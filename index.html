@@ -9,14 +9,14 @@
     <style>
         :root {
             --primary: #0088cc;
-            --bg: #f4f5f7;
+            --bg: #f4f6f9;
             --card-bg: #ffffff;
-            --text-main: #222;
-            --text-sub: #666;
-            --border: #e1e4e8;
-            --success: #28a745;
-            --warning: #f59e0b;
-            --coin: #eab308;
+            --text-main: #1f2937;
+            --text-sub: #4b5563;
+            --border: #e5e7eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --coin: #d97706;
         }
 
         body {
@@ -36,72 +36,128 @@
             background: #fff;
             padding: 10px 14px;
             border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             margin-bottom: 12px;
         }
+
         .coin-box {
             display: flex;
             align-items: center;
             gap: 6px;
-            background: #fef9c3;
-            border: 1px solid #fde047;
-            padding: 6px 12px;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-weight: bold;
+            font-weight: 800;
             font-size: 14px;
-            color: #854d0e;
+            color: var(--coin);
         }
+
         .lang-switch {
-            background: #e3edf5;
+            background: #e0f2fe;
             color: var(--primary);
             border: 1px solid var(--primary);
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        h2 {
-            color: var(--primary);
-            text-align: center;
-            margin: 6px 0;
-            font-size: 18px;
+        /* Ad Banner */
+        .earn-banner {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+        }
+        .earn-banner div h4 { margin: 0 0 2px 0; font-size: 14px; }
+        .earn-banner div p { margin: 0; font-size: 11px; opacity: 0.9; }
+        .btn-earn {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
         }
 
-        /* Card Section */
+        /* Quiz Box */
         .card {
             background: var(--card-bg);
             border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--border);
+            margin-bottom: 14px;
         }
-        .card h3 {
-            margin: 0 0 8px 0;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        .card-header h3 {
+            margin: 0;
             font-size: 15px;
             color: var(--primary);
         }
-        .card p {
+        .progress-text {
             font-size: 12px;
+            font-weight: bold;
             color: var(--text-sub);
-            margin: 0 0 12px 0;
         }
 
-        /* Earn Coin Banner */
-        .earn-banner {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            border-radius: 12px;
-            padding: 14px;
-            text-align: center;
-            margin-bottom: 12px;
+        .question-box {
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 14px;
+            color: #111827;
         }
-        .earn-banner h4 { margin: 0 0 6px 0; font-size: 16px; }
-        .earn-banner p { font-size: 12px; margin: 0 0 10px 0; opacity: 0.9; }
-        .btn-earn {
-            background: #f59e0b;
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            background: #f9fafb;
+            border: 1.5px solid var(--border);
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 13px;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .option-btn:active { background: #e5e7eb; }
+        .option-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #15803d !important; font-weight: bold; }
+        .option-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #b91c1c !important; }
+
+        .explanation {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            color: #166534;
+            margin-top: 10px;
+        }
+
+        .nav-btn {
+            background: var(--primary);
             color: white;
             border: none;
             padding: 10px 16px;
@@ -109,82 +165,72 @@
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        /* Quiz Styling */
-        .quiz-question {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .option-btn {
-            display: block;
             width: 100%;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            padding: 10px;
-            margin-bottom: 6px;
-            border-radius: 8px;
-            text-align: left;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.2s;
+            margin-top: 10px;
+            display: none;
         }
-        .option-btn:active { background: #e2e8f0; }
-        .option-btn.correct { background: #dcfce7; border-color: var(--success); color: #166534; font-weight: bold; }
-        .option-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
 
-        /* Unlock Exam Button */
+        /* PDF Unlock Section */
+        .unlock-card {
+            background: #ffffff;
+            border: 1.5px dashed var(--primary);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+        }
+        .unlock-card h4 { margin: 0 0 4px 0; font-size: 14px; color: var(--primary); }
+        .unlock-card p { margin: 0 0 10px 0; font-size: 12px; color: var(--text-sub); }
         .btn-unlock {
             background: var(--success);
             color: white;
             border: none;
-            padding: 10px;
-            width: 100%;
+            padding: 10px 18px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
+    <!-- Header -->
     <div class="top-bar">
         <div class="coin-box">
             🪙 <span id="coinCount">50</span> Coins
         </div>
-        <button class="lang-switch" onclick="toggleLanguage()">🌐 Amh / Eng</button>
+        <button class="lang-switch" onclick="toggleLang()">🌐 Amh / Eng</button>
     </div>
 
-    <h2>📚 Bahirab Quiz & Study Hub</h2>
-
-    <!-- Earn Free Coins via Ad -->
+    <!-- Watch Ad Banner -->
     <div class="earn-banner">
-        <h4 id="bannerTitle">⭐ ነፃ 🪙 Coins ያግኙ!</h4>
-        <p id="bannerDesc">አጭር ማስታወቂያ በማየት 50 ኮይኖችን በነፃ ይሰብስቡ።</p>
-        <button class="earn-banner-btn btn-earn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ (+50 Coins)</button>
-    </div>
-
-    <!-- Daily Quiz Section -->
-    <div class="card">
-        <h3 id="quizHeader">🧠 የዕለቱ የፈተና ጥያቄ (Quiz Challenge)</h3>
-        <div id="quizContainer">
-            <div class="quiz-question" id="qText">1. Which branch of philosophy studies the nature of knowledge?</div>
-            <button class="option-btn" onclick="checkAnswer(0)">A) Metaphysics</button>
-            <button class="option-btn" onclick="checkAnswer(1)">B) Epistemology (Correct)</button>
-            <button class="option-btn" onclick="checkAnswer(2)">C) Ethics</button>
-            <button class="option-btn" onclick="checkAnswer(3)">D) Aesthetics</button>
+        <div>
+            <h4 id="adTitle">⭐ ነፃ Coins ይፈልጋሉ?</h4>
+            <p id="adSub">አጭር ማስታወቂያ በማየት +50 Coins ያግኙ።</p>
         </div>
-        <div id="quizFeedback" style="margin-top: 8px; font-weight: bold; font-size: 13px;"></div>
+        <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ</button>
     </div>
 
-    <!-- Premium Exam Download Section -->
+    <!-- Quiz Engine Card -->
     <div class="card">
-        <h3 id="examHeader">📥 ፕሪሚየም የፈተና PDF ዎች</h3>
-        <p id="examDesc">ሙሉውን የዩኒቨርሲቲ ፈተና ፒዲኤፍ ለማውረድ 100 Coins ይጠቀሙ።</p>
-        <button class="btn-unlock" id="unlockBtn" onclick="unlockExam('logic_mid_pdf')">🔓 100 Coins ከፍተህ አውርድ</button>
+        <div class="card-header">
+            <h3 id="quizTitle">📊 Economics Final Exam Practice</h3>
+            <span class="progress-text" id="quizProgress">1 / 15</span>
+        </div>
+
+        <div class="question-box" id="qText">Loading question...</div>
+        <div id="optionsContainer"></div>
+
+        <div class="explanation" id="expBox"></div>
+        <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">ቀጣይ ጥያቄ ➡️</button>
+    </div>
+
+    <!-- Unlock Full Paper Section -->
+    <div class="unlock-card">
+        <h4 id="unTitle">📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?</h4>
+        <p id="unSub">ሁሉንም 20 ጥያቄዎች እና የ Workout መልሶችን በ 100 Coins አውርድ።</p>
+        <button class="btn-unlock" id="unBtn" onclick="unlockExamPDF()">🔓 በ 100 Coins በቴሌግራም አውርድ</button>
     </div>
 
     <script>
@@ -194,7 +240,7 @@
             tg.expand();
         }
 
-        // Coins Management
+        // Coins state
         let userCoins = parseInt(localStorage.getItem('bahirab_coins')) || 50;
         document.getElementById('coinCount').innerText = userCoins;
 
@@ -204,88 +250,219 @@
             document.getElementById('coinCount').innerText = userCoins;
         }
 
-        // Language toggle
-        let currentLang = 'am';
-        function toggleLanguage() {
-            currentLang = currentLang === 'am' ? 'en' : 'am';
-            if(currentLang === 'en') {
-                document.getElementById('bannerTitle').innerText = "⭐ Earn Free 🪙 Coins!";
-                document.getElementById('bannerDesc').innerText = "Watch a short ad to earn 50 free coins.";
-                document.querySelector('.earn-banner-btn').innerText = "⭐ Watch Ad (+50 Coins)";
-                document.getElementById('quizHeader').innerText = "🧠 Daily Quiz Challenge";
-                document.getElementById('examHeader').innerText = "📥 Premium Exam PDFs";
-                document.getElementById('examDesc').innerText = "Use 100 Coins to unlock & download full PDF exams.";
-                document.getElementById('unlockBtn').innerText = "🔓 Unlock & Download (100 Coins)";
-            } else {
-                document.getElementById('bannerTitle').innerText = "⭐ ነፃ 🪙 Coins ያግኙ!";
-                document.getElementById('bannerDesc').innerText = "አጭር ማስታወቂያ በማየት 50 ኮይኖችን በነፃ ይሰብስቡ።";
-                document.querySelector('.earn-banner-btn').innerText = "⭐ ማስታወቂያ እይ (+50 Coins)";
-                document.getElementById('quizHeader').innerText = "🧠 የዕለቱ የፈተና ጥያቄ (Quiz Challenge)";
-                document.getElementById('examHeader').innerText = "📥 ፕሪሚየም የፈተና PDF ዎች";
-                document.getElementById('examDesc').innerText = "ሙሉውን የዩኒቨርሲቲ ፈተና ፒዲኤፍ ለማውረድ 100 Coins ይጠቀሙ።";
-                document.getElementById('unlockBtn').innerText = "🔓 100 Coins ከፍተህ አውርድ";
+        // Questions Array from Bahir Dar University Economics Final Exam
+        const questions = [
+            {
+                q: "1. Under perfectly competitive market structure, some firm can gain competitive advantage over other firms through advertising their products.",
+                options: ["A) True", "B) False"],
+                correct: 1,
+                exp: "ትክክል! በ Perfect Competition ውስጥ ምርቶች ተመሳሳይ (Homogeneous) በመሆናቸው ማስታወቂያ ተወዳዳሪ ጥቅም አያስገኝም።"
+            },
+            {
+                q: "2. The values of self-owned inputs that are used in the production process are called implicit costs.",
+                options: ["A) True", "B) False"],
+                correct: 0,
+                exp: "ትክክል! የአንድ ባለቤት የራሱ የሆኑ ግብአቶች ግምት Implicit Cost ይባላል።"
+            },
+            {
+                q: "3. Which one of the following is NOT true about perfectly competitive market structure?",
+                options: [
+                    "A) Price and marginal revenue are equal for each unit sold",
+                    "B) Firms are price maker",
+                    "C) Demand curve is perfectly elastic",
+                    "D) A firm can sell whatever amount with the existing price"
+                ],
+                correct: 1,
+                exp: "ትክክል! በ Perfect Competition ውስጥ ድርጅቶች Price Taker እንጂ Price Maker አይደሉም።"
+            },
+            {
+                q: "4. An Ethiopian construction company built a road in Kenya; this economic activity would be:",
+                options: [
+                    "A) Fully included in Ethiopian GDP",
+                    "B) Excluded from Ethiopian GNP",
+                    "C) Included in Ethiopian GNP",
+                    "D) Excluded from Kenyan GDP"
+                ],
+                correct: 2,
+                exp: "ትክክል! የኢትዮጵያ ዜጋ/ድርጅት በውጭ ሀገር የሚያመርተው ምርት በኢትዮጵያ GNP ውስጥ ይካተታል።"
+            },
+            {
+                q: "5. Suppose a firm produces 200,000 units and sells for $10 each. Explicit cost is $1,500,000 and implicit cost is $300,000. What is accounting and economic profit?",
+                options: [
+                    "A) $400,000 accounting profit and $200,000 economic profit",
+                    "B) $300,000 accounting profit and $400,000 economic profit",
+                    "C) $500,000 accounting profit and $200,000 economic profit",
+                    "D) $200,000 accounting profit and $500,000 economic profit"
+                ],
+                correct: 2,
+                exp: "ትክክል! TR = $2,000,000። Accounting Profit = 2,000,000 - 1,500,000 = $500,000፤ Economic Profit = 500,000 - 300,000 = $200,000።"
+            },
+            {
+                q: "6. If Ethiopian GDP exceeds Ethiopian GNP, it implies that:",
+                options: [
+                    "A) Intermediate production exceeds final production",
+                    "B) Real GDP exceeds nominal GDP",
+                    "C) Ethiopians are producing more abroad than foreigners in Ethiopia",
+                    "D) Foreigners are producing more in Ethiopia than Ethiopians are producing abroad"
+                ],
+                correct: 3,
+                exp: "ትክክል! GDP > GNP ማለት Net Factor Income ከአገር ውጭ አሉታዊ (Negative) ሲሆን ነው (Foreigners produce more inside)።"
+            },
+            {
+                q: "7. Suppose Average Fixed Cost for 5th unit is 15 and Total Fixed Cost is 25% of Total Cost. What is the Total Variable Cost (TVC) at 5th unit?",
+                options: ["A) 300", "B) 225", "C) 22.5", "D) 75"],
+                correct: 1,
+                exp: "ትክክል! TFC = 5 × 15 = 75። TC = 75 / 0.25 = 300። TVC = TC - TFC = 300 - 75 = 225።"
+            },
+            {
+                q: "8. Which of the following is FALSE about Stage II of short-run production?",
+                options: [
+                    "A) TP increases at a decreasing rate",
+                    "B) TP increases at an increasing rate",
+                    "C) MP declines but it is positive",
+                    "D) It occurs in the range of maximum AP and Zero MP"
+                ],
+                correct: 1,
+                exp: "ትክክል! በ Stage II ውስጥ Total Product (TP) በ Increasing rate አያድግም (Decreasing rate ነው የሚያድገው)።"
+            },
+            {
+                q: "9. The current telecom market in Ethiopia is an example of:",
+                options: [
+                    "A) Monopoly market",
+                    "B) Monopolistic competition",
+                    "C) Perfectly competitive market",
+                    "D) Duopoly market"
+                ],
+                correct: 3,
+                exp: "ትክክል! በኢትዮጵያ ውስጥ ሁለት የቴሌኮም አቅራቢዎች (ኢትዮ ቴሌኮም እና ሳፋሪኮም) ስላሉ ገበያው Duopoly ነው።"
+            },
+            {
+                q: "10. What is the firm's profit if the price of its product is $10 and it produces 500 units at a total cost of $3,500?",
+                options: ["A) 500", "B) 200", "C) 3000", "D) 1500"],
+                correct: 3,
+                exp: "ትክክል! TR = 10 × 500 = $5,000። Profit = TR - TC = 5,000 - 3,500 = $1,500።"
             }
-        }
+        ];
 
-        // Quiz Logic
-        let answered = false;
-        function checkAnswer(selectedIdx) {
-            if (answered) return;
-            answered = true;
-            const buttons = document.querySelectorAll('.option-btn');
-            const feedback = document.getElementById('quizFeedback');
+        let currentQIndex = 0;
+        let isAnswered = false;
+
+        function loadQuestion() {
+            isAnswered = false;
+            const current = questions[currentQIndex];
+            document.getElementById('quizProgress').innerText = `${currentQIndex + 1} / ${questions.length}`;
+            document.getElementById('qText').innerText = current.q;
             
-            if (selectedIdx === 1) {
-                buttons[selectedIdx].classList.add('correct');
-                feedback.style.color = "var(--success)";
-                feedback.innerText = currentLang === 'am' ? "🎉 ትክክል! +20 Coins ተሸልመዋል!" : "🎉 Correct! You won +20 Coins!";
+            const optContainer = document.getElementById('optionsContainer');
+            optContainer.innerHTML = '';
+            
+            current.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => handleSelect(idx, btn);
+                optContainer.appendChild(btn);
+            });
+
+            document.getElementById('expBox').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function handleSelect(selectedIdx, btnElement) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const current = questions[currentQIndex];
+            const allBtns = document.querySelectorAll('.option-btn');
+
+            if (selectedIdx === current.correct) {
+                btnElement.classList.add('correct');
                 updateCoins(20);
+                document.getElementById('expBox').innerText = `🎉 ትክክል! (+20 Coins ተሸልመዋል)\n💡 ${current.exp}`;
             } else {
-                buttons[selectedIdx].classList.add('wrong');
-                buttons[1].classList.add('correct');
-                feedback.style.color = "#ef4444";
-                feedback.innerText = currentLang === 'am' ? "❌ ተሳስተዋል! ትክክለኛው መልስ B ነው።" : "❌ Wrong! Correct answer is B.";
+                btnElement.classList.add('wrong');
+                allBtns[current.correct].classList.add('correct');
+                document.getElementById('expBox').innerText = `❌ ተሳስተዋል!\n💡 ${current.exp}`;
+            }
+
+            document.getElementById('expBox').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQIndex++;
+            if (currentQIndex < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById('qText').innerText = "🎉 እንኳን ደስ አለዎት! ሁሉንም የፈተና ጥያቄዎች ሰርተው አጠናቀዋል።";
+                document.getElementById('optionsContainer').innerHTML = '';
+                document.getElementById('expBox').innerText = `አጠቃላይ ያገኙት ነጥብ፡ 🪙 ${userCoins} Coins ነው።`;
+                document.getElementById('nextBtn').style.display = 'none';
             }
         }
 
-        // Adsgram Reward Integration
+        // Adsgram Integration
         let adController = null;
         function watchAdForCoins() {
             try {
                 if (!adController) {
-                    // እዚህጋ Adsgram ላይ የምትፈጥረውን አዲስ Block ID ታስገባለህ (ለምሳሌ Interstitial ወይም Reward)
-                    adController = window.Adsgram.init({ blockId: "int-44327" }); 
+                    adController = window.Adsgram.init({ blockId: "int-44327" });
                 }
                 adController.show().then(() => {
-                    // ማስታወቂያውን አይቶ ሲጨርስ 50 coin ይሰጠዋል
                     updateCoins(50);
-                    alert(currentLang === 'am' ? "🎉 50 Coins ተጨምሮልዎታል!" : "🎉 50 Coins added to your balance!");
-                }).catch((err) => {
-                    // ማስታወቂያው ገና በሞደሬሽን ላይ ከሆነ ወይም ካልሰራ በነፃ ይሞላልልን (ለሙከራ)
+                    alert("🎉 50 Coins በተሳካ ሁኔታ ተጨምሮልዎታል!");
+                }).catch(() => {
+                    // Fallback for preview mode
                     updateCoins(50);
-                    alert(currentLang === 'am' ? "🎉 (Test Mode) 50 Coins ተጨምሯል!" : "🎉 (Test Mode) 50 Coins added!");
+                    alert("🎉 (Preview Mode) 50 Coins ተጨምሯል!");
                 });
             } catch (e) {
                 updateCoins(50);
-                alert("🎉 50 Coins added!");
+                alert("🎉 50 Coins ተጨምሯል!");
             }
         }
 
-        // Unlock Exam logic
-        function unlockExam(fileKey) {
+        // Unlock Full PDF Logic
+        function unlockExamPDF() {
             if (userCoins >= 100) {
                 updateCoins(-100);
-                alert(currentLang === 'am' ? "🔓 ተከፍቷል! ወደ ቦቱ በመላክ ላይ..." : "🔓 Unlocked! Redirecting to bot...");
+                alert("🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...");
                 if (tg && tg.initData) {
-                    tg.openTelegramLink("https://t.me/Bahirabbot?start=" + fileKey);
+                    tg.openTelegramLink("https://t.me/Bahirabbot?start=econ_final_2016");
                     setTimeout(() => { tg.close(); }, 800);
                 } else {
-                    window.location.href = "https://t.me/Bahirabbot?start=" + fileKey;
+                    window.location.href = "https://t.me/Bahirabbot?start=econ_final_2016";
                 }
             } else {
-                alert(currentLang === 'am' ? "⚠️ በቂ Coins የለዎትም! እባክዎ ማስታወቂያ በማየት ኮይን ያግኙ።" : "⚠️ Not enough coins! Please watch an ad to get coins.");
+                alert("⚠️ በቂ Coins የለዎትም! ጥያቄዎችን በመስራት ወይም ማስታወቂያ በማየት Coins ይሰብስቡ።");
             }
         }
+
+        // Language toggle
+        let currentLang = 'am';
+        function toggleLang() {
+            currentLang = currentLang === 'am' ? 'en' : 'am';
+            if (currentLang === 'en') {
+                document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
+                document.getElementById('adSub').innerText = "Watch a quick ad to get +50 Coins.";
+                document.getElementById('adBtn').innerText = "⭐ Watch Ad";
+                document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
+                document.getElementById('unSub').innerText = "Unlock all 20 questions & workout for 100 Coins.";
+                document.getElementById('unBtn').innerText = "🔓 Unlock in Telegram (100 Coins)";
+                document.getElementById('nextBtn').innerText = "Next Question ➡️";
+            } else {
+                document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
+                document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በማየት +50 Coins ያግኙ።";
+                document.getElementById('adBtn').innerText = "⭐ ማስታወቂያ እይ";
+                document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
+                document.getElementById('unSub').innerText = "ሁሉንም 20 ጥያቄዎች እና የ Workout መልሶችን በ 100 Coins አውርድ።";
+                document.getElementById('unBtn').innerText = "🔓 በ 100 Coins በቴሌግራም አውርድ";
+                document.getElementById('nextBtn').innerText = "ቀጣይ ጥያቄ ➡️";
+            }
+        }
+
+        // Init
+        loadQuestion();
     </script>
 </body>
 </html>
