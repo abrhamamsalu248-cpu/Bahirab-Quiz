@@ -371,5 +371,13 @@ window.historyData = {
         {
             q: "24. Which major factor enabled the Christian Kingdom to defeat Imam Ahmed at Woyna Dega in 1543?",
             options: [
-                "A) Imam Ahmed's fatal mistake of returning the Ottoman soldiers home soon after battle of Ofla",
-                "B
+                "A) Imam Ahmed's fatal mistake of returning the Ottoman musketeers home after the battle of Ofla",
+                "B) Portuguese military assistance and firearms provided to Emperor Gelawdewos",
+                "C) Alliance with the Zagwe dynasty rulers",
+                "D) A & B"
+            ],
+            correct: 3,
+            exp: "D: የአህመድ ግራኝ የኦቶማን ወታደሮችን መመለስ እና በፖርቹጋል ወታደሮች የተደረገው የጦር መሳሪያ ድጋፍ በወይና ደጋ ጦርነት ድል እንዲቀዳጁ አስችሏቸዋል።"
+        }
+    ]
+};
