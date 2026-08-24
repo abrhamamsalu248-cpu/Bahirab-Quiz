@@ -16,6 +16,8 @@
     <script src="global.js"></script>
     <script src="civics.js"></script>
     <script src="anthropology.js"></script>
+    <script src="english.js"></script>
+    <script src="psychology.js"></script>
 
     <style>
         :root {
@@ -236,6 +238,9 @@
     <div class="select-box">
         <label id="lblSelect">📚 የፈተና ዓይነት ይምረጡ (Select Exam):</label>
         <select class="exam-dropdown" id="examSelect" onchange="switchExam(this.value)">
+            <option value="psychology_final">🧠 General Psychology (Final Exam)</option>
+            <option value="english_final">📖 Communicative English Skills II (Final Exam)</option>
+            <option value="english_mid">📖 Communicative English Skills II (Mid Exam)</option>
             <option value="anthro_final">🏺 Social Anthropology (Final Exam)</option>
             <option value="anthro_mid">🏺 Social Anthropology (Mid Exam)</option>
             <option value="civics_final">⚖️ Moral & Civic Education (Final Exam)</option>
@@ -265,8 +270,8 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 id="quizTitle">🏺 Social Anthropology Final Exam Practice</h3>
-            <span class="progress-text" id="quizProgress">1 / 30</span>
+            <h3 id="quizTitle">🧠 General Psychology Final Exam</h3>
+            <span class="progress-text" id="quizProgress">1 / 32</span>
         </div>
 
         <div class="question-box" id="qText">ጥያቄዎች በመጫን ላይ ናቸው...</div>
@@ -302,6 +307,8 @@
 
         function getMergedData() {
             return {
+                ...(window.psychologyData || {}),
+                ...(window.englishData || {}),
                 ...(window.anthropologyData || {}),
                 ...(window.civicsData || {}),
                 ...(window.economicsData || {}),
@@ -314,6 +321,9 @@
         }
 
         const titles = {
+            psychology_final: "🧠 General Psychology Final Exam",
+            english_final: "📖 Communicative English Skills II Final Exam",
+            english_mid: "📖 Communicative English Skills II Mid Exam",
             anthro_final: "🏺 Social Anthropology Final Exam Practice",
             anthro_mid: "🏺 Social Anthropology Mid Exam Practice",
             civics_final: "⚖️ Civic Education Final Exam Practice",
@@ -332,7 +342,7 @@
             econ_mid: "📝 Economics Mid Exam Practice"
         };
 
-        let currentExam = 'anthro_final';
+        let currentExam = 'psychology_final';
         let currentQIndex = 0;
         let isAnswered = false;
 
@@ -428,6 +438,9 @@
 
         function unlockExamPDF() {
             const fileMap = {
+                psychology_final: 'psychology_final_2016',
+                english_final: 'english_final_2016',
+                english_mid: 'english_mid_2016',
                 anthro_final: 'anthro_final_2016',
                 anthro_mid: 'anthro_mid_2016',
                 civics_final: 'civics_final_2015',
