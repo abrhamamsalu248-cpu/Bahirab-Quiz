@@ -64,7 +64,6 @@
             cursor: pointer;
         }
 
-        /* Exam Selector */
         .select-box {
             margin-bottom: 12px;
         }
@@ -87,7 +86,6 @@
             outline: none;
         }
 
-        /* Ad Banner */
         .earn-banner {
             background: linear-gradient(135deg, #0284c7, #0369a1);
             color: white;
@@ -113,7 +111,6 @@
             white-space: nowrap;
         }
 
-        /* Quiz Box */
         .card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -193,7 +190,6 @@
             display: none;
         }
 
-        /* PDF Unlock Section */
         .unlock-card {
             background: #ffffff;
             border: 1.5px dashed var(--primary);
@@ -218,7 +214,6 @@
 </head>
 <body>
 
-    <!-- Header -->
     <div class="top-bar">
         <div class="coin-box">
             🪙 <span id="coinCount">50</span> Coins
@@ -226,20 +221,20 @@
         <button class="lang-switch" onclick="toggleLang()">🌐 Amh / Eng</button>
     </div>
 
-    <!-- Exam Selector -->
     <div class="select-box">
         <label id="lblSelect">📚 የፈተና ዓይነት ይምረጡ (Select Exam):</label>
         <select class="exam-dropdown" id="examSelect" onchange="switchExam(this.value)">
-            <option value="econ_final">🎓 Economics (Final Exam)</option>
-            <option value="econ_mid">📝 Economics (Mid Exam)</option>
-            <option value="logic_final">💡 Logic & Critical Thinking (Final Exam)</option>
-            <option value="logic_mid">💡 Logic & Critical Thinking (Mid Exam)</option>
+            <option value="history_mid">📜 History of Ethiopia and the Horn (Mid Exam)</option>
+            <option value="history_final">📜 History of Ethiopia and the Horn (Final Exam)</option>
             <option value="geography_final">🌍 Geography of Ethiopia (Final Exam)</option>
             <option value="geography_mid">🗺️ Geography of Ethiopia (Mid Exam)</option>
+            <option value="logic_final">💡 Logic & Critical Thinking (Final Exam)</option>
+            <option value="logic_mid">💡 Logic & Critical Thinking (Mid Exam)</option>
+            <option value="econ_final">🎓 Economics (Final Exam)</option>
+            <option value="econ_mid">📝 Economics (Mid Exam)</option>
         </select>
     </div>
 
-    <!-- Watch Ad Banner -->
     <div class="earn-banner">
         <div>
             <h4 id="adTitle">⭐ ነፃ Coins ይፈልጋሉ?</h4>
@@ -248,11 +243,10 @@
         <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ</button>
     </div>
 
-    <!-- Quiz Card -->
     <div class="card">
         <div class="card-header">
-            <h3 id="quizTitle">🎓 Economics Final Exam Practice</h3>
-            <span class="progress-text" id="quizProgress">1 / 15</span>
+            <h3 id="quizTitle">📜 History Mid Exam Practice</h3>
+            <span class="progress-text" id="quizProgress">1 / 22</span>
         </div>
 
         <div class="question-box" id="qText">Loading question...</div>
@@ -262,7 +256,6 @@
         <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">ቀጣይ ጥያቄ ➡️</button>
     </div>
 
-    <!-- Unlock PDF -->
     <div class="unlock-card">
         <h4 id="unTitle">📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?</h4>
         <p id="unSub">የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።</p>
@@ -276,7 +269,6 @@
             tg.expand();
         }
 
-        // Coins state
         let userCoins = parseInt(localStorage.getItem('bahirab_coins')) || 50;
         document.getElementById('coinCount').innerText = userCoins;
 
@@ -286,14 +278,960 @@
             document.getElementById('coinCount').innerText = userCoins;
         }
 
-        // FULL 6 EXAM QUESTION BANKS (NO QUESTIONS TRUNCATED)
         const examData = {
+            history_mid: [
+                {
+                    q: "1. Knowledge of history is indispensable to understand who we are and where we fit in the world.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ታሪክ ማንነታችንን ለመረዳት እና በአለም ውስጥ ያለንን ቦታ ለማወቅ መሰረታዊ እውቀት ነው።"
+                },
+                {
+                    q: "2. The organized study and narration of the past was introduced by ancient Greek historian called Leopold Von Ranke.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ታሪክን እንደ ሳይንሳዊ ትምህርት ያደራጀው ሊዮፖልድ ቮን ራንኬ የጀርመን (Modern Germany) እንጂ የጥንቷ ግሪክ የታሪክ አባት (Herodotus) አይደለም።"
+                },
+                {
+                    q: "3. The geographic limit of Ethiopia and the Horn includes Ethiopia, Sudan, Eritrea, Djibouti and Somalia.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ሱዳን የአፍሪካ ቀንድ (Horn of Africa) አካል ተደርጋ አትቆጠርም።"
+                },
+                {
+                    q: "4. Oral information we get from an eyewitness of a person on an incident is primary source whatever the subjectivity of the informant.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ክስተቱን በዓይኑ ያየ ሰው የሚሰጠው የቃል መረጃ ቀዳሚ የታሪክ ምንጭ (Primary Source) ነው።"
+                },
+                {
+                    q: "5. The earliest known reference that we have on the history of Ethiopia and the Horn is the Periplus of the Erythrean Sea written in the first century A.D.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ፔሪፕለስ ኦፍ ዘ ኤሪትሪያን ሲ በመጀመሪያው መቶ ክፍለ ዘመን የተጻፈ ጥንታዊ የጽሑፍ ምንጭ ነው።"
+                },
+                {
+                    q: "6. The abuse of history is emanated from lack of sources and the intentional aim of the writers to discard past actions.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የታሪክ መዛባት ከምንጮች እጥረት እና ሆን ተብሎ ከሚደረግ የታሪክ ማዛባት የመነጨ ነው።"
+                },
+                {
+                    q: "7. The history of non-literate societies had been written based on oral sources.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የጽሑፍ ባህል ባልነበራቸው ማህበረሰቦች ታሪካቸው የተመዘገበው በአፈ-ታሪክ (Oral tradition) ነው።"
+                },
+                {
+                    q: "8. Yeha as a cultural center was established due to the commercial involvement of South-Arabian merchants in the Horn of Africa.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ይሐ ከደቡብ ዓረብ ነጋዴዎች ጋር በነበረው የንግድና የባህል ትስስር ማዕከል ሆና ተመስርታለች።"
+                },
+                {
+                    q: "9. Which one of the following alternative is different from the other (Secondary Source)?",
+                    options: ["A) Coin", "B) Book", "C) Letter", "D) Minute"],
+                    correct: 1,
+                    exp: "B: መጽሐፍ (Book) ሁለተኛ ደረጃ የታሪክ ምንጭ (Secondary Source) ሲሆን ሌሎቹ ቀዳሚ (Primary) ናቸው።"
+                },
+                {
+                    q: "10. Identify the wrong statement about the Zagwe Dynasty?",
+                    options: [
+                        "A) The Zagwe maintained the ancient Aksumite traditions intact",
+                        "B) Merra Tekle Haimanot was the last king of Zagwe Dynasty whose throne was overthrown by Yekuno-Amlak",
+                        "C) The Zagwe period was a golden age in Ethiopia's paintings and translation of religious works",
+                        "D) Export items included slaves, ivory and rare spices"
+                    ],
+                    correct: 1,
+                    exp: "B: ሜራ ተክለሃይማኖት የዛጔ ስርወ-መንግስት መስራች እንጂ የመጨረሻው ንጉሥ (Yetbarak) አልነበረም።"
+                },
+                {
+                    q: "11. The decline of Axumite State in the 7th Century A.D is attributed to the following events except:",
+                    options: [
+                        "A) The perpetuation of lucrative trade with the external world",
+                        "B) Environmental degradation and decline in agricultural productivity",
+                        "C) Isolation of the Aksum state from its old commercial partners by Muslim Arabs",
+                        "D) The destruction of the port of Adulis and economic decline"
+                    ],
+                    correct: 0,
+                    exp: "A: የአክሱም ውድቀት ከዓለም አቀፍ ንግድ መቋረጥ ጋር የተያያዘ እንጂ የንግዱ መቀጠል አልነበረም።"
+                },
+                {
+                    q: "12. Identify the incorrect statement about religion and religious processes in Ethiopia and the Horn?",
+                    options: [
+                        "A) Unlike Catholicism, Orthodox Christianity is Monophysite in explaining the nature of Christ",
+                        "B) Christianity and Islam are both monotheistic religions introduced from abroad in the 4th and 7th Centuries A.D",
+                        "C) The introduction of Judaism to the Horn is apparent compared to Christianity and Islam",
+                        "D) The practices and beliefs of indigenous religion are fused with Christianity and Islam"
+                    ],
+                    correct: 0,
+                    exp: "A: የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ እምነት ተዋሕዶ (Mia-physite) እንጂ Monophysite አትባልም።"
+                },
+                {
+                    q: "13. Who introduced monastic life to the Christian of ancient Ethiopia?",
+                    options: ["A) Nine saints", "B) Fremnatous", "C) Atnatewos", "D) Ezana"],
+                    correct: 0,
+                    exp: "A: ተስዓቱ ቅዱሳን (Nine Saints) በ 5ኛው ክፍለ ዘመን ምንኩስናንና ገዳማዊ ህይወትን አስተዋውቀዋል።"
+                },
+                {
+                    q: "14. Which one of the following is correct in chronological order from ancient to recent in human evolution timeline?",
+                    options: [
+                        "A) Homo sapiens -> Homo habilis -> Homo erectus",
+                        "B) Homo erectus -> Homo sapiens -> Homo habilis",
+                        "C) Homo habilis -> Homo erectus -> Homo sapiens",
+                        "D) Homo habilis -> Homo sapiens -> Homo erectus"
+                    ],
+                    correct: 2,
+                    exp: "C: ትክክለኛው የሰው ዘር የዝግመተ ለውጥ ቅደም ተከተል Habilis -> Erectus -> Sapiens ነው።"
+                },
+                {
+                    q: "15. Identify the wrong statement about history?",
+                    options: [
+                        "A) History is the basis for the study of politics and philosophy",
+                        "B) Cause and effect relationship between past and present is lively presented",
+                        "C) History is an inquiry in the present based on evidences",
+                        "D) History enables us to study changes and continuity that are taking place over time"
+                    ],
+                    correct: 2,
+                    exp: "C: ታሪክ ያለፈውን (Past) መመርመር እንጂ የአሁኑን ጊዜ ብቻ መመርመር አይደለም።"
+                },
+                {
+                    q: "16. Which of the following is NOT among the uses of history?",
+                    options: [
+                        "A) Promote diversity that provides opportunities for succession",
+                        "B) Develop sense of tolerance and open mindedness",
+                        "C) Enables to understand the surrounding environment",
+                        "D) Enables to understand the past and correct past mistake"
+                    ],
+                    correct: 0,
+                    exp: "A: ታሪክ ለመገንጠልና ለልዩነት ማራመጃነት አያገለግልም።"
+                },
+                {
+                    q: "17. Which of the following statements best describe primary sources?",
+                    options: [
+                        "A) They are interpreted from secondary sources",
+                        "B) Have no direct relation to the event they are describing",
+                        "C) They are original and nearer to the event both in time and space",
+                        "D) They are free from critical examination by historians"
+                    ],
+                    correct: 2,
+                    exp: "C: የመጀመሪያ ደረጃ ምንጮች ለክስተቱ በጊዜና በቦታ እጅግ የቀረቡ ኦሪጅናል መረጃዎች ናቸው።"
+                },
+                {
+                    q: "18. Which of the following was the factor for the downfall of Zagwe dynasty in 1270 AD?",
+                    options: [
+                        "A) Power succession among the ruling family and opposition against the dynasty",
+                        "B) Foreign invasion from the Arab world to control the lucrative ports",
+                        "C) The prevalence of natural problems mainly drought and environmental pollution",
+                        "D) The outbreak of religious problems among orthodox and Catholics"
+                    ],
+                    correct: 0,
+                    exp: "A: በስርወ-መንግስቱ ቤተሰቦች መካከል የነበረው የስልጣን ሽኩቻና ተቃውሞ ለውድቀቱ ዋነኛ ምክንያት ነበር።"
+                },
+                {
+                    q: "19. Why king Lalibela had constructed the Rock-hewn churches in Ethiopia?",
+                    options: [
+                        "A) To show the glory and majesty of the king",
+                        "B) To establish second Jerusalem to solve the difficulties on pilgrims to the Holy land",
+                        "C) To take the position of Egyptian Coptic church to consecrate Abuns",
+                        "D) The need to restore Judaism over Christianity"
+                    ],
+                    correct: 1,
+                    exp: "B: ወደ እየሩሳሌም የሚደረገውን አስቸጋሪና አደገኛ ጉዞ ለማስቀረት ሁለተኛዋን እየሩሳሌም በሀገሩ ለመገንባት ነው።"
+                },
+                {
+                    q: "20. One of the following was not a historical development that took place during the Neolithic Revolution?",
+                    options: [
+                        "A) Domestication of plants and animals",
+                        "B) Development of language and shelter in caves",
+                        "C) Transformation from mobile to sedentary life",
+                        "D) Production of crops"
+                    ],
+                    correct: 1,
+                    exp: "B: በዋሻ ውስጥ መኖር የ Paleolithic (የቀድሞው ድንጋይ ዘመን) መገለጫ እንጂ የኒዮሊቲክ አይደለም።"
+                },
+                {
+                    q: "21. Identify the wrong statement about the Aksumite state?",
+                    options: [
+                        "A) Its coins had international acceptance",
+                        "B) Since the late 7th c A.D, Aksum was quite reducing in size",
+                        "C) The presence of timber made Aksum the major naval power in the red sea region",
+                        "D) The relationship between Aksum and South Arabia was always harmonious"
+                    ],
+                    correct: 3,
+                    exp: "D: በአክሱምና ደቡብ ዓረብ መካከል ጦርነትና ወረራ የነበረ በመሆኑ ግንኙነታቸው ሁልጊዜ ሰላማዊ አልነበረም።"
+                },
+                {
+                    q: "22. Which one of the following periods laid the basis for the emergence of civilization?",
+                    options: ["A) Paleolithic", "B) Mesolithic", "C) Neolithic", "D) Middle Stone Age"],
+                    correct: 2,
+                    exp: "C: ኒዮሊቲክ (Neolithic / እርሻና እንስሳት ማላመድ) ለሰው ልጅ ሥልጣኔ መፈጠር መሰረቱን ጥሏል።"
+                }
+            ],
+            history_final: [
+                {
+                    q: "1. Following the death of Imam Ahmed at the battle of Woyna Dega in 1543, the threat from Adal ceased immediately and the Christian kingdom continued its expansion to south of Abay River.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ከአህመድ ግራኝ ሞት በኋላም የዐዳል ሱልጣኔት ዛቻ ሙሉ በሙሉ አልቆመም፤ በተለይም በአሚር ኑር መሪነት ጦርነቱ ቀጥሏል።"
+                },
+                {
+                    q: "2. The two super powers, the Portuguese and Ottoman Turks were directly involved in the conflict between the Christian Kingdom and the Sultanate of Adal in order to glorify their global images.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ጣልቃ የገቡት ለቀይ ባህር እና ህንድ ውቅያኖስ የንግድ መስመር ቁጥጥር (Geopolitical & Economic interests) እንጂ ለዝና ብቻ አልነበረም።"
+                },
+                {
+                    q: "3. The process of the formation modern Ethiopia had been an easy task that ended up with the peaceful submission of states to Menelik.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ሂደቱ በሰላማዊ መንገድ ብቻ ሳይሆን በከባድ ወታደራዊ ፍልሚያዎችም ጭምር የተካሄደ ውስብስብ ሂደት ነበር።"
+                },
+                {
+                    q: "4. During the medieval periods Emperor Amde Tsion made large scale territorial expansion as compared to his successors and predecessor.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: አፄ ዓምደ ጽዮን በመካከለኛው ዘመን እጅግ ሰፊ የግዛት መስፋፋትን ያካሄዱ ንጉሥ ነበሩ።"
+                },
+                {
+                    q: "5. The Jesuit's evangelical effort against the Ethiopian Orthodox Church started during the reign of Emperor Susenyos.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የኢየሱሳውያን (Jesuits) እንቅስቃሴ የጀመረው በአፄ ገላውዴዎስ ዘመን ሲሆን በሱስንዮስ ዘመን ከፍተኛ ደረጃ ላይ ደረሰ።"
+                },
+                {
+                    q: "6. Before the onset of the Zemene-Mesafint, Gondar became the center of state administration, learning, commerce, art, and crafts for more than two centuries.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ጎንደር ከ 1636 ጀምሮ ለሁለት መቶ ዓመታት የፖለቲካ፣ ንግድና የጥበብ ማዕከል ነበረች።"
+                },
+                {
+                    q: "7. The process of territorial expansion was consummated with the signing of boundary agreements with the neighboring colonial powers that continued until 1908.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የድንበር ስምምነቶች ከቅኝ ገዥዎች ጋር እስከ 1908 ድረስ ተፈርመው ተጠናቀዋል።"
+                },
+                {
+                    q: "8. The Council of Boru Meda (1878) where Tewahdo was declared the only doctrine of the EOC was one of the triggering factors for opponents of Emperor Yohannes IV.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የቦሩ ሜዳ ጉባኤ ተዋሕዶ ብቸኛ የሀገር ሃይማኖት እንዲሆን የወሰነበት ጉባኤ ነበር።"
+                },
+                {
+                    q: "9. Until the late 14th century the descendants of Yekuno Amlak were primarily engaged in the establishment and consolidation of the new dynasty.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የይኩኖ አምላክ ተተኪዎች ስርወ-መንግስታቸውን በማጠናከር ላይ አተኩረው ነበር።"
+                },
+                {
+                    q: "10. The territorial expansion of the late nineteenth century was made to control lucrative resource bases and trade routes and thereby form a strong Ethiopian state.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የ 19ኛው መቶ ክፍለ ዘመን የግዛት አንድነት ዋና አላማ የንግድ መስመሮችን እና ሀብቶችን በመቆጣጠር ጠንካራ መንግስት መመስረት ነበር።"
+                },
+                {
+                    q: "11. One of the following was NOT the reforms of Fasileades soon after he came to power?",
+                    options: [
+                        "A) Reconciliation of Catholicism into the Orthodox Church",
+                        "B) Restoration of Orthodox to be the state religion",
+                        "C) Expulsion of Jesuit missionaries",
+                        "D) Declaration of Closed door policy"
+                    ],
+                    correct: 0,
+                    exp: "A: አፄ ፋሲለደስ ካቶሊክን ከኦርቶዶክስ ጋር አላስታረቁም፤ ይልቁንም ካቶሊኮችን አባረው ኦርቶዶክስን ብቻ አጽንተዋል።"
+                },
+                {
+                    q: "12. One of the following Queens did NOT play a prominent role in the medieval period of Ethiopia?",
+                    options: [
+                        "A) Queen Elleni",
+                        "B) Empress Taytu",
+                        "C) Queen Seblewongel",
+                        "D) Bati Dil Wanbera"
+                    ],
+                    correct: 1,
+                    exp: "B: እቴጌ ጣይቱ የ 19ኛው እና የ 20ኛው መቶ ክፍለ ዘመን ንግሥት እንጂ የመካከለኛው ዘመን አይደሉም።"
+                },
+                {
+                    q: "13. Which one of the following Muslim sultanate repeatedly challenged the Christian highland kingdom in the 15th and 16th centuries?",
+                    options: ["A) Shewa", "B) Ifat", "C) Adal", "D) Fatagar"],
+                    correct: 2,
+                    exp: "C: በ 15ኛው እና 16ኛው ክፍለ ዘመን የክርስትያን መንግስትን በዋናነት የተገዳደረው የዐዳል (Adal) ሱልጣኔት ነበር።"
+                },
+                {
+                    q: "14. Which one of the following was NOT considered as a possible cause for the 16th century population movement?",
+                    options: [
+                        "A) The population pressure",
+                        "B) Religious controversy",
+                        "C) The wars of the 16th century",
+                        "D) Drought and famine"
+                    ],
+                    correct: 1,
+                    exp: "B: የህዝብ እንቅስቃሴው ምክንያት የስነ-ምህዳር፣ የህዝብ ቁጥር መጨመር እና ጦርነት እንጂ የሃይማኖት ክርክር አልነበረም።"
+                },
+                {
+                    q: "15. The closed door policy that led to the isolation of Ethiopia from Christian Europe was introduced by king:",
+                    options: ["A) Susenyos", "B) Fasilades", "C) Serse Dengel", "D) Iyasu I"],
+                    correct: 1,
+                    exp: "B: የዝግ በር ፖሊሲን (Closed door policy) ያስተዋወቀው አፄ ፋሲለደስ (Fasilades) ነው።"
+                },
+                {
+                    q: "16. Who was the successful Catholic priest who converted king Susenyos into Catholicism?",
+                    options: ["A) Bermudez", "B) Oviedo", "C) Pedro Paez", "D) Mendez"],
+                    correct: 2,
+                    exp: "C: ፔድሮ ፓኤዝ (Pedro Paez) ቋንቋውንና ባህሉን በማጥናት ሱስንዮስን ወደ ካቶሊክ የቀየረ ጎበዝ ቄስ ነበር።"
+                },
+                {
+                    q: "17. The woman that dominated the politics of the last period of Gondarine era was:",
+                    options: ["A) Queen Eleni", "B) Itege Mentewab", "C) Seble Wengiel", "D) Bati Dil Wanbera"],
+                    correct: 1,
+                    exp: "B: እቴጌ ምንትዋብ (Itege Mentewab) በጎንደር ዘመን ማብቂያ ላይ የፖለቲካው ቁንጮ ነበሩ።"
+                },
+                {
+                    q: "18. Which one of the following doesn't characterize the Gondarine period?",
+                    options: [
+                        "A) Intrigues and poisoning of reigning monarch",
+                        "B) The production of illuminated manuscripts",
+                        "C) Increased involvement of the Oromo in the army and imperial court",
+                        "D) The existence of homogenous community in the towns of Gondar"
+                    ],
+                    correct: 3,
+                    exp: "D: ጎንደር የተለያየ እምነትና ባህል ያላቸው የተለያዩ ማህበረሰቦች መኖሪያ (Diverse quarters) ነበረች እንጂ Homogenous አልነበረችም።"
+                },
+                {
+                    q: "19. Which of the following statements is true about the Ewostatewos Movement?",
+                    options: [
+                        "A) It was monastic community everywhere joined by ardent followers",
+                        "B) It was based on teachings that stress the strict observance of Sabbath (Saturday)",
+                        "C) Ewostatewos enjoyed warm reception by Ethiopian pilgrims in Cairo",
+                        "D) Opposed by Abun and monarch"
+                    ],
+                    correct: 1,
+                    exp: "B: የኤዎስጣቴዎስ ንቅናቄ ዋና መርህ የሰንበትን (ቀዳሚት ሰንበትን) ጥብቅ አከባበር ማስተማር ነበር።"
+                },
+                {
+                    q: "20. The Golden Age of the Gondarine period covered the successive reign of:",
+                    options: [
+                        "A) Fassiledas, Iyoas and Iyassu I",
+                        "B) Fassiledas, Yohannis I and Iyassu I",
+                        "C) Iyasu I, Yohannes II and Bakafa",
+                        "D) Iyassu I, Minas and Sertse Dingle"
+                    ],
+                    correct: 1,
+                    exp: "B: የጎንደር ወርቃማ ዘመን የሚባለው የፋሲለደስ፣ የዮሐንስ 1ኛ እና የኢያሱ 1ኛ (ታላቁ ኢያሱ) ዘመን ነው።"
+                },
+                {
+                    q: "21. Why did the restored Solomonic dynasty prefer to administer the kingdom from mobile courts?",
+                    options: [
+                        "A) Frequent destruction of their capital by rival sultanates",
+                        "B) Kings were religious humanists",
+                        "C) Permanent centers were not conducive",
+                        "D) It was good to easily control rebellious movements inside the vast kingdom"
+                    ],
+                    correct: 3,
+                    exp: "D: ተንቀሳቃሽ ከተማ (Mobile camps) ሰፊውን ግዛት በቀላሉ ለመቆጣጠርና አመፆችን ወዲያውኑ ለማፈን ይጠቅም ነበር።"
+                },
+                {
+                    q: "22. Which of the following statements is TRUE about the position of religion in the rivalry between Christian kingdom and Sultanate of Adal?",
+                    options: [
+                        "A) It was the fundamental cause for the wars",
+                        "B) It provided an ideological justification to the wars",
+                        "C) It did not have values and impacts in both camps",
+                        "D) There was no more religious interaction"
+                    ],
+                    correct: 1,
+                    exp: "B: የጦርነቱ ዋና ምክንያት የንግድ መስመር የበላይነት ሲሆን ሃይማኖት ግን እንደ ርዕዮተ-ዓለም ማነሳሻ (Ideological justification) አገልግሏል።"
+                },
+                {
+                    q: "23. The earliest Gibe Oromo state was:",
+                    options: ["A) Limu Enarya", "B) Jimma", "C) Gera", "D) Guma"],
+                    correct: 0,
+                    exp: "A: ከጊቤ ኦሮሞ መንግስታት መካከል ቀድሞ የተመሰረተው ሊሙ-ኤናሪያ (Limu Enarya) ነው።"
+                },
+                {
+                    q: "24. Which major factor enabled the Christian Kingdom to defeat Imam Ahmed at Woyna Dega in 1543?",
+                    options: [
+                        "A) Imam Ahmed's fatal mistake of returning the Ottoman soldiers home soon after battle of Ofla",
+                        "B) Hit and run war strategy",
+                        "C) Skillfully used strong cavalry force",
+                        "D) All"
+                    ],
+                    correct: 0,
+                    exp: "A: አህመድ ግራኝ ከአፍላ ጦርነት በኋላ የቱርክ ወታደሮችን ማሰናበቱ በወይና ደጋ ለሽንፈቱ ዋነኛ ምክንያት ሆነ።"
+                },
+                {
+                    q: "25. Which one of the following states was incorporated by Emperor Menelik II AFTER the battle of Adwa?",
+                    options: ["A) Jimma and Leqa Neqamte", "B) Arsi and Harari", "C) Kaffa and Borena", "D) Wolayta and Hadya"],
+                    correct: 2,
+                    exp: "C: ከዐድዋ ድል (1896) በኋላ የተካተቱት ከፋ (1897) እና ቦረና (1897) ናቸው።"
+                },
+                {
+                    q: "26. One of the following was NOT the Muslim sultanate of medieval Ethiopia?",
+                    options: ["A) Ifat", "B) Fatagar", "C) Damot", "D) Bali"],
+                    correct: 2,
+                    exp: "C: ዳሞት (Damot) ጥንታዊ ራሱን የቻለ መንግስት እንጂ የእስልምና ሱልጣኔት አልነበረም።"
+                },
+                {
+                    q: "27. Which Solomonic king threatened to divert the course of Nile as a response to the persecution of Coptic Christians by Egyptian sultan?",
+                    options: ["A) Dawit", "B) Sayfe Arad", "C) Amde Tsion", "D) Zara Yacob"],
+                    correct: 0,
+                    exp: "A: ቀዳማዊ ዳዊት (Emperor Dawit I) አባይን ወደ ሌላ አቅጣጫ አዞረዋለሁ በማለት ለግብፅ ማስጠንቀቂያ ልኮ ነበር።"
+                },
+                {
+                    q: "28. What was the historical development that led to the beginning of the Zemene Mesafint in 1769?",
+                    options: [
+                        "A) The erosion of traditional power by Imam Ahmed",
+                        "B) Establishment of Gondar as capital",
+                        "C) The murder of king Iyoas by Ras Mikael Sehul of Tigray",
+                        "D) All"
+                    ],
+                    correct: 2,
+                    exp: "C: በ 1769 ራስ ሚካኤል ስሑል ንጉሥ ኢዮአስን መግደላቸው የዘመነ መሳፍንት መጀመሪያ ተደርጎ ይወሰዳል።"
+                }
+            ],
+            geography_final: [
+                {
+                    q: "1. Ethiopia's wildlife resource is characterized by high level of uniqueness and endemicity.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ኢትዮጵያ በርካታ ብርቅዬ (Endemic) የዱር እንስሳት አሏት።"
+                },
+                {
+                    q: "2. The earth surface is the main source of heat for the lower atmosphere that transfers in the form of long-wave radiation and convection.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የከባቢ አየር የታችኛው ክፍል ሙቀት የሚያገኘው ከመሬት በሚወጣው Long-wave radiation ነው።"
+                },
+                {
+                    q: "3. Despite their origin from highland areas, rivers in Ethiopia have immense navigation potential.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የኢትዮጵያ ወንዞች ተራራማና ፏፏቴ የበዛባቸው በመሆናቸው ለትራንስፖርት አያገለግሉም።"
+                },
+                {
+                    q: "4. In Ethiopia, the variation in the amount of solar radiation received daily is small throughout the year.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ለምድር ወገብ ቅርብ በመሆኗ የፀሐይ ብርሃን ልዩነት አነስተኛ ነው።"
+                },
+                {
+                    q: "5. In the tropical region, the annual range of temperature is very low due to high change in angle of sun in winter and summer.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የፀሐይ ማዕዘን ለውጥ አነስተኛ (Low change in sun angle) በመሆኑ ነው።"
+                },
+                {
+                    q: "6. The peripheries of Ethiopia experience tropical temperature conditions and mean maximum temperatures.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የኢትዮጵያ ድንበር አዋሳኝ ቆላማ አካባቢዎች ከፍተኛ ሙቀት ያስመዘግባሉ።"
+                },
+                {
+                    q: "7. Why do most parts of Ethiopia receive little or no rainfall during the winter season (Bega)?",
+                    options: [
+                        "A) Winds carry moisture from Atlantic",
+                        "B) Winds dominating during winter are of continental origin (NE Trade Winds)",
+                        "C) Position of ITCZ shifts North",
+                        "D) Westerlies energetic"
+                    ],
+                    correct: 1,
+                    exp: "B: የሰሜን ምሥራቅ ንፋሶች ከደረቅ የየብስ ክፍል ስለሚነሱ ዝናብ አልባ ናቸው።"
+                },
+                {
+                    q: "8. Identify the WRONG combination of wildlife and its habitat:",
+                    options: [
+                        "A) Walia Ibex -> Semien highlands",
+                        "B) Hippopotamus -> Bale Mountains",
+                        "C) Semien Fox -> Bale and Semien highlands",
+                        "D) Flamingos -> Abijata-Shalla national park"
+                    ],
+                    correct: 1,
+                    exp: "B: ጉማሬ የውሃ እንስሳ እንጂ የባሌ ተራሮች መገለጫ አይደለም።"
+                },
+                {
+                    q: "9. Which one of the following is TRUE about Ethiopian rivers?",
+                    options: [
+                        "A) Atbara to Mereb, Juba to Wabishebelle",
+                        "B) Never manifest variation in water quantity",
+                        "C) Ghenale largest in catchment",
+                        "D) Serve as physical boundary between regions and countries"
+                    ],
+                    correct: 3,
+                    exp: "D: ወንዞቻችን እንደ ተፈጥሯዊ ወሰን (Physical boundary) ሆነው ያገለግላሉ።"
+                },
+                {
+                    q: "10. The following statements are correct about controls of weather and climate EXCEPT:",
+                    options: [
+                        "A) Higher latitude areas receive high temperature",
+                        "B) Lower latitude areas receive high temperature",
+                        "C) Inclination of earth's axis produces changes in directness of sun rays",
+                        "D) Inclination of earth's axis determines temperature zones"
+                    ],
+                    correct: 0,
+                    exp: "A: Higher latitude (ከወገብ የራቁ ቦታዎች) ቅዝቃዜ እንጂ ከፍተኛ ሙቀት አይቀበሉም።"
+                },
+                {
+                    q: "11. Which traditional climate zone of Ethiopia is dominated by Acacia vegetation?",
+                    options: ["A) Woina Dega", "B) Dega", "C) Bereha / Kolla", "D) Wurch"],
+                    correct: 2,
+                    exp: "C: የግራር (Acacia) ዛፎች በቆላና በረሃ በስፋት ይገኛሉ።"
+                },
+                {
+                    q: "12. In summer, Ethiopia experiences lower temperatures contrary to high solar insolation due to:",
+                    options: [
+                        "A) Latitude and global air pressure",
+                        "B) Altitude and ocean current",
+                        "C) Latitude and distance from sea",
+                        "D) Altitude and cloud cover"
+                    ],
+                    correct: 3,
+                    exp: "D: የመሬት ከፍታ እና የደመና መሸፈን ሙቀቱን ይቀንሰዋል።"
+                },
+                {
+                    q: "13. Public transportation and energy efficient technologies to reduce greenhouse gas emissions is categorized as:",
+                    options: ["A) Adaptation", "B) Mitigation", "C) Resilience", "D) Modification"],
+                    correct: 1,
+                    exp: "B: የበካይ ጋዞች ልቀትን መቀነስ Mitigation ይባላል።"
+                },
+                {
+                    q: "14. Which man-made lake is CORRECTLY matched with its river?",
+                    options: [
+                        "A) Koka -> Fincha river",
+                        "B) Melka Wakena -> Wabishebelle river",
+                        "C) Abasamuel -> Abay river",
+                        "D) Fincha -> Awash river"
+                    ],
+                    correct: 1,
+                    exp: "B: የመልካ ዋከና ሰው ሰራሽ ሐይቅ የተሰራው በዋቢ ሸበሌ ወንዝ ላይ ነው።"
+                },
+                {
+                    q: "15. Which of the following is a dominant plant species found in the Afro-alpine (Wurch) region?",
+                    options: [
+                        "A) Lobelia rhynchopetalum (Giberra)",
+                        "B) Hagenia Abyssinica (Kosso)",
+                        "C) Ficus sur (Sholla)",
+                        "D) Olea africana (Weyra)"
+                    ],
+                    correct: 0,
+                    exp: "A: ግበራ (Lobelia rhynchopetalum) በከፍተኛ የቁር ቦታዎች ብቻ የሚበቅል ነው።"
+                },
+                {
+                    q: "16. Which altitudinal range has relatively short growing seasons?",
+                    options: [
+                        "A) 1600-2000 m a.s.l",
+                        "B) 500-1500 m a.s.l",
+                        "C) 2400-3000 m a.s.l",
+                        "D) Above 3300 m a.s.l"
+                    ],
+                    correct: 3,
+                    exp: "D: ከ 3300 ሜትር በላይ ባሉ በጣም ቀዝቃዛ ቦታዎች የዕድገት ወቅት እጅግ አጭር ነው።"
+                },
+                {
+                    q: "17. The spatial variation of temperature in Ethiopia is significantly determined by:",
+                    options: ["A) Latitude", "B) Distance from water bodies", "C) Vegetation cover", "D) Altitude"],
+                    correct: 3,
+                    exp: "D: በኢትዮጵያ የሙቀት ልዩነት በዋናነት የሚወሰነው በመሬት ከፍታ (Altitude) ነው።"
+                }
+            ],
+            geography_mid: [
+                {
+                    q: "1. The Gneissic high lands of Konso and the surrounding high lands separate the main Ethiopian rift from the Afar triangle.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የኮንሶ ከፍተኛ ቦታዎች ዋናውን ስምጥ ሸለቆ ከ Chew Bahir ስምጥ ሸለቆ ይለያሉ።"
+                },
+                {
+                    q: "2. The systematic approach of geographical study examines a variety of geographical features in a certain areal extent.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: በአንድ የተወሰነ ክልል ማጥናት Regional Approach ይባላል።"
+                },
+                {
+                    q: "3. The uplift of the Arabo-Ethiopian landmass was one of the major geologic events during the Cenozoic era.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: በ Cenozoic Era የመሬት መነሳትና የስምጥ ሸለቆ መፈጠር ተከስቷል።"
+                },
+                {
+                    q: "4. The Shewan Plateau has the largest proportion of elevated ground from the Western highlands physiographic subdivision.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የሸዋ አምባ ከፍተኛውን ስፋትና ከፍታ ይዟል።"
+                },
+                {
+                    q: "5. The marshy area of broad and shallow depression covered by tall grasses is the prominent feature of Chew Bahir Rift.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የጨው ባህር ስምጥ ሸለቆ ረግረጋማና ረዣዥም ሳሮች የበቀሉበት ነው።"
+                },
+                {
+                    q: "6. Which of the following is/are WRONG about the physiographic effects of the formation of the Rift Valley?",
+                    options: [
+                        "A) It divides the Ethiopian Plateau into two",
+                        "B) It creates basins and fault depressions on which lakes are formed",
+                        "C) It causes the formation of the Dead Sea and Red Sea",
+                        "D) It subjects the land to intense folding"
+                    ],
+                    correct: 3,
+                    exp: "D: የስምጥ ሸለቆ መፈጠር ከመሰንጠቅ (Faulting) ጋር እንጂ ከመታጠፍ (Folding) ጋር አይገናኝም።"
+                },
+                {
+                    q: "7. Which is TRUE about the location of Ethiopia?",
+                    options: [
+                        "A) Because of latitudinal location, Ethiopia uses GMT+3",
+                        "B) Ethiopia has a defined sea outlet",
+                        "C) Due to latitudinal location, Ethiopia experiences tropical type of climate",
+                        "D) There is a three hour difference between extremes"
+                    ],
+                    correct: 2,
+                    exp: "C: ኢትዮጵያ በሞቃታማ (Tropical) የአየር ንብረት ክልል ውስጥ ትገኛለች።"
+                },
+                {
+                    q: "8. Of the following, which statement is NOT correct?",
+                    options: [
+                        "A) Hararghe plateau found north easterly extension of south eastern highlands",
+                        "B) Bale highlands separated from Sidama highlands by Ghenale River",
+                        "C) Western lowlands are the most extensive lowlands in Ethiopia",
+                        "D) South eastern lowlands are characterized by arid and semi-arid climate"
+                    ],
+                    correct: 2,
+                    exp: "C: በስፋት አንደኛ የሆኑት ደቡብ ምሥራቃዊ ዝቅተኛ ቦታዎች (Southeastern lowlands) ናቸው።"
+                },
+                {
+                    q: "9. Among the following, which mountain is INCORRECTLY matched with its highland?",
+                    options: [
+                        "A) Mt Garamuleta -> Hararghe plateau",
+                        "B) Mt Tulu Demtu -> Bale highlands",
+                        "C) Mt Bada -> Sidama high lands",
+                        "D) Mt Chilalo -> Arsi highlands"
+                    ],
+                    correct: 2,
+                    exp: "C: ባዳ ተራራ የሚገኘው በአርሲ ከፍተኛ ቦታዎች ነው።"
+                },
+                {
+                    q: "10. Which is NOT correct about the geologic history of Ethiopia and the Horn?",
+                    options: [
+                        "A) Tertiary period resulted in the outpouring of Trappean lava series",
+                        "B) Thickness and age of Adigrat sandstone decrease from SE to NW",
+                        "C) Paleozoic era is known for lowering of surface through denudation",
+                        "D) The sedimentary rocks were formed during the Precambrian era"
+                    ],
+                    correct: 3,
+                    exp: "D: የደለል አለቶች የተፈጠሩት በሜሶዞይክ (Mesozoic era) ነው።"
+                },
+                {
+                    q: "11. One is unique (Absolute method) among the techniques of estimating the age of rocks:",
+                    options: [
+                        "A) Using radioactive isotopes",
+                        "B) Using superposition principle",
+                        "C) Relating rock type and structure",
+                        "D) Relating fossils of fauna and flora"
+                    ],
+                    correct: 0,
+                    exp: "A: ራዲዮአክቲቭ አይሶቶፕ ፍፁማዊ የዕድሜ መገመቻ ዘዴ (Absolute dating) ነው።"
+                },
+                {
+                    q: "12. One is an example of endogenic process as a result of COMPRESSIONAL forces:",
+                    options: ["A) Faulting", "B) Folding", "C) Mass transfer", "D) Deposition"],
+                    correct: 1,
+                    exp: "B: Folding የሚከሰተው የመሬት ገጽ በጎንዮሽ ጫና (Compressional forces) ሲገፋ ነው።"
+                },
+                {
+                    q: "13. Platinum has been mined in Ethiopia mainly in:",
+                    options: ["A) Adola", "B) Erta Ale", "C) Yubdo", "D) Dallol"],
+                    correct: 2,
+                    exp: "C: በኢትዮጵያ ፕላቲኒየም የሚመረትበት የታወቀው ቦታ ዩብዶ (Yubdo) ነው።"
+                },
+                {
+                    q: "14. Which one of the following is NOT part of the South Eastern Highlands?",
+                    options: ["A) Mount Kaka", "B) Mount Tulu Demtu", "C) Jemjem plateau", "D) Mount Guraghe"],
+                    correct: 3,
+                    exp: "D: የጉራጌ ተራራ (Mt Guraghe) የምዕራባዊ ከፍተኛ ቦታዎች አካል ነው።"
+                },
+                {
+                    q: "15. Which highlands accommodate the most dissected terrain and diverse cultural groups in the country?",
+                    options: [
+                        "A) North central highlands",
+                        "B) Arsi-Bale-Sidama Highlands",
+                        "C) South western highlands",
+                        "D) Tigray plateau"
+                    ],
+                    correct: 2,
+                    exp: "C: ደቡብ ምዕራብ ከፍተኛ ቦታዎች እጅግ የተሰነጣጠቁ ሸለቆዎችና በርካታ ብሔረሰቦች ያሉበት ነው።"
+                },
+                {
+                    q: "16. Which lowlands of Ethiopia are the WETTEST and SURFACE WATER DEFICIT respectively?",
+                    options: [
+                        "A) Borena Lowland & Abay Dindir Lowland",
+                        "B) Omo Lowland & Baro Lowland",
+                        "C) Omo Lowland & Gibe Lowland",
+                        "D) Baro Lowland & Ogaden lowland"
+                    ],
+                    correct: 3,
+                    exp: "D: ባሮ በጣም እርጥበታማ ሲሆን ኦጋዴን ደግሞ የወለል ውሃ እጥረት አለበት።"
+                },
+                {
+                    q: "17. Western tip of Ethiopia (Akobo, 33°E) vs Eastern tip (Ogaden, 48°E). Time at Akobo will be:",
+                    options: [
+                        "A) 1 hour late from Ogaden",
+                        "B) Half an hour ahead of Ogaden",
+                        "C) 1 hour ahead of Ogaden",
+                        "D) The same as that of Ogaden"
+                    ],
+                    correct: 0,
+                    exp: "A: በ 15° የኬንትሮስ ልዩነት አኮቦ ከኦጋዴን በ1 ሰዓት ወደኋላ (1 hour late) ይዘገያል።"
+                },
+                {
+                    q: "18. Which highland area is best known for GRAIN PRODUCTION in Ethiopia?",
+                    options: [
+                        "A) Jemjem Plateau",
+                        "B) Sidama Highlands",
+                        "C) Arsi-Bale Highlands",
+                        "D) Hararghe Plateau"
+                    ],
+                    correct: 2,
+                    exp: "C: የአርሲና ባሌ ከፍተኛ ቦታዎች የእህል ምርት ጎተራ በመባል ይታወቃሉ።"
+                }
+            ],
+            logic_final: [
+                {
+                    q: "1. A word is vague when there is no clear borderline case for it to be or not to be applied to a particular case.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: Vagueness የሚፈጠረው የአንድ ቃል ወሰን ግልጽ ሳይሆን ሲቀር ነው።"
+                },
+                {
+                    q: "2. All words have an intensional meaning and an extensional meaning.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ሁሉም ቃላት በገሃዱ ዓለም ህልውና (Extensional meaning) የላቸውም።"
+                },
+                {
+                    q: "3. The indirect approach of appeal to the people fallacy is common in advertising industry.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ማስታወቂያዎች Appeal to the People (Indirect) በስፋት ይጠቀማሉ።"
+                },
+                {
+                    q: "4. Straw man fallacy is committed when the arguer cites the claims of another person who lacks the required expertise.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ይህ Appeal to Unqualified Authority እንጂ Straw Man አይደለም።"
+                },
+                {
+                    q: "5. False dichotomy always involves an 'either... or...' statement, at least implicitly.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: False Dichotomy ሁለት ጽንፎችን ብቻ በማቅረብ ይከራከራል።"
+                },
+                {
+                    q: "6. Which of the following best expresses the form of 'ad hominem tu quoque' fallacy?",
+                    options: [
+                        "A) X failed to follow his/her own advice. Therefore, X's claim should be rejected.",
+                        "B) X is biased or has a questionable motive.",
+                        "C) X is a bad person; therefore, claim rejected.",
+                        "D) X's view is false or unjustified."
+                    ],
+                    correct: 0,
+                    exp: "A: Tu quoque ማለት 'አንተም አታደርገውም (Hypocrite)' በማለት ምክርን ውድቅ ማድረግ ነው።"
+                },
+                {
+                    q: "7. 'Each cell in the human body is invisible. Therefore, the human body itself is invisible.' This fallacy is:",
+                    options: ["A) Composition", "B) Division", "C) Amphiboly", "D) Accident"],
+                    correct: 0,
+                    exp: "A: የክፍሉን ባህሪ ወደ ሙሉው አካል ማስተላለፍ Fallacy of Composition ይባላል።"
+                },
+                {
+                    q: "8. Which type of definition is common especially in the area of science and philosophy?",
+                    options: ["A) Persuasive", "B) Précising", "C) Lexical", "D) Theoretical"],
+                    correct: 3,
+                    exp: "D: በሳይንስና ፍልስፍና Theoretical Definition ጥቅም ላይ ይውላል።"
+                },
+                {
+                    q: "9. The view that 'my wife is not clever, therefore all wives are not clever' commits:",
+                    options: ["A) Begging the question", "B) Ad hominem abusive", "C) Composition", "D) Hasty generalization"],
+                    correct: 3,
+                    exp: "D: ከአንድ አነስተኛ ምሳሌ ተነስቶ ወደ አጠቃላይ ድምዳሜ መድረስ Hasty Generalization ነው።"
+                },
+                {
+                    q: "10. A fallacy that employs threats or intimidation is:",
+                    options: ["A) Straw man", "B) Appeal to force", "C) Appeal to pity", "D) Suppressed evidence"],
+                    correct: 1,
+                    exp: "B: በማስፈራራት የሚደረግ ክርክር Appeal to Force (Ad Baculum) ነው።"
+                },
+                {
+                    q: "11. 'Senior citizen means a purchaser must be at least 65 years old.' This definition is classified as:",
+                    options: ["A) Stipulative", "B) Précising", "C) Lexical", "D) Persuasive"],
+                    correct: 1,
+                    exp: "B: አሻሚነትን ለማስወገድ የተወሰነ ወሰን (65 ዓመት) መስጠት Précising Definition ነው።"
+                },
+                {
+                    q: "12. 'London, Paris, Madrid' for the term 'City' represents which method of definition?",
+                    options: ["A) Enumerative", "B) Subclass", "C) Etymological", "D) Operational"],
+                    correct: 0,
+                    exp: "A: አባላቱን በስማቸው በመጥቀስ ማብራራት Enumerative Definition ይባላል።"
+                },
+                {
+                    q: "13. 'Whatever you do, never buy a lottery ticket... you'll end up totally broke.' commits:",
+                    options: ["A) Missing the point", "B) Post hoc", "C) Slippery slope", "D) Begging the question"],
+                    correct: 2,
+                    exp: "C: ያለምክንያት ወደ አስከፊ ሰንሰለታማ ውጤት የሚወስድ ክርክር Slippery Slope ነው።"
+                },
+                {
+                    q: "14. 'Have you given up your criminal ways?' If answered 'yes', it commits:",
+                    options: ["A) Complex question", "B) False cause", "C) Suppressed evidence", "D) Appeal to pity"],
+                    correct: 0,
+                    exp: "A: ያደፈጠ ወጥመድ ጥያቄ የያዘ አረፍተ ነገር Complex Question ነው።"
+                },
+                {
+                    q: "15. A fallacy that occurs when premises support one conclusion, but then a different conclusion is drawn:",
+                    options: [
+                        "A) Missing the point",
+                        "B) Slippery slope",
+                        "C) Complex question",
+                        "D) Weak analogy"
+                    ],
+                    correct: 0,
+                    exp: "A: መረጃው ወደ አንድ ድምዳሜ እያመራ ሌላ ያልተገናኘ ድምዳሜ ላይ ሲደረስ Missing the point ይባላል።"
+                }
+            ],
+            logic_mid: [
+                {
+                    q: "1. Reading and knowing philosophy is sufficient for someone to be a philosopher.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ፍልስፍናን ማንበብ ብቻውን ፈላስፋ አያደርግም።"
+                },
+                {
+                    q: "2. An argument that has actually true premises and actually false conclusion is always invalid.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: True premises ኖረውት False conclusion ያለው ክርክር ሁልጊዜ Invalid ነው።"
+                },
+                {
+                    q: "3. Scientific arguments aimed at the discovery of a law of nature are usually deductive.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ሳይንሳዊ ምርምሮች Inductive ናቸው።"
+                },
+                {
+                    q: "4. Philosophy is a rational attempt to look at the world as a whole rather than separately.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ፍልስፍና ዓለምን በአጠቃላይ የሚመረምር መስክ ነው።"
+                },
+                {
+                    q: "5. Knowing the factual claims of statements is a prerequisite for determining whether an argument is deductive or inductive.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: Deductive ወይም Inductive መሆኑን የምናውቀው በመረጃዎቹ ግንኙነት (Inferential Claim) ነው።"
+                },
+                {
+                    q: "6. If A is said to be a necessary condition for B, the occurrence of B is possible without the occurrence of A.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ያለ A መከሰት B በፍጹም ሊከሰት አይችልም።"
+                },
+                {
+                    q: "7. For extreme rationalists, humans can arrive at irrefutable knowledge without the help of our senses.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: Rationalists እውቀት የሚገኘው በምክንያት (Reason) ብቻ ነው ብለው ያምናሉ።"
+                },
+                {
+                    q: "8. 'An element is a collection of atoms... Each atom contains protons, neutrons, and electrons...' This passage is:",
+                    options: [
+                        "A) Argument with conclusion about element",
+                        "B) Argument with conclusion about electrons",
+                        "C) Argument with conclusion about nucleus",
+                        "D) Non-argument"
+                    ],
+                    correct: 3,
+                    exp: "D: መረጃን የሚያብራራ ገላጭ ጽሑፍ እንጂ ክርክር አይደለም።"
+                },
+                {
+                    q: "9. A sound argument is the one that contains:",
+                    options: [
+                        "A) All true premises and strong argument",
+                        "B) Valid argument and all true premises",
+                        "C) Invalid argument and all true premises",
+                        "D) Strong argument and valid argument"
+                    ],
+                    correct: 1,
+                    exp: "B: Valid ሆኖ መነሻዎቹ እውነት ሲሆኑ Sound Argument ይባላል።"
+                },
+                {
+                    q: "10. 'Samerawit is a polytheist. Therefore, she believes in more than one god.' This argument is:",
+                    options: [
+                        "A) Inductive, cogent",
+                        "B) Deductive, invalid",
+                        "C) Deductive, valid",
+                        "D) Inductive, strong"
+                    ],
+                    correct: 2,
+                    exp: "C: በትርጉሙ መሰረት ድምዳሜው የግድ የሚከተል (Deductive, Valid) ነው።"
+                },
+                {
+                    q: "11. All of the following statements are correct except:",
+                    options: [
+                        "A) All valid arguments are sound",
+                        "B) An argument should contain at least two statements",
+                        "C) In any argument, conclusion contains the central idea",
+                        "D) All invalid arguments are unsound"
+                    ],
+                    correct: 0,
+                    exp: "A: ሁሉም Valid arguments 'Sound' ሊሆኑ አይችሉም፤ መነሻቸው ሀሰት ከሆነ Unsound ይሆናሉ።"
+                },
+                {
+                    q: "12. In 'The moon sends forth light because it reflects light from the sun', 'The moon sends forth light' is called:",
+                    options: [
+                        "A) Explanans",
+                        "B) Explanandum",
+                        "C) Consequent",
+                        "D) Conclusion"
+                    ],
+                    correct: 1,
+                    exp: "B: ማብራሪያ የተፈለገለት ክስተት Explanandum ይባላል።"
+                },
+                {
+                    q: "13. Which of the following sentences is a statement?",
+                    options: [
+                        "A) Vladimir Putin is a brain surgeon.",
+                        "B) Let's go to a restaurant tonight.",
+                        "C) I suggest you to take vacation.",
+                        "D) Stop beating that drum right now!"
+                    ],
+                    correct: 0,
+                    exp: "A: እውነት ወይም ሀሰት ተብሎ ሊፈረጅ የሚችል ገላጭ አረፍተ-ነገር ነው።"
+                },
+                {
+                    q: "14. 'All birds are animals. A parrot is a bird. Therefore, a parrot is an animal.' This argument is:",
+                    options: [
+                        "A) Non-argumentative passage",
+                        "B) Deductive valid and unsound argument",
+                        "C) Inductive invalid and sound argument",
+                        "D) Deductive valid and sound argument"
+                    ],
+                    correct: 3,
+                    exp: "D: ቅርጹ Valid ሆኖ መረጃዎቹ እውነት ስለሆኑ Sound Argument ነው።"
+                },
+                {
+                    q: "15. 'The past five times my friend borrowed my laptop, it had a problem... likely next time too.' This is:",
+                    options: [
+                        "A) Argument from analogy",
+                        "B) Argument from prediction",
+                        "C) Argument from authority",
+                        "D) Argument based on sign"
+                    ],
+                    correct: 1,
+                    exp: "B: ካለፈው ልምድ ተነስቶ ስለ ወደፊቱ መተንበይ Argument from Prediction ነው።"
+                }
+            ],
             econ_final: [
                 {
                     q: "1. Under perfectly competitive market structure, some firm can gain competitive advantage over the other firm through advertising their products.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "False: በ Perfect Competition ውስጥ ምርቶች ተመሳሳይ (Homogeneous) በመሆናቸው ማስታወቂያ ተወዳዳሪ ጥቅም አያስገኝም።"
+                    exp: "False: በ Perfect Competition ውስጥ ምርቶች ተመሳሳይ በመሆናቸው ማስታወቂያ ጥቅም አያስገኝም።"
                 },
                 {
                     q: "2. The demand curve of a monopolist is downward as it is a price taker.",
@@ -305,37 +1243,37 @@
                     q: "3. The values of self-owned inputs that are used in the production process are called implicit costs.",
                     options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "True: የአንድ ባለቤት የራሱ የሆኑ ግብአቶች ግምት Implicit Cost ይባላል።"
+                    exp: "True: የአንድ ባለቤት የራሱ የሆኑ ግብአቶች ዋጋ Implicit Cost ይባላል።"
                 },
                 {
                     q: "4. In stage 1 of production, the fixed input is underutilized. Thus, the firm increases output by increasing the variable input.",
                     options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "True: በ Stage 1 ቋሚ ግብአቱ በደንብ ስላልተሰራበት ተለዋዋጭ ግብአትን በመጨመር ምርትን ያሳድጋል።"
+                    exp: "True: በ Stage 1 ቋሚ ግብአቱን በተሻለ ለመጠቀም ተለዋዋጭ ግብአት ይጨመራል።"
                 },
                 {
                     q: "5. A firm incurs loss whenever price is less than average cost.",
                     options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "True: ዋጋ ከአማካይ ወጪ ካነሰ (P < AC) ድርጅቱ ኪሳራ ያጋጥመዋል።"
+                    exp: "True: ዋጋ ከአማካይ ወጪ ካነሰ (P < AC) ኪሳራ ያጋጥማል።"
                 },
                 {
                     q: "6. Imported goods and services directly enter into GDP deflator calculation.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "False: የውጭ እቃዎች በ GDP Deflator ውስጥ አይካተቱም (በ CPI ውስጥ ብቻ ነው የሚካተቱት)።"
+                    exp: "False: የውጭ እቃዎች በ GDP Deflator ውስጥ አይካተቱም።"
                 },
                 {
                     q: "7. Even if cost is a function of output level, as we increase the level of output average fixed cost will remain constant.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "False: ምርት በጨመረ ቁጥር Average Fixed Cost (AFC) ይቀንሳል እንጂ ቋሚ አይሆንም።"
+                    exp: "False: ምርት ሲጨምር Average Fixed Cost (AFC) ይቀንሳል።"
                 },
                 {
                     q: "8. The monopoly firm produces a commodity with lots of close substitutes.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "False: የሞኖፖሊ ድርጅት ተለዋጭ የሌለውን (No close substitutes) እቃ ያመርታል።"
+                    exp: "False: ሞኖፖሊ ተለዋጭ የሌለውን (No close substitutes) እቃ ያመርታል።"
                 },
                 {
                     q: "9. When NFI is positive, the value of GDP is lower than the value of GNP.",
@@ -347,7 +1285,7 @@
                     q: "10. Under perfectly competitive market structure, price of a product is determined by market force.",
                     options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "True: ዋጋ የሚወሰነው በገበያ ፍላጎትና አቅርቦት (Market forces) ነው።"
+                    exp: "True: ዋጋ የሚወሰነው በገበያ ፍላጎትና አቅርቦት ነው።"
                 },
                 {
                     q: "11. Which one of the following is not true about perfect competitive market structure?",
@@ -358,7 +1296,7 @@
                         "D) A firm can sell whatever amount with the existing price"
                     ],
                     correct: 1,
-                    exp: "B: በ Perfect Competition ውስጥ ድርጅቶች Price Taker እንጂ Price Maker አይደሉም።"
+                    exp: "B: ድርጅቶች Price Taker እንጂ Price Maker አይደሉም።"
                 },
                 {
                     q: "12. An Ethiopian construction company built a road in Kenya; this activity would be:",
@@ -369,7 +1307,7 @@
                         "D) Excluded from Kenyan GDP"
                     ],
                     correct: 2,
-                    exp: "C: የኢትዮጵያ ዜጎች በውጭ ሀገር የሚያመርቱት በ GNP ውስጥ ይካተታል።"
+                    exp: "C: የዜጎች የውጭ ሀገር ምርት በ GNP ውስጥ ይካተታል።"
                 },
                 {
                     q: "13. Suppose that a firm produces 200,000 units a year and sells them all for $10 each. Explicit costs = $1,500,000 and implicit costs = $300,000. What is accounting and economic profit?",
@@ -387,11 +1325,11 @@
                     options: [
                         "A) Intermediate production exceeds final production",
                         "B) Real GDP exceeds nominal GDP",
-                        "C) Ethiopians are producing more in foreign countries than foreigners in Ethiopia",
-                        "D) Foreigners are producing more in Ethiopia than Ethiopians are producing abroad"
+                        "C) Ethiopians are producing more in foreign countries",
+                        "D) Foreigners are producing more in Ethiopia than Ethiopians abroad"
                     ],
                     correct: 3,
-                    exp: "D: GDP > GNP ማለት የውጭ ዜጎች በኢትዮጵያ ውስጥ የሚያመርቱት ኢትዮጵያውያን በውጭ ከሚያመርቱት ሲበልጥ ነው።"
+                    exp: "D: GDP > GNP ማለት የውጭ ዜጎች በሀገር ውስጥ የሚያመርቱት ከዜጎች የውጭ ምርት ሲበልጥ ነው።"
                 },
                 {
                     q: "15. The current telecom market in Ethiopia is an example of:",
@@ -402,7 +1340,7 @@
                         "D) Duopoly market"
                     ],
                     correct: 3,
-                    exp: "D: ሁለት አቅራቢዎች (ኢትዮ ቴሌኮም እና ሳፋሪኮም) ስላሉ ገበያው Duopoly ነው።"
+                    exp: "D: ሁለት አቅራቢዎች ስላሉ ገበያው Duopoly ነው።"
                 }
             ],
             econ_mid: [
@@ -509,355 +1447,10 @@
                     correct: 0,
                     exp: "A: Ed = (dQ/dP) * (P/Q) => -1/3 = -0.5 * (P/30) => P = 20።"
                 }
-            ],
-            logic_final: [
-                {
-                    q: "1. A word is vague when there is no clear borderline case for it to be or not to be applied to a particular case.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: Vagueness የሚፈጠረው የአንድ ቃል ወሰን ግልጽ ሳይሆን ሲቀር ነው።"
-                },
-                {
-                    q: "2. All words have an intensional meaning and an extensional meaning.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "False: ሁሉም ቃላት በገሃዱ ዓለም ህልውና (Extensional meaning) የላቸውም።"
-                },
-                {
-                    q: "3. The indirect approach of appeal to the people fallacy is common in advertising industry.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: ማስታወቂያዎች Appeal to the People (Indirect) በስፋት ይጠቀማሉ።"
-                },
-                {
-                    q: "4. Straw man fallacy is committed when the arguer cites the claims of another person who lacks the required expertise.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "False: ይህ Appeal to Unqualified Authority እንጂ Straw Man አይደለም።"
-                },
-                {
-                    q: "5. False dichotomy always involves an 'either... or...' statement, at least implicitly.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: False Dichotomy ሁለት ጽንፎችን ብቻ በማቅረብ ይከራከራል።"
-                },
-                {
-                    q: "6. Which of the following best expresses the form of 'ad hominem tu quoque' fallacy?",
-                    options: [
-                        "A) X failed to follow his/her own advice. Therefore, X's claim should be rejected.",
-                        "B) X is biased or has a questionable motive.",
-                        "C) X is a bad person; therefore, claim rejected.",
-                        "D) X's view is false or unjustified."
-                    ],
-                    correct: 0,
-                    exp: "A: Tu quoque ማለት 'አንተም አታደርገውም (Hypocrite)' በማለት ምክርን ውድቅ ማድረግ ነው።"
-                },
-                {
-                    q: "7. 'Each cell in the human body is invisible. Therefore, the human body itself is invisible.' This fallacy is:",
-                    options: ["A) Composition", "B) Division", "C) Amphiboly", "D) Accident"],
-                    correct: 0,
-                    exp: "A: የክፍሉን ባህሪ ወደ ሙሉው አካል ማስተላለፍ Fallacy of Composition ይባላል።"
-                },
-                {
-                    q: "8. Which type of definition is common especially in the area of science and philosophy?",
-                    options: ["A) Persuasive", "B) Précising", "C) Lexical", "D) Theoretical"],
-                    correct: 3,
-                    exp: "D: በሳይንስና ፍልስፍና Theoretical Definition ጥቅም ላይ ይውላል።"
-                },
-                {
-                    q: "9. The view that 'my wife is not clever, therefore all wives are not clever' commits:",
-                    options: ["A) Begging the question", "B) Ad hominem abusive", "C) Composition", "D) Hasty generalization"],
-                    correct: 3,
-                    exp: "D: ከአንድ አነስተኛ ምሳሌ ተነስቶ ወደ አጠቃላይ ድምዳሜ መድረስ Hasty Generalization ነው።"
-                },
-                {
-                    q: "10. A fallacy that employs threats or intimidation is:",
-                    options: ["A) Straw man", "B) Appeal to force", "C) Appeal to pity", "D) Suppressed evidence"],
-                    correct: 1,
-                    exp: "B: በማስፈራራት የሚደረግ ክርክር Appeal to Force (Ad Baculum) ነው።"
-                },
-                {
-                    q: "11. 'Senior citizen means a purchaser must be at least 65 years old.' This definition is classified as:",
-                    options: ["A) Stipulative", "B) Précising", "C) Lexical", "D) Persuasive"],
-                    correct: 1,
-                    exp: "B: አሻሚነትን ለማስወገድ የተወሰነ ወሰን (65 ዓመት) መስጠት Précising Definition ነው።"
-                },
-                {
-                    q: "12. 'London, Paris, Madrid' for the term 'City' represents which method of definition?",
-                    options: ["A) Enumerative", "B) Subclass", "C) Etymological", "D) Operational"],
-                    correct: 0,
-                    exp: "A: አባላቱን በስማቸው በመጥቀስ ማብራራት Enumerative Definition ይባላል።"
-                },
-                {
-                    q: "13. 'Whatever you do, never buy a lottery ticket... you'll end up totally broke.' commits:",
-                    options: ["A) Missing the point", "B) Post hoc", "C) Slippery slope", "D) Begging the question"],
-                    correct: 2,
-                    exp: "C: ያለምክንያት ወደ አስከፊ ሰንሰለታማ ውጤት የሚወስድ ክርክር Slippery Slope ነው።"
-                },
-                {
-                    q: "14. 'Have you given up your criminal ways?' If answered 'yes', it commits:",
-                    options: ["A) Complex question", "B) False cause", "C) Suppressed evidence", "D) Appeal to pity"],
-                    correct: 0,
-                    exp: "A: ያደፈጠ ወጥመድ ጥያቄ የያዘ አረፍተ ነገር Complex Question ነው።"
-                }
-            ],
-            logic_mid: [
-                {
-                    q: "1. Reading and knowing philosophy is sufficient for someone to be a philosopher.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "False: ፍልስፍናን ማንበብ ብቻውን ፈላስፋ አያደርግም።"
-                },
-                {
-                    q: "2. An argument that has actually true premises and actually false conclusion is always invalid.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: True premises ኖረውት False conclusion ያለው ክርክር ሁልጊዜ Invalid ነው።"
-                },
-                {
-                    q: "3. Scientific arguments aimed at the discovery of a law of nature are usually deductive.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "False: ሳይንሳዊ ምርምሮች Inductive ናቸው።"
-                },
-                {
-                    q: "4. Philosophy is a rational attempt to look at the world as a whole rather than separately.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: ፍልስፍና ዓለምን በአጠቃላይ የሚመረምር መስክ ነው።"
-                },
-                {
-                    q: "5. 'An element is a collection of atoms...' This passage is:",
-                    options: ["A) Argument", "B) Expository passage", "C) Illustration", "D) Non-argument"],
-                    correct: 3,
-                    exp: "D: መረጃን የሚያብራራ ገላጭ ጽሑፍ እንጂ ክርክር አይደለም።"
-                },
-                {
-                    q: "6. A sound argument is the one that contains:",
-                    options: [
-                        "A) All true premises and strong argument",
-                        "B) Valid argument and all true premises",
-                        "C) Invalid argument and all true premises",
-                        "D) Strong argument and valid argument"
-                    ],
-                    correct: 1,
-                    exp: "B: Valid ሆኖ መነሻዎቹ እውነት ሲሆኑ Sound Argument ይባላል።"
-                },
-                {
-                    q: "7. 'Samerawit is a polytheist. Therefore, she believes in more than one god.' This argument is:",
-                    options: ["A) Inductive, cogent", "B) Deductive, invalid", "C) Deductive, valid", "D) Inductive, strong"],
-                    correct: 2,
-                    exp: "C: በትርጉሙ መሰረት ድምዳሜው የግድ የሚከተል (Deductive, Valid) ነው።"
-                },
-                {
-                    q: "8. Which of the following sentences is a statement?",
-                    options: [
-                        "A) Vladimir Putin is a brain surgeon.",
-                        "B) Let's go to a restaurant tonight.",
-                        "C) I suggest you to take vacation.",
-                        "D) Stop beating that drum right now!"
-                    ],
-                    correct: 0,
-                    exp: "A: እውነት ወይም ሀሰት ተብሎ ሊፈረጅ የሚችል ገላጭ አረፍተ-ነገር ነው።"
-                },
-                {
-                    q: "9. 'All birds are animals. A parrot is a bird. Therefore, a parrot is an animal.' This argument is:",
-                    options: [
-                        "A) Non-argumentative passage",
-                        "B) Deductive valid and unsound",
-                        "C) Inductive invalid and sound",
-                        "D) Deductive valid and sound argument"
-                    ],
-                    correct: 3,
-                    exp: "D: ቅርጹ Valid ሆኖ መረጃዎቹ እውነት ስለሆኑ Sound Argument ነው።"
-                },
-                {
-                    q: "10. 'The past five times my friend borrowed my laptop, it had a problem... likely next time too.' This is:",
-                    options: ["A) Analogy", "B) Argument from prediction", "C) Authority", "D) Sign"],
-                    correct: 1,
-                    exp: "B: ካለፈው ልምድ ተነስቶ ስለ ወደፊቱ መተንበይ Argument from Prediction ነው።"
-                }
-            ],
-            geography_mid: [
-                {
-                    q: "1. The Gneissic high lands of Konso and the surrounding high lands separate the main Ethiopian rift from the Afar triangle.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "False: የኮንሶ ከፍተኛ ቦታዎች ዋናውን ስምጥ ሸለቆ ከ Chew Bahir ስምጥ ሸለቆ ይለያሉ።"
-                },
-                {
-                    q: "2. The systematic approach of geographical study examines a variety of geographical features in a certain areal extent.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "False: ይህ Regional Approach ይባላል።"
-                },
-                {
-                    q: "3. The uplift of the Arabo-Ethiopian landmass was one of the major geologic events during the Cenozoic era.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: በ Cenozoic Era የመሬት መነሳትና የስምጥ ሸለቆ መፈጠር ተከስቷል።"
-                },
-                {
-                    q: "4. The Shewan Plateau has the largest proportion of elevated ground from the Western highlands physiographic subdivision.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: የሸዋ አምባ ከፍተኛውን ስፋትና ከፍታ ይዟል።"
-                },
-                {
-                    q: "5. The marshy area of broad and shallow depression covered by tall grasses is the prominent feature of Chew Bahir Rift.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: የጨው ባህር ስምጥ ሸለቆ ረግረጋማና ረዣዥም ሳሮች የበቀሉበት ነው።"
-                },
-                {
-                    q: "6. Which of the following is/are WRONG about the physiographic effects of the formation of the Rift Valley?",
-                    options: [
-                        "A) It divides the Ethiopian Plateau into two",
-                        "B) It creates basins and fault depressions on which lakes are formed",
-                        "C) It causes the formation of the Dead Sea and Red Sea",
-                        "D) It subjects the land to intense folding"
-                    ],
-                    correct: 3,
-                    exp: "D: የስምጥ ሸለቆ መፈጠር ከመሰንጠቅ (Faulting) ጋር እንጂ ከመታጠፍ (Folding) ጋር አይገናኝም።"
-                },
-                {
-                    q: "7. Which is TRUE about the location of Ethiopia?",
-                    options: [
-                        "A) Because of latitudinal location, Ethiopia uses GMT+3",
-                        "B) Ethiopia has a defined sea outlet",
-                        "C) Due to latitudinal location, Ethiopia experiences tropical type of climate",
-                        "D) There is a three hour difference between extremes"
-                    ],
-                    correct: 2,
-                    exp: "C: ኢትዮጵያ በሞቃታማ (Tropical) የአየር ንብረት ክልል ውስጥ ትገኛለች።"
-                },
-                {
-                    q: "8. Among the following, which mountain is INCORRECTLY matched with its highland?",
-                    options: [
-                        "A) Mt Garamuleta -> Hararghe plateau",
-                        "B) Mt Tulu Demtu -> Bale highlands",
-                        "C) Mt Bada -> Sidama high lands",
-                        "D) Mt Chilalo -> Arsi highlands"
-                    ],
-                    correct: 2,
-                    exp: "C: ባዳ ተራራ የሚገኘው በአርሲ ከፍተኛ ቦታዎች ነው።"
-                },
-                {
-                    q: "9. Platinum has been mined in Ethiopia mainly in:",
-                    options: ["A) Adola", "B) Erta Ale", "C) Yubdo", "D) Dallol"],
-                    correct: 2,
-                    exp: "C: በኢትዮጵያ ፕላቲኒየም የሚመረትበት የታወቀው ቦታ ዩብዶ (Yubdo) ነው።"
-                },
-                {
-                    q: "10. Which highland area is best known for GRAIN PRODUCTION in Ethiopia?",
-                    options: ["A) Jemjem Plateau", "B) Sidama Highlands", "C) Arsi-Bale Highlands", "D) Hararghe Plateau"],
-                    correct: 2,
-                    exp: "C: የአርሲና ባሌ ከፍተኛ ቦታዎች የእህል ምርት ጎተራ በመባል ይታወቃሉ።"
-                },
-                {
-                    q: "11. Which lowlands of Ethiopia are the WETTEST and SURFACE WATER DEFICIT respectively?",
-                    options: [
-                        "A) Borena & Abay Dindir",
-                        "B) Omo & Baro",
-                        "C) Omo & Gibe",
-                        "D) Baro Lowland & Ogaden lowland"
-                    ],
-                    correct: 3,
-                    exp: "D: ባሮ በጣም እርጥበታማ ሲሆን ኦጋዴን ደግሞ የወለል ውሃ እጥረት አለበት።"
-                }
-            ],
-            geography_final: [
-                {
-                    q: "1. Ethiopia's wildlife resource is characterized by high level of uniqueness and endemicity.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: ኢትዮጵያ በርካታ ብርቅዬ (Endemic) የዱር እንስሳት አሏት።"
-                },
-                {
-                    q: "2. The earth surface is the main source of heat for the lower atmosphere that transfers in the form of long-wave radiation and convection.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: የከባቢ አየር የታችኛው ክፍል ሙቀት የሚያገኘው ከመሬት በሚወጣው Long-wave radiation ነው።"
-                },
-                {
-                    q: "3. Despite their origin from highland areas, rivers in Ethiopia have immense navigation potential.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "False: የኢትዮጵያ ወንዞች ተራራማና ፏፏቴ የበዛባቸው በመሆናቸው ለትራንስፖርት አያገለግሉም።"
-                },
-                {
-                    q: "4. In Ethiopia, the variation in the amount of solar radiation received daily is small throughout the year.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "True: ለምድር ወገብ ቅርብ በመሆኗ የፀሐይ ብርሃን ልዩነት አነስተኛ ነው።"
-                },
-                {
-                    q: "5. Why do most parts of Ethiopia receive little or no rainfall during the winter season (Bega)?",
-                    options: [
-                        "A) Winds carry moisture from Atlantic",
-                        "B) Winds dominating during winter are of continental origin (NE Trade Winds)",
-                        "C) Position of ITCZ shifts North",
-                        "D) Westerlies energetic"
-                    ],
-                    correct: 1,
-                    exp: "B: የሰሜን ምሥራቅ ንፋሶች ከደረቅ የየብስ ክፍል ስለሚነሱ ዝናብ አልባ ናቸው።"
-                },
-                {
-                    q: "6. Identify the WRONG combination of wildlife and its habitat:",
-                    options: [
-                        "A) Walia Ibex -> Semien highlands",
-                        "B) Hippopotamus -> Bale Mountains",
-                        "C) Semien Fox -> Bale and Semien highlands",
-                        "D) Flamingos -> Abijata-Shalla national park"
-                    ],
-                    correct: 1,
-                    exp: "B: ጉማሬ የውሃ እንስሳ እንጂ የባሌ ተራሮች መገለጫ አይደለም።"
-                },
-                {
-                    q: "7. Which one of the following is TRUE about Ethiopian rivers?",
-                    options: [
-                        "A) Atbara to Mereb, Juba to Wabishebelle",
-                        "B) Never manifest variation in water quantity",
-                        "C) Ghenale largest in catchment",
-                        "D) Serve as physical boundary between regions and countries"
-                    ],
-                    correct: 3,
-                    exp: "D: ወንዞቻችን እንደ ተፈጥሯዊ ወሰን (Physical boundary) ሆነው ያገለግላሉ።"
-                },
-                {
-                    q: "8. Which traditional climate zone of Ethiopia is dominated by Acacia vegetation?",
-                    options: ["A) Woina Dega", "B) Dega", "C) Bereha / Kolla", "D) Wurch"],
-                    correct: 2,
-                    exp: "C: የግራር (Acacia) ዛፎች በቆላና በረሃ በስፋት ይገኛሉ።"
-                },
-                {
-                    q: "9. In summer, Ethiopia experiences lower temperatures contrary to high solar insolation due to:",
-                    options: ["A) Latitude and pressure", "B) Altitude and ocean current", "C) Distance from sea", "D) Altitude and cloud cover"],
-                    correct: 3,
-                    exp: "D: የመሬት ከፍታ እና የደመና መሸፈን ሙቀቱን ይቀንሰዋል።"
-                },
-                {
-                    q: "10. Which man-made lake is CORRECTLY matched with its river?",
-                    options: ["A) Koka -> Fincha", "B) Melka Wakena -> Wabishebelle river", "C) Abasamuel -> Abay", "D) Fincha -> Awash"],
-                    correct: 1,
-                    exp: "B: የመልካ ዋከና ሰው ሰራሽ ሐይቅ የተሰራው በዋቢ ሸበሌ ወንዝ ላይ ነው።"
-                },
-                {
-                    q: "11. Which of the following is a dominant plant species found in the Afro-alpine (Wurch) region?",
-                    options: ["A) Lobelia rhynchopetalum (Giberra)", "B) Hagenia Abyssinica (Kosso)", "C) Ficus sur (Sholla)", "D) Olea africana (Weyra)"],
-                    correct: 0,
-                    exp: "A: ግበራ (Lobelia rhynchopetalum) በከፍተኛ የቁር (Afro-alpine) ቦታዎች ብቻ የሚበቅል ነው።"
-                },
-                {
-                    q: "12. The spatial variation of temperature in Ethiopia is significantly determined by:",
-                    options: ["A) Latitude", "B) Distance from water bodies", "C) Vegetation cover", "D) Altitude"],
-                    correct: 3,
-                    exp: "D: በኢትዮጵያ የሙቀት ልዩነት በዋናነት የሚወሰነው በመሬት ከፍታ (Altitude) ነው።"
-                }
             ]
         };
 
-        let currentExam = 'econ_final';
+        let currentExam = 'history_mid';
         let currentQIndex = 0;
         let isAnswered = false;
 
@@ -865,12 +1458,14 @@
             currentExam = type;
             currentQIndex = 0;
             const titles = {
-                econ_final: "🎓 Economics Final Exam Practice",
-                econ_mid: "📝 Economics Mid Exam Practice",
+                history_mid: "📜 History Mid Exam Practice",
+                history_final: "📜 History Final Exam Practice",
+                geography_final: "🌍 Geography Final Exam Practice",
+                geography_mid: "🗺️ Geography Mid Exam Practice",
                 logic_final: "💡 Logic Final Exam Practice",
                 logic_mid: "💡 Logic Mid Exam Practice",
-                geography_final: "🌍 Geography Final Exam Practice",
-                geography_mid: "🗺️ Geography Mid Exam Practice"
+                econ_final: "🎓 Economics Final Exam Practice",
+                econ_mid: "📝 Economics Mid Exam Practice"
             };
             document.getElementById('quizTitle').innerText = titles[type];
             loadQuestion();
@@ -934,7 +1529,6 @@
             }
         }
 
-        // Adsgram Integration
         let adController = null;
         function watchAdForCoins() {
             try {
@@ -954,15 +1548,16 @@
             }
         }
 
-        // Unlock PDF Logic
         function unlockExamPDF() {
             const fileMap = {
-                econ_final: 'econ_final_2016',
-                econ_mid: 'econ_mid_2016',
+                history_mid: 'history_mid_2016',
+                history_final: 'history_final_2016',
+                geography_final: 'geography_final_2017',
+                geography_mid: 'geography_mid_2016',
                 logic_final: 'logic_final',
                 logic_mid: 'logic_mid_2016',
-                geography_final: 'geography_final_2017',
-                geography_mid: 'geography_mid_2016'
+                econ_final: 'econ_final_2016',
+                econ_mid: 'econ_mid_2016'
             };
             const fileKey = fileMap[currentExam];
             if (userCoins >= 100) {
@@ -979,7 +1574,6 @@
             }
         }
 
-        // Language toggle
         let currentLang = 'am';
         function toggleLang() {
             currentLang = currentLang === 'am' ? 'en' : 'am';
@@ -1004,7 +1598,6 @@
             }
         }
 
-        // Init
         loadQuestion();
     </script>
 </body>
