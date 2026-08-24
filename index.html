@@ -88,6 +88,7 @@
             align-items: center;
             margin-bottom: 14px;
             box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+            text-align: left;
         }
         .earn-banner div h4 { margin: 0 0 2px 0; font-size: 14px; }
         .earn-banner div p { margin: 0; font-size: 11px; opacity: 0.9; }
@@ -101,6 +102,28 @@
             font-size: 12px;
             cursor: pointer;
             white-space: nowrap;
+        }
+
+        /* Tabs Nav */
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .tab-btn {
+            flex: 1;
+            background: #e2e8f0;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            color: var(--text-sub);
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
         }
 
         /* Home View (Grid Buttons) */
@@ -139,6 +162,33 @@
         }
         .course-btn span { font-size: 24px; }
         .course-btn:active { transform: scale(0.97); background: #f0fdf4; border-color: var(--success); }
+
+        /* Materials View */
+        #materialsView {
+            display: none;
+            text-align: left;
+        }
+        .mat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        .mat-card h3 { margin: 0 0 4px 0; font-size: 15px; color: #111; }
+        .mat-card p { color: var(--text-sub); font-size: 12px; margin-bottom: 10px; }
+        .btn-mat {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 13px;
+            font-weight: bold;
+        }
 
         /* Quiz View */
         #quizView {
@@ -282,6 +332,12 @@
         <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ</button>
     </div>
 
+    <!-- Main Navigation Tabs -->
+    <div class="tabs-nav" id="mainTabs">
+        <button class="tab-btn active" id="tabQuiz" onclick="switchTab('quiz')">✍️ የፈተና ጥያቄዎች (Quiz)</button>
+        <button class="tab-btn" id="tabMats" onclick="switchTab('mats')">📥 የፈተና ፒዲኤፍ (Materials)</button>
+    </div>
+
     <!-- HOME VIEW: Course Selection Buttons -->
     <div id="homeView">
         <div class="home-title" id="lblSelect">📚 የፈተና ኮርስ ይምረጡ (Select Course):</div>
@@ -308,6 +364,12 @@
             <button class="course-btn" onclick="openExam('econ_final')"><span>🎓</span>Economics (Final)</button>
             <button class="course-btn" onclick="openExam('econ_mid')"><span>📝</span>Economics (Mid)</button>
         </div>
+    </div>
+
+    <!-- MATERIALS VIEW -->
+    <div id="materialsView">
+        <div class="home-title">📥 የፈተና ፒዲኤፍ እና ማቴሪያሎች (በ 100 Coins)</div>
+        <div id="materialList"></div>
     </div>
 
     <!-- QUIZ VIEW -->
@@ -350,6 +412,136 @@
             userCoins += amount;
             localStorage.setItem('bahirab_coins', userCoins);
             document.getElementById('coinCount').innerText = userCoins;
+        }
+
+        const materials = [
+            { title: "🌍 Global Trend Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "global_trend_2015" },
+            { title: "📜 History Mid Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "history_2015" },
+            { title: "🗺️ Geography Final Exam", desc: "Bahir Dar University • Freshman Course", key: "geography_final" },
+            { title: "💻 Emerging Technology Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_mid" },
+            { title: "⚖️ Civics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "civics_mid" },
+            { title: "💡 Logic Final Exam", desc: "Bahir Dar University • Freshman Course", key: "logic_final" },
+            { title: "📱 Freshman Modules and Exams Application", desc: "All-in-one Android App", key: "freshman_app" },
+            { title: "🤝 Inclusiveness Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "inclusiveness_2014" },
+            { title: "🧠 General Psychology Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_mid" },
+            { title: "🧪 General Chemistry Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "chemistry_mid" },
+            { title: "🗺️ Geography Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "geography_2014" },
+            { title: "⚡ General Physics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "physics_mid" },
+            { title: "💡 Logic Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "logic_mid" },
+            { title: "📐 Applied Mathematics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "applied_math_mid" },
+            { title: "💻 C++ BDU Mid Exam", desc: "Bahir Dar University • Programming Course", key: "cpp_mid" },
+            { title: "📜 History Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "history_mid_2016" },
+            { title: "🤖 Emerging Technology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2016" },
+            { title: "🌍 Global Trend Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "global_trend_2016" },
+            { title: "🦴 Anthropology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_mid_2016" },
+            { title: "📊 Economics Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_mid_2016" },
+            { title: "📜 History Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "history_final_2016" },
+            { title: "📊 Economics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2016" },
+            { title: "🦴 Anthropology Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2016" },
+            { title: "💻 Emerging Technology Final Exam", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_final" },
+            { title: "📐 Mathematics For Social Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid" },
+            { title: "📐 Mathematics For Social Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid_2016" },
+            { title: "🗺️ Geography Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2016" },
+            { title: "📐 Applied Mathematics One Final Exam", desc: "Bahir Dar University • Freshman Course", key: "applied_math_one_final" },
+            { title: "⚖️ Moral and Civic Education Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_2016" },
+            { title: "🗺️ Geography Mid Exam 2016 (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2016_b" },
+            { title: "🗺️ Geography Mid Exam 2016 (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_other" },
+            { title: "💡 Logic Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "logic_mid_2016" },
+            { title: "📜 History Mid Exam (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "history_mid_b" },
+            { title: "💼 Entrepreneurship Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_mid_2016" },
+            { title: "📜 History Final Exam 2015 (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "history_final_2015_b" },
+            { title: "📐 Mathematics For Natural Final Exam", desc: "Bahir Dar University • Freshman Course", key: "math_natural_final" },
+            { title: "📐 Mathematics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "math_final_2016" },
+            { title: "📜 History Final Exam (Bahirab Academy)", desc: "Bahir Dar University • Freshman Course", key: "history_final_academy" },
+            { title: "📐 Applied Mathematics One Final (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "applied_math_one_final_b" },
+            { title: "📜 History 2016 Final Exam (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "history_final_2016_2" },
+            { title: "📐 Mathematics For Social Final Exam", desc: "Bahir Dar University • Freshman Course", key: "math_social_final" },
+            { title: "🗣️ Communication Skills English Final Exam", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_final" },
+            { title: "🧠 General Psychology Final Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_final" },
+            { title: "🌍 Global Final Exam (Set 1)", desc: "Bahir Dar University • Freshman Course", key: "global_final_176" },
+            { title: "🌍 Global Trend Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "global_trend_2015_b" },
+            { title: "🌍 Global Final Exam (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "global_final_179" },
+            { title: "⚖️ Civics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2016" },
+            { title: "⚖️ Civics Final Exam 2023", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2023" },
+            { title: "⚖️ Civics Final Exam (Set 3)", desc: "Bahir Dar University • Freshman Course", key: "civics_final_187" },
+            { title: "⚖️ Civics Final Exam (Set 4)", desc: "Bahir Dar University • Freshman Course", key: "civics_final_192" },
+            { title: "⚖️ Moral & Civic Education Final Exam", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_final_193" },
+            { title: "📊 Economics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2016_b" },
+            { title: "📊 Economics Final Exam 2013", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2013" },
+            { title: "📊 Economics Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2015" },
+            { title: "💻 Emerging Technology Final Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2014" },
+            { title: "💻 Emerging Technology Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2015" },
+            { title: "💻 Emerging Technology Final Exam (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_203" },
+            { title: "🗺️ Geography Final Exam (Bahirab Set 1)", desc: "Bahir Dar University • Freshman Course", key: "geography_final_204" },
+            { title: "🗺️ Geography Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "geography_final_2016" },
+            { title: "🗺️ Geography Final Exam (Bahirab Set 2)", desc: "Bahir Dar University • Freshman Course", key: "geography_final_213" },
+            { title: "💼 Entrepreneurship Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_2016" },
+            { title: "💼 Entrepreneurship Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_2015" },
+            { title: "💡 Logic Final Exam (Bahirab Set 1)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_219" },
+            { title: "💡 Logic Final Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "logic_final_2014" },
+            { title: "💡 Logic Final Exam 2021", desc: "Bahir Dar University • Freshman Course", key: "logic_final_2021" },
+            { title: "🦴 Anthropology Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2015" },
+            { title: "🦴 Anthropology Final Exam 2016 (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2016_b" },
+            { title: "⚡ General Physics Final Exam", desc: "Bahir Dar University • Freshman Course", key: "physics_final_224" },
+            { title: "💡 Logic Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "logic_final_2017" },
+            { title: "🗺️ Geography Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "geography_final_2017" },
+            { title: "🦴 Anthropology Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "anthro_mid_2017" },
+            { title: "💡 Critical Thinking Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "critical_thinking_mid_2017" },
+            { title: "🌍 Global Trend Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "global_trend_mid_2017" },
+            { title: "🗺️ Geography Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2017" },
+            { title: "📊 Economics Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "econ_mid_2017" },
+            { title: "⚖️ Moral and Civic Education Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_323" },
+            { title: "📐 Mathematics Mid Exam For Social", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid_325" },
+            { title: "🗣️ Communication English Skills Two Mid 2016", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_2016" },
+            { title: "🗣️ Communication English Skills Two Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_b" },
+            { title: "🗣️ Communication English Skills Two Mid 2016/17", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_2017" },
+            { title: "📜 History Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "history_mid_2017" },
+            { title: "🧠 Psychology Material / Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_330" },
+            { title: "🗣️ Communication English Skills Two Final 2017", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_final_406" },
+            { title: "🌍 Global Trend Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "global_trend_final_790" },
+            { title: "💼 Entrepreneurship Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_785" },
+            { title: "🧠 General Psychology Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "psychology_final_793" },
+            { title: "🧠 General Psychology Final Exam (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "psychology_final_794" },
+            { title: "💡 Logic Final Exam (Bahirab Set 2)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_802" },
+            { title: "💡 Logic Final Exam 2017 (Set 1)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_808" },
+            { title: "💡 Logic Final Exam 2017 (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_809" },
+            { title: "📊 Economics Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "econ_final_814" },
+            { title: "💡 Logic Final Exam 2017 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_818" },
+            { title: "🗣️ Communication Skills One English Final", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_822" },
+            { title: "🗣️ Communication Skills One Final 2017", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_823" },
+            { title: "🗣️ Communication Skills One Final 2017 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_827" }
+        ];
+
+        function renderMaterials() {
+            const listEl = document.getElementById('materialList');
+            listEl.innerHTML = '';
+            materials.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'mat-card';
+                card.innerHTML = `
+                    <h3>${item.title}</h3>
+                    <p>${item.desc}</p>
+                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ (ወይም ማስታወቂያ)</button>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tabQuiz').classList.remove('active');
+            document.getElementById('tabMats').classList.remove('active');
+            document.getElementById('homeView').style.display = 'none';
+            document.getElementById('materialsView').style.display = 'none';
+            document.getElementById('quizView').style.display = 'none';
+
+            if (tab === 'quiz') {
+                document.getElementById('tabQuiz').classList.add('active');
+                document.getElementById('homeView').style.display = 'block';
+            } else if (tab === 'mats') {
+                document.getElementById('tabMats').classList.add('active');
+                document.getElementById('materialsView').style.display = 'block';
+                renderMaterials();
+            }
         }
 
         let examData = {};
@@ -401,6 +593,7 @@
         function openExam(type) {
             currentExam = type;
             currentQIndex = 0;
+            document.getElementById('mainTabs').style.display = 'none';
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('quizView').style.display = 'block';
             document.getElementById('quizTitle').innerText = titles[type];
@@ -409,6 +602,7 @@
 
         function goHome() {
             document.getElementById('quizView').style.display = 'none';
+            document.getElementById('mainTabs').style.display = 'flex';
             document.getElementById('homeView').style.display = 'block';
         }
 
@@ -480,7 +674,7 @@
         function watchAdForCoins() {
             try {
                 if (!adController) {
-                    adController = window.Adsgram.init({ blockId: "int-44327" });
+                    adController = window.Adsgram.init({ blockId: "int-44107" });
                 }
                 adController.show().then(() => {
                     updateCoins(50);
@@ -492,6 +686,35 @@
             } catch (e) {
                 updateCoins(50);
                 alert("🎉 50 Coins ተጨምሯል!");
+            }
+        }
+
+        function unlockMaterial(fileKey) {
+            if (userCoins >= 100) {
+                updateCoins(-100);
+                alert("🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...");
+                redirectToBot(fileKey);
+            } else {
+                if (confirm("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ማስታወቂያ ማየት ይፈልጋሉ?")) {
+                    watchAdForUnlock(fileKey);
+                }
+            }
+        }
+
+        function watchAdForUnlock(fileKey) {
+            try {
+                if (!adController) {
+                    adController = window.Adsgram.init({ blockId: "int-44107" });
+                }
+                adController.show().then(() => {
+                    alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! ፋይሉ ወደ ቴሌግራም ቦት ይላካል።");
+                    redirectToBot(fileKey);
+                }).catch(() => {
+                    alert("⚠️ ማስታወቂያው አልተጠናቀቀም!");
+                });
+            } catch (e) {
+                alert("⚠️ ማስታወቂያ መጫን አልተቻለም።");
+                redirectToBot(fileKey);
             }
         }
 
@@ -519,18 +742,16 @@
                 econ_final: 'econ_final_2016',
                 econ_mid: 'econ_mid_2016'
             };
-            const fileKey = fileMap[currentExam];
-            if (userCoins >= 100) {
-                updateCoins(-100);
-                alert("🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...");
-                if (tg && tg.initData) {
-                    tg.openTelegramLink("https://t.me/Bahirabbot?start=" + fileKey);
-                    setTimeout(() => { tg.close(); }, 800);
-                } else {
-                    window.location.href = "https://t.me/Bahirabbot?start=" + fileKey;
-                }
+            const fileKey = fileMap[currentExam] || 'freshman_app';
+            unlockMaterial(fileKey);
+        }
+
+        function redirectToBot(fileKey) {
+            if (tg && tg.initData) {
+                tg.openTelegramLink("https://t.me/Bahirabbot?start=" + fileKey);
+                setTimeout(() => { tg.close(); }, 800);
             } else {
-                alert("⚠️ በቂ Coins የለዎትም! ማስታወቂያ በማየት ወይም ጥያቄዎችን በመስራት Coins ይሰብስቡ።");
+                window.location.href = "https://t.me/Bahirabbot?start=" + fileKey;
             }
         }
 
@@ -539,6 +760,8 @@
             currentLang = currentLang === 'am' ? 'en' : 'am';
             if (currentLang === 'en') {
                 document.getElementById('lblSelect').innerText = "📚 Select Course:";
+                document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
+                document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
                 document.getElementById('adSub').innerText = "Watch a quick ad to get +50 Coins.";
@@ -549,6 +772,8 @@
                 document.getElementById('nextBtn').innerText = "Next Question ➡️";
             } else {
                 document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
+                document.getElementById('tabQuiz').innerText = "✍️ የፈተና ጥያቄዎች (Quiz)";
+                document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
                 document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በማየት +50 Coins ያግኙ።";
