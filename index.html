@@ -160,11 +160,10 @@
         .course-btn span { font-size: 24px; }
         .course-btn:active { transform: scale(0.97); background: #f0fdf4; border-color: var(--success); }
 
-        /* Materials Main View (Category Buttons) */
+        /* Materials Main View */
         #materialsMainView {
             display: block;
         }
-        /* Materials Detail View (Items List) */
         #materialsDetailView {
             display: none;
             text-align: left;
@@ -368,15 +367,13 @@
         </div>
     </div>
 
-    <!-- MATERIALS VIEW (Categorized Buttons) -->
+    <!-- MATERIALS VIEW -->
     <div id="materialsView" style="display: none;">
-        <!-- Main Categories Grid -->
         <div id="materialsMainView">
             <div class="home-title" id="lblMatSelect">📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:</div>
             <div class="course-grid" id="matCategoriesGrid"></div>
         </div>
 
-        <!-- Detail Items List View -->
         <div id="materialsDetailView">
             <div class="back-bar">
                 <button class="btn-back" onclick="backToMatMain()">⬅️ ወደ ምድቦች ተመለስ</button>
@@ -632,7 +629,7 @@
                 card.innerHTML = `
                     <h3>${item.title}</h3>
                     <p>${item.desc}</p>
-                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ (ወይም ማስታወቂያ)</button>
+                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ</button>
                 `;
                 listEl.appendChild(card);
             });
@@ -797,12 +794,10 @@
                     updateCoins(50);
                     alert("🎉 50 Coins በተሳካ ሁኔታ ተጨምሮልዎታል!");
                 }).catch(() => {
-                    updateCoins(50);
-                    alert("🎉 (Preview Mode) 50 Coins ተጨምሯል!");
+                    alert("⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለወጡ ነፃ Coins ማግኘት አይችሉም!");
                 });
             } catch (e) {
-                updateCoins(50);
-                alert("🎉 50 Coins ተጨምሯል!");
+                alert("⚠️ ማስታወቂያ መጫን አልተቻለም።");
             }
         }
 
@@ -812,26 +807,7 @@
                 alert("🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...");
                 redirectToBot(fileKey);
             } else {
-                if (confirm("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ማስታወቂያ ማየት ይፈልጋሉ?")) {
-                    watchAdForUnlock(fileKey);
-                }
-            }
-        }
-
-        function watchAdForUnlock(fileKey) {
-            try {
-                if (!adController) {
-                    adController = window.Adsgram.init({ blockId: "int-44107" });
-                }
-                adController.show().then(() => {
-                    alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! ፋይሉ ወደ ቴሌግራም ቦት ይላካል።");
-                    redirectToBot(fileKey);
-                }).catch(() => {
-                    alert("⚠️ ማስታወቂያው አልተጠናቀቀም!");
-                });
-            } catch (e) {
-                alert("⚠️ ማስታወቂያ መጫን አልተቻለም።");
-                redirectToBot(fileKey);
+                alert("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ከላይ ያለውን 'ማስታወቂያ እይ' የሚለውን በተን ተጭነው Coins ያግኙ።");
             }
         }
 
