@@ -126,7 +126,7 @@
             color: white;
         }
 
-        /* Home View */
+        /* Home View (Grid Buttons) */
         .home-title {
             font-size: 15px;
             font-weight: bold;
@@ -160,11 +160,13 @@
         .course-btn span { font-size: 24px; }
         .course-btn:active { transform: scale(0.97); background: #f0fdf4; border-color: var(--success); }
 
-        /* Materials Main View */
+        /* Materials View (Categorized Buttons) */
+        #materialsView {
+            display: none;
+        }
         #materialsMainView {
             display: block;
         }
-        /* Materials Detail View */
         #materialsDetailView {
             display: none;
             text-align: left;
@@ -632,7 +634,7 @@
                 card.innerHTML = `
                     <h3>${item.title}</h3>
                     <p>${item.desc}</p>
-                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ (ወይም ማስታወቂያ)</button>
+                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ</button>
                 `;
                 listEl.appendChild(card);
             });
@@ -787,54 +789,35 @@
             }
         }
 
-        // ==================== ADSGRAM INTEGRATION ====================
         let adController = null;
 
-        function getAdController() {
-            if (!adController) {
-                // ለ Rewarded Ad የተዘጋጀውን ትክክለኛ Block ID እዚህ ጋር ያስገቡ
-                adController = window.Adsgram.init({ blockId: "44107" });
-            }
-            return adController;
-        }
-
+        // ማስታወቂያ የሚታየው ተጠቃሚው ነፃ Coins (50 Coins) ለማግኘት ሲፈልግ ብቻ ነው
         function watchAdForCoins() {
             try {
-                const controller = getAdController();
-                controller.show().then(() => {
+                if (!adController) {
+                    adController = window.Adsgram.init({ blockId: "int-44107" });
+                }
+                adController.show().then(() => {
+                    // ማስታወቂያው እስከመጨረሻው ሲታይ ብቻ
                     updateCoins(50);
-                    alert("🎉 50 Coins በተሳካ ሁኔታ ተጨምሮልዎታል!");
+                    alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +50 Coins ተጨምሮልዎታል!");
                 }).catch(() => {
-                    alert("⚠️ ማስታወቂያው አልተጠናቀቀም! Coins ለማግኘት ማስታወቂያውን እስከመጨረሻው ይመልከቱ።");
+                    // ማስታወቂያውን ሲያቋርጥ
+                    alert("⚠️ ማስታወቂያውን ሳይጨርሱ ስለወጡ ነፃ Coins ማግኘት አይችሉም!");
                 });
             } catch (e) {
-                alert("⚠️ ማስታወቂያ መጫን አልተቻለም። እባክዎ ትንሽ ቆይተው ይሞክሩ።");
+                alert("⚠️ ማስታወቂያ መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።");
             }
         }
 
+        // ፋይል ለማውረድ የሚያስችለው በ Coins ብቻ ነው
         function unlockMaterial(fileKey) {
             if (userCoins >= 100) {
                 updateCoins(-100);
                 alert("🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...");
                 redirectToBot(fileKey);
             } else {
-                if (confirm("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ማስታወቂያ ማየት ይፈልጋሉ?")) {
-                    watchAdForUnlock(fileKey);
-                }
-            }
-        }
-
-        function watchAdForUnlock(fileKey) {
-            try {
-                const controller = getAdController();
-                controller.show().then(() => {
-                    alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! ፋይሉ ወደ ቴሌግራም ቦት ይላካል።");
-                    redirectToBot(fileKey);
-                }).catch(() => {
-                    alert("⚠️ ማስታወቂያው ስላልተጠናቀቀ ፋይሉን መክፈት አልተቻለም!");
-                });
-            } catch (e) {
-                alert("⚠️ ማስታወቂያ መጫን አልተቻለም።");
+                alert("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ከላይ ያለውን 'ነፃ Coins ይፈልጋሉ?' የሚለውን በተን ተጭነው ማስታወቂያ ይመልከቱ።");
             }
         }
 
