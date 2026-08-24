@@ -408,7 +408,13 @@ window.economicsData = {
         {
             q: "30. Which statement clearly shows the relation between APL and MPL?",
             options: [
-                "A) When MPL = APL, APL reach its own minimum",
+                "A) When MPL = APL, APL reaches its maximum",
                 "B) When APL > MPL, MPL is rising",
-                "C) When MPL > APL, APL will rise",
-    
+                "C) When MPL > APL, APL will fall",
+                "D) When MPL < APL, APL will rise"
+            ],
+            correct: 0,
+            exp: "A: MPL ከ APL ጋር እኩል በሚሆንበት ነጥብ ላይ APL ከፍተኛው (Maximum) ደረጃ ላይ ይደርሳል።"
+        }
+    ]
+};
