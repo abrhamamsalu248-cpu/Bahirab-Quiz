@@ -491,7 +491,7 @@
                     { title: "Civics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2016" },
                     { title: "Civics Final Exam 2023", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2023" },
                     { title: "Civics Final Exam (Set 3)", desc: "Bahir Dar University • Freshman Course", key: "civics_final_187" },
-                    { title: "Civics Final Exam (Set 4)", desc: "Bahir Dar University • Freshman Course", key: "civics_final_192" },
+                    { title: "Civics Final Exam (Set 4)", desc: "Bahir Dar University ancient", key: "civics_final_192" },
                     { title: "Moral & Civic Education Final Exam", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_final_193" },
                     { title: "Moral and Civic Education Mid Exam (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_323" }
                 ]
@@ -795,22 +795,35 @@
 
         let adController = null;
 
-        // Watching Ad gives +100 Coins (Bilingual Alerts)
+        // Watching Ad with Strict Adsgram Verification & Bilingual Alerts
         function watchAdForCoins() {
             try {
                 if (!adController) {
                     adController = window.Adsgram.init({ blockId: "int-44107" });
                 }
-                adController.show().then(() => {
-                    updateCoins(100);
-                    const msg = currentLang === 'en' ? "🎉 You watched the ad successfully! +100 Coins added!" : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
-                    alert(msg);
+                adController.show().then((result) => {
+                    if (result && result.done) {
+                        updateCoins(100);
+                        const msg = currentLang === 'en' 
+                            ? "🎉 You watched the ad successfully! +100 Coins added!" 
+                            : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+                        alert(msg);
+                    } else {
+                        const msg = currentLang === 'en' 
+                            ? "⚠️ You skipped the ad early. No coins rewarded!" 
+                            : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
+                        alert(msg);
+                    }
                 }).catch(() => {
-                    const msg = currentLang === 'en' ? "⚠️ You did not finish watching the ad. No free coins rewarded!" : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለወጡ ነፃ Coins ማግኘት አይችሉም!";
+                    const msg = currentLang === 'en' 
+                        ? "⚠️ Ad was closed or failed to load. Please try again." 
+                        : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
                     alert(msg);
                 });
             } catch (e) {
-                const msg = currentLang === 'en' ? "⚠️ Failed to load ad. Please try again." : "⚠️ ማስታወቂያ መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+                const msg = currentLang === 'en' 
+                    ? "⚠️ Failed to initialize ad service." 
+                    : "⚠️ የማስታወቂያ አገልግሎቱን መክፈት አልተቻለም።";
                 alert(msg);
             }
         }
