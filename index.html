@@ -126,7 +126,7 @@
             color: white;
         }
 
-        /* Home View (Grid Buttons) */
+        /* Home View */
         .home-title {
             font-size: 15px;
             font-weight: bold;
@@ -160,11 +160,11 @@
         .course-btn span { font-size: 24px; }
         .course-btn:active { transform: scale(0.97); background: #f0fdf4; border-color: var(--success); }
 
-        /* Materials Main View (Category Buttons) */
+        /* Materials Main View */
         #materialsMainView {
             display: block;
         }
-        /* Materials Detail View (Items List) */
+        /* Materials Detail View */
         #materialsDetailView {
             display: none;
             text-align: left;
@@ -787,22 +787,28 @@
             }
         }
 
+        // ==================== ADSGRAM INTEGRATION ====================
         let adController = null;
+
+        function getAdController() {
+            if (!adController) {
+                // ለ Rewarded Ad የተዘጋጀውን ትክክለኛ Block ID እዚህ ጋር ያስገቡ
+                adController = window.Adsgram.init({ blockId: "44107" });
+            }
+            return adController;
+        }
+
         function watchAdForCoins() {
             try {
-                if (!adController) {
-                    adController = window.Adsgram.init({ blockId: "int-44107" });
-                }
-                adController.show().then(() => {
+                const controller = getAdController();
+                controller.show().then(() => {
                     updateCoins(50);
                     alert("🎉 50 Coins በተሳካ ሁኔታ ተጨምሮልዎታል!");
                 }).catch(() => {
-                    updateCoins(50);
-                    alert("🎉 (Preview Mode) 50 Coins ተጨምሯል!");
+                    alert("⚠️ ማስታወቂያው አልተጠናቀቀም! Coins ለማግኘት ማስታወቂያውን እስከመጨረሻው ይመልከቱ።");
                 });
             } catch (e) {
-                updateCoins(50);
-                alert("🎉 50 Coins ተጨምሯል!");
+                alert("⚠️ ማስታወቂያ መጫን አልተቻለም። እባክዎ ትንሽ ቆይተው ይሞክሩ።");
             }
         }
 
@@ -820,18 +826,15 @@
 
         function watchAdForUnlock(fileKey) {
             try {
-                if (!adController) {
-                    adController = window.Adsgram.init({ blockId: "int-44107" });
-                }
-                adController.show().then(() => {
+                const controller = getAdController();
+                controller.show().then(() => {
                     alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! ፋይሉ ወደ ቴሌግራም ቦት ይላካል።");
                     redirectToBot(fileKey);
                 }).catch(() => {
-                    alert("⚠️ ማስታወቂያው አልተጠናቀቀም!");
+                    alert("⚠️ ማስታወቂያው ስላልተጠናቀቀ ፋይሉን መክፈት አልተቻለም!");
                 });
             } catch (e) {
                 alert("⚠️ ማስታወቂያ መጫን አልተቻለም።");
-                redirectToBot(fileKey);
             }
         }
 
