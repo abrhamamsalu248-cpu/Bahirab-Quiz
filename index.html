@@ -14,6 +14,8 @@
     <script src="history.js"></script>
     <script src="emerging.js"></script>
     <script src="global.js"></script>
+    <script src="civics.js"></script>
+    <script src="anthropology.js"></script>
 
     <style>
         :root {
@@ -234,18 +236,22 @@
     <div class="select-box">
         <label id="lblSelect">📚 የፈተና ዓይነት ይምረጡ (Select Exam):</label>
         <select class="exam-dropdown" id="examSelect" onchange="switchExam(this.value)">
-            <option value="econ_final">🎓 Economics (Final Exam)</option>
-            <option value="econ_mid">📝 Economics (Mid Exam)</option>
-            <option value="logic_final">💡 Logic & Critical Thinking (Final Exam)</option>
-            <option value="logic_mid">💡 Logic & Critical Thinking (Mid Exam)</option>
-            <option value="geography_final">🌍 Geography of Ethiopia (Final Exam)</option>
-            <option value="geography_mid">🗺️ Geography of Ethiopia (Mid Exam)</option>
-            <option value="history_final">📜 History of Ethiopia (Final Exam)</option>
-            <option value="history_mid">📜 History of Ethiopia (Mid Exam)</option>
-            <option value="emerging_final">🤖 Emerging Technologies (Final Exam)</option>
-            <option value="emerging_mid">🤖 Emerging Technologies (Mid Exam)</option>
+            <option value="anthro_final">🏺 Social Anthropology (Final Exam)</option>
+            <option value="anthro_mid">🏺 Social Anthropology (Mid Exam)</option>
+            <option value="civics_final">⚖️ Moral & Civic Education (Final Exam)</option>
+            <option value="civics_mid">⚖️ Moral & Civic Education (Mid Exam)</option>
             <option value="global_final">🌐 Global Trends (Final Exam)</option>
             <option value="global_mid">🌐 Global Trends (Mid Exam)</option>
+            <option value="emerging_final">🤖 Emerging Technologies (Final Exam)</option>
+            <option value="emerging_mid">🤖 Emerging Technologies (Mid Exam)</option>
+            <option value="history_final">📜 History of Ethiopia (Final Exam)</option>
+            <option value="history_mid">📜 History of Ethiopia (Mid Exam)</option>
+            <option value="geography_final">🌍 Geography of Ethiopia (Final Exam)</option>
+            <option value="geography_mid">🗺️ Geography of Ethiopia (Mid Exam)</option>
+            <option value="logic_final">💡 Logic & Critical Thinking (Final Exam)</option>
+            <option value="logic_mid">💡 Logic & Critical Thinking (Mid Exam)</option>
+            <option value="econ_final">🎓 Economics (Final Exam)</option>
+            <option value="econ_mid">📝 Economics (Mid Exam)</option>
         </select>
     </div>
 
@@ -259,7 +265,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 id="quizTitle">🎓 Economics Final Exam Practice</h3>
+            <h3 id="quizTitle">🏺 Social Anthropology Final Exam Practice</h3>
             <span class="progress-text" id="quizProgress">1 / 30</span>
         </div>
 
@@ -296,6 +302,8 @@
 
         function getMergedData() {
             return {
+                ...(window.anthropologyData || {}),
+                ...(window.civicsData || {}),
                 ...(window.economicsData || {}),
                 ...(window.logicData || {}),
                 ...(window.geographyData || {}),
@@ -306,21 +314,25 @@
         }
 
         const titles = {
-            econ_final: "🎓 Economics Final Exam Practice",
-            econ_mid: "📝 Economics Mid Exam Practice",
-            logic_final: "💡 Logic Final Exam Practice",
-            logic_mid: "💡 Logic Mid Exam Practice",
-            geography_final: "🌍 Geography Final Exam Practice",
-            geography_mid: "🗺️ Geography Mid Exam Practice",
-            history_final: "📜 History Final Exam Practice",
-            history_mid: "📜 History Mid Exam Practice",
+            anthro_final: "🏺 Social Anthropology Final Exam Practice",
+            anthro_mid: "🏺 Social Anthropology Mid Exam Practice",
+            civics_final: "⚖️ Civic Education Final Exam Practice",
+            civics_mid: "⚖️ Civic Education Mid Exam Practice",
+            global_final: "🌐 Global Trends Final Exam Practice",
+            global_mid: "🌐 Global Trends Mid Exam Practice",
             emerging_final: "🤖 Emerging Technologies Final Exam Practice",
             emerging_mid: "🤖 Emerging Technologies Mid Exam Practice",
-            global_final: "🌐 Global Trends Final Exam Practice",
-            global_mid: "🌐 Global Trends Mid Exam Practice"
+            history_final: "📜 History of Ethiopia Final Exam Practice",
+            history_mid: "📜 History of Ethiopia Mid Exam Practice",
+            geography_final: "🌍 Geography Final Exam Practice",
+            geography_mid: "🗺️ Geography of Ethiopia Mid Exam Practice",
+            logic_final: "💡 Logic Final Exam Practice",
+            logic_mid: "💡 Logic Mid Exam Practice",
+            econ_final: "🎓 Economics Final Exam Practice",
+            econ_mid: "📝 Economics Mid Exam Practice"
         };
 
-        let currentExam = 'econ_final';
+        let currentExam = 'anthro_final';
         let currentQIndex = 0;
         let isAnswered = false;
 
@@ -337,7 +349,7 @@
             const qList = examData[currentExam] || [];
             
             if (!qList.length) {
-                setTimeout(loadQuestion, 200);
+                setTimeout(loadQuestion, 150);
                 return;
             }
 
@@ -416,18 +428,22 @@
 
         function unlockExamPDF() {
             const fileMap = {
-                econ_final: 'econ_final_2016',
-                econ_mid: 'econ_mid_2016',
-                logic_final: 'logic_final',
-                logic_mid: 'logic_mid_2016',
-                geography_final: 'geography_final_2017',
-                geography_mid: 'geography_mid_2016',
-                history_final: 'history_final_2016',
-                history_mid: 'history_mid_2016',
+                anthro_final: 'anthro_final_2016',
+                anthro_mid: 'anthro_mid_2016',
+                civics_final: 'civics_final_2015',
+                civics_mid: 'civics_mid_2016',
+                global_final: 'global_final_2016',
+                global_mid: 'global_mid_2016',
                 emerging_final: 'emerging_final_2016',
                 emerging_mid: 'emerging_mid_2016',
-                global_final: 'global_final_2016',
-                global_mid: 'global_mid_2016'
+                history_final: 'history_final_2016',
+                history_mid: 'history_mid_2016',
+                geography_final: 'geography_final_2017',
+                geography_mid: 'geography_mid_2016',
+                logic_final: 'logic_final',
+                logic_mid: 'logic_mid_2016',
+                econ_final: 'econ_final_2016',
+                econ_mid: 'econ_mid_2016'
             };
             const fileKey = fileMap[currentExam];
             if (userCoins >= 100) {
