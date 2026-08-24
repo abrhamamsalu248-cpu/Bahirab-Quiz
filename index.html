@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bahirab Quiz & Study Hub</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+    <style>
+        :root {
+            --primary: #0088cc;
+            --bg: #f4f5f7;
+            --card-bg: #ffffff;
+            --text-main: #222;
+            --text-sub: #666;
+            --border: #e1e4e8;
+            --success: #28a745;
+            --warning: #f59e0b;
+            --coin: #eab308;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 12px;
+            margin: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 12px;
+        }
+        .coin-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef9c3;
+            border: 1px solid #fde047;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #854d0e;
+        }
+        .lang-switch {
+            background: #e3edf5;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin: 6px 0;
+            font-size: 18px;
+        }
+
+        /* Card Section */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 15px;
+            color: var(--primary);
+        }
+        .card p {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin: 0 0 12px 0;
+        }
+
+        /* Earn Coin Banner */
+        .earn-banner {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .earn-banner h4 { margin: 0 0 6px 0; font-size: 16px; }
+        .earn-banner p { font-size: 12px; margin: 0 0 10px 0; opacity: 0.9; }
+        .btn-earn {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Quiz Styling */
+        .quiz-question {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 10px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .option-btn:active { background: #e2e8f0; }
+        .option-btn.correct { background: #dcfce7; border-color: var(--success); color: #166534; font-weight: bold; }
+        .option-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+        /* Unlock Exam Button */
+        .btn-unlock {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="coin-box">
+            🪙 <span id="coinCount">50</span> Coins
+        </div>
+        <button class="lang-switch" onclick="toggleLanguage()">🌐 Amh / Eng</button>
+    </div>
+
+    <h2>📚 Bahirab Quiz & Study Hub</h2>
+
+    <!-- Earn Free Coins via Ad -->
+    <div class="earn-banner">
+        <h4 id="bannerTitle">⭐ ነፃ 🪙 Coins ያግኙ!</h4>
+        <p id="bannerDesc">አጭር ማስታወቂያ በማየት 50 ኮይኖችን በነፃ ይሰብስቡ።</p>
+        <button class="earn-banner-btn btn-earn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ (+50 Coins)</button>
+    </div>
+
+    <!-- Daily Quiz Section -->
+    <div class="card">
+        <h3 id="quizHeader">🧠 የዕለቱ የፈተና ጥያቄ (Quiz Challenge)</h3>
+        <div id="quizContainer">
+            <div class="quiz-question" id="qText">1. Which branch of philosophy studies the nature of knowledge?</div>
+            <button class="option-btn" onclick="checkAnswer(0)">A) Metaphysics</button>
+            <button class="option-btn" onclick="checkAnswer(1)">B) Epistemology (Correct)</button>
+            <button class="option-btn" onclick="checkAnswer(2)">C) Ethics</button>
+            <button class="option-btn" onclick="checkAnswer(3)">D) Aesthetics</button>
+        </div>
+        <div id="quizFeedback" style="margin-top: 8px; font-weight: bold; font-size: 13px;"></div>
+    </div>
+
+    <!-- Premium Exam Download Section -->
+    <div class="card">
+        <h3 id="examHeader">📥 ፕሪሚየም የፈተና PDF ዎች</h3>
+        <p id="examDesc">ሙሉውን የዩኒቨርሲቲ ፈተና ፒዲኤፍ ለማውረድ 100 Coins ይጠቀሙ።</p>
+        <button class="btn-unlock" id="unlockBtn" onclick="unlockExam('logic_mid_pdf')">🔓 100 Coins ከፍተህ አውርድ</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        // Coins Management
+        let userCoins = parseInt(localStorage.getItem('bahirab_coins')) || 50;
+        document.getElementById('coinCount').innerText = userCoins;
+
+        function updateCoins(amount) {
+            userCoins += amount;
+            localStorage.setItem('bahirab_coins', userCoins);
+            document.getElementById('coinCount').innerText = userCoins;
+        }
+
+        // Language toggle
+        let currentLang = 'am';
+        function toggleLanguage() {
+            currentLang = currentLang === 'am' ? 'en' : 'am';
+            if(currentLang === 'en') {
+                document.getElementById('bannerTitle').innerText = "⭐ Earn Free 🪙 Coins!";
+                document.getElementById('bannerDesc').innerText = "Watch a short ad to earn 50 free coins.";
+                document.querySelector('.earn-banner-btn').innerText = "⭐ Watch Ad (+50 Coins)";
+                document.getElementById('quizHeader').innerText = "🧠 Daily Quiz Challenge";
+                document.getElementById('examHeader').innerText = "📥 Premium Exam PDFs";
+                document.getElementById('examDesc').innerText = "Use 100 Coins to unlock & download full PDF exams.";
+                document.getElementById('unlockBtn').innerText = "🔓 Unlock & Download (100 Coins)";
+            } else {
+                document.getElementById('bannerTitle').innerText = "⭐ ነፃ 🪙 Coins ያግኙ!";
+                document.getElementById('bannerDesc').innerText = "አጭር ማስታወቂያ በማየት 50 ኮይኖችን በነፃ ይሰብስቡ።";
+                document.querySelector('.earn-banner-btn').innerText = "⭐ ማስታወቂያ እይ (+50 Coins)";
+                document.getElementById('quizHeader').innerText = "🧠 የዕለቱ የፈተና ጥያቄ (Quiz Challenge)";
+                document.getElementById('examHeader').innerText = "📥 ፕሪሚየም የፈተና PDF ዎች";
+                document.getElementById('examDesc').innerText = "ሙሉውን የዩኒቨርሲቲ ፈተና ፒዲኤፍ ለማውረድ 100 Coins ይጠቀሙ።";
+                document.getElementById('unlockBtn').innerText = "🔓 100 Coins ከፍተህ አውርድ";
+            }
+        }
+
+        // Quiz Logic
+        let answered = false;
+        function checkAnswer(selectedIdx) {
+            if (answered) return;
+            answered = true;
+            const buttons = document.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('quizFeedback');
+            
+            if (selectedIdx === 1) {
+                buttons[selectedIdx].classList.add('correct');
+                feedback.style.color = "var(--success)";
+                feedback.innerText = currentLang === 'am' ? "🎉 ትክክል! +20 Coins ተሸልመዋል!" : "🎉 Correct! You won +20 Coins!";
+                updateCoins(20);
+            } else {
+                buttons[selectedIdx].classList.add('wrong');
+                buttons[1].classList.add('correct');
+                feedback.style.color = "#ef4444";
+                feedback.innerText = currentLang === 'am' ? "❌ ተሳስተዋል! ትክክለኛው መልስ B ነው።" : "❌ Wrong! Correct answer is B.";
+            }
+        }
+
+        // Adsgram Reward Integration
+        let adController = null;
+        function watchAdForCoins() {
+            try {
+                if (!adController) {
+                    // እዚህጋ Adsgram ላይ የምትፈጥረውን አዲስ Block ID ታስገባለህ (ለምሳሌ Interstitial ወይም Reward)
+                    adController = window.Adsgram.init({ blockId: "int-44327" }); 
+                }
+                adController.show().then(() => {
+                    // ማስታወቂያውን አይቶ ሲጨርስ 50 coin ይሰጠዋል
+                    updateCoins(50);
+                    alert(currentLang === 'am' ? "🎉 50 Coins ተጨምሮልዎታል!" : "🎉 50 Coins added to your balance!");
+                }).catch((err) => {
+                    // ማስታወቂያው ገና በሞደሬሽን ላይ ከሆነ ወይም ካልሰራ በነፃ ይሞላልልን (ለሙከራ)
+                    updateCoins(50);
+                    alert(currentLang === 'am' ? "🎉 (Test Mode) 50 Coins ተጨምሯል!" : "🎉 (Test Mode) 50 Coins added!");
+                });
+            } catch (e) {
+                updateCoins(50);
+                alert("🎉 50 Coins added!");
+            }
+        }
+
+        // Unlock Exam logic
+        function unlockExam(fileKey) {
+            if (userCoins >= 100) {
+                updateCoins(-100);
+                alert(currentLang === 'am' ? "🔓 ተከፍቷል! ወደ ቦቱ በመላክ ላይ..." : "🔓 Unlocked! Redirecting to bot...");
+                if (tg && tg.initData) {
+                    tg.openTelegramLink("https://t.me/Bahirabbot?start=" + fileKey);
+                    setTimeout(() => { tg.close(); }, 800);
+                } else {
+                    window.location.href = "https://t.me/Bahirabbot?start=" + fileKey;
+                }
+            } else {
+                alert(currentLang === 'am' ? "⚠️ በቂ Coins የለዎትም! እባክዎ ማስታወቂያ በማየት ኮይን ያግኙ።" : "⚠️ Not enough coins! Please watch an ad to get coins.");
+            }
+        }
+    </script>
+</body>
+</html>
