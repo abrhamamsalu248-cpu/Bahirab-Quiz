@@ -871,10 +871,10 @@
 
         function redirectToBot(fileKey) {
             if (tg && tg.initData) {
-                tg.openTelegramLink("https://t.me/Bahirabbot?start=" + fileKey);
+                tg.openTelegramLink("https://t.me/BahirabQuiz_Bot?start=" + fileKey);
                 setTimeout(() => { tg.close(); }, 800);
             } else {
-                window.location.href = "https://t.me/Bahirabbot?start=" + fileKey;
+                window.location.href = "https://t.me/BahirabQuiz_Bot?start=" + fileKey;
             }
         }
 
