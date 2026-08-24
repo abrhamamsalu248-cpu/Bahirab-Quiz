@@ -64,7 +64,7 @@
             cursor: pointer;
         }
 
-        /* Course / Exam Selector */
+        /* Exam Selector */
         .select-box {
             margin-bottom: 12px;
         }
@@ -230,12 +230,12 @@
     <div class="select-box">
         <label id="lblSelect">📚 የፈተና ዓይነት ይምረጡ (Select Exam):</label>
         <select class="exam-dropdown" id="examSelect" onchange="switchExam(this.value)">
+            <option value="econ_final">🎓 Economics (Final Exam)</option>
+            <option value="econ_mid">📝 Economics (Mid Exam)</option>
+            <option value="logic_final">💡 Logic & Critical Thinking (Final Exam)</option>
+            <option value="logic_mid">💡 Logic & Critical Thinking (Mid Exam)</option>
             <option value="geography_final">🌍 Geography of Ethiopia (Final Exam)</option>
             <option value="geography_mid">🗺️ Geography of Ethiopia (Mid Exam)</option>
-            <option value="logic_mid">💡 Logic & Critical Thinking (Mid Exam)</option>
-            <option value="logic_final">💡 Logic & Critical Thinking (Final Exam)</option>
-            <option value="econ_mid">📝 Economics (Mid Exam)</option>
-            <option value="econ_final">🎓 Economics (Final Exam)</option>
         </select>
     </div>
 
@@ -251,8 +251,8 @@
     <!-- Quiz Card -->
     <div class="card">
         <div class="card-header">
-            <h3 id="quizTitle">🌍 Geography Final Exam Practice</h3>
-            <span class="progress-text" id="quizProgress">1 / 18</span>
+            <h3 id="quizTitle">🎓 Economics Final Exam Practice</h3>
+            <span class="progress-text" id="quizProgress">1 / 15</span>
         </div>
 
         <div class="question-box" id="qText">Loading question...</div>
@@ -286,176 +286,319 @@
             document.getElementById('coinCount').innerText = userCoins;
         }
 
-        // Comprehensive Question Banks
+        // FULL 6 EXAM QUESTION BANKS (NO QUESTIONS TRUNCATED)
         const examData = {
-            geography_final: [
+            econ_final: [
                 {
-                    q: "1. Ethiopia's wildlife resource is characterized by high level of uniqueness and endemicity.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "ትክክል! ኢትዮጵያ በተለያዩ የመልክዓ ምድር ከፍታዎች ሳቢያ በርካታ በሀገሪቱ ብቻ የሚገኙ (Endemic) ብርቅዬ የዱር እንስሳት አሏት።"
-                },
-                {
-                    q: "2. The earth surface is the main source of heat for the lower atmosphere that transfers in the form of long-wave radiation and convection.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "ትክክል! የከባቢ አየር የታችኛው ክፍል ሙቀት የሚያገኘው ከመሬት ገጽ በሚወጣው ረጅም ሞገድ ጨረር (Terrestrial long-wave radiation) ነው።"
-                },
-                {
-                    q: "3. Despite their origin from highland areas, rivers in Ethiopia have immense navigation potential.",
+                    q: "1. Under perfectly competitive market structure, some firm can gain competitive advantage over the other firm through advertising their products.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "ትክክል! የኢትዮጵያ ወንዞች ተራራማና ፏፏቴ የበዛባቸው (Rapids & Cataracts) በመሆናቸው ለትራንስፖርት (Navigation) አያገለግሉም (ከባሮ ወንዝ በስተቀር)።"
+                    exp: "False: በ Perfect Competition ውስጥ ምርቶች ተመሳሳይ (Homogeneous) በመሆናቸው ማስታወቂያ ተወዳዳሪ ጥቅም አያስገኝም።"
                 },
                 {
-                    q: "4. In Ethiopia, the variation in the amount of solar radiation received daily is small throughout the year.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "ትክክል! ኢትዮጵያ ለምድር ወገብ (Equator) ቅርብ በመሆኗ ዓመቱን ሙሉ የምታገኘው የፀሐይ ብርሃን ልዩነት በጣም አነስተኛ ነው።"
-                },
-                {
-                    q: "5. In the tropical region, the annual range of temperature is very low due to high change in angle of sun in winter and summer.",
+                    q: "2. The demand curve of a monopolist is downward as it is a price taker.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "ትክክል! በሞቃታማ ክልሎች ዓመታዊ የሙቀት ልዩነት አነስተኛ የሆነው የፀሐይ ማዕዘን ለውጥ አነስተኛ (Low change in sun angle) በመሆኑ እንጂ ከፍተኛ በመሆኑ አይደለም።"
+                    exp: "False: ሞኖፖሊ Price Maker እንጂ Price Taker አይደለም።"
                 },
                 {
-                    q: "6. The peripheries of Ethiopia experience tropical temperature conditions and mean maximum temperatures.",
+                    q: "3. The values of self-owned inputs that are used in the production process are called implicit costs.",
                     options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "ትክክል! የኢትዮጵያ ድንበር አዋሳኝ ቆላማ አካባቢዎች (Peripheries) ከፍተኛ የሆነ አመታዊ የሙቀት መጠን ያስመዘግባሉ።"
+                    exp: "True: የአንድ ባለቤት የራሱ የሆኑ ግብአቶች ግምት Implicit Cost ይባላል።"
                 },
                 {
-                    q: "7. Why do most parts of Ethiopia receive little or no rainfall during the winter season (Bega)?",
-                    options: [
-                        "A) Winds carry moisture from Atlantic Ocean",
-                        "B) Winds dominating during winter are of continental origin (Northeast Trade Winds)",
-                        "C) Position of ITCZ shifts towards North of Ethiopia",
-                        "D) Position of ITCZ shifts towards South making Westerlies energetic"
-                    ],
-                    correct: 1,
-                    exp: "ትክክል! በበጋ ወቅት በኢትዮጵያ ላይ የሚነፍሱት የሰሜን ምሥራቅ ንፋሶች ከደረቅ የመሬት ክፍል (Continental origin) ስለሚነሱ ዝናብ አልባ ናቸው።"
-                },
-                {
-                    q: "8. Identify the WRONG combination of wildlife and its habitat:",
-                    options: [
-                        "A) Walia Ibex -> Semien highlands",
-                        "B) Hippopotamus -> Bale Mountains",
-                        "C) Semien Fox -> Bale and Semien highlands",
-                        "D) Flamingos -> Abijata-Shalla national park"
-                    ],
-                    correct: 1,
-                    exp: "ትክክል! ጉማሬ (Hippopotamus) የውሃና የሐይቅ ዳርቻ እንስሳ እንጂ የባሌ ተራሮች መገለጫ አይደለም።"
-                },
-                {
-                    q: "9. Which one of the following is TRUE about Ethiopian rivers?",
-                    options: [
-                        "A) While Atbara is to Mereb, Juba is to Wabishebelle",
-                        "B) Most Ethiopian rivers never manifest variation in water quantity",
-                        "C) From SE drainage, Ghenale is the largest in catchment area",
-                        "D) One of the functions of Ethiopian rivers is that they serve as physical boundaries"
-                    ],
-                    correct: 3,
-                    exp: "ትክክል! የኢትዮጵያ ወንዞች በክልሎችና በሀገራት መካከል እንደ ተፈጥሯዊ ወሰን (Physical boundary) ሆነው ያገለግላሉ።"
-                },
-                {
-                    q: "10. The following statements are correct about controls of weather and climate EXCEPT:",
-                    options: [
-                        "A) Higher latitude areas receive high temperature",
-                        "B) Lower latitude areas receive high temperature",
-                        "C) Inclination of earth's axis produces changes in directness of sun rays",
-                        "D) Inclination of earth's axis determines temperature zones"
-                    ],
+                    q: "4. In stage 1 of production, the fixed input is underutilized. Thus, the firm increases output by increasing the variable input.",
+                    options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "ትክክል! ከፍተኛ ላቲቲዩድ (Higher latitude / ወገብ የራቁ ቦታዎች) ቅዝቃዜ እንጂ ከፍተኛ ሙቀት አይቀበሉም።"
+                    exp: "True: በ Stage 1 ቋሚ ግብአቱ በደንብ ስላልተሰራበት ተለዋዋጭ ግብአትን በመጨመር ምርትን ያሳድጋል።"
                 },
                 {
-                    q: "11. Which traditional climate zone of Ethiopia is dominated by Acacia vegetation?",
-                    options: ["A) Woina Dega", "B) Dega", "C) Bereha / Kolla", "D) Wurch"],
+                    q: "5. A firm incurs loss whenever price is less than average cost.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ዋጋ ከአማካይ ወጪ ካነሰ (P < AC) ድርጅቱ ኪሳራ ያጋጥመዋል።"
+                },
+                {
+                    q: "6. Imported goods and services directly enter into GDP deflator calculation.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የውጭ እቃዎች በ GDP Deflator ውስጥ አይካተቱም (በ CPI ውስጥ ብቻ ነው የሚካተቱት)።"
+                },
+                {
+                    q: "7. Even if cost is a function of output level, as we increase the level of output average fixed cost will remain constant.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ምርት በጨመረ ቁጥር Average Fixed Cost (AFC) ይቀንሳል እንጂ ቋሚ አይሆንም።"
+                },
+                {
+                    q: "8. The monopoly firm produces a commodity with lots of close substitutes.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የሞኖፖሊ ድርጅት ተለዋጭ የሌለውን (No close substitutes) እቃ ያመርታል።"
+                },
+                {
+                    q: "9. When NFI is positive, the value of GDP is lower than the value of GNP.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: GNP = GDP + NFI ስለሆነ NFI ፖዘቲቭ ከሆነ GNP > GDP ይሆናል።"
+                },
+                {
+                    q: "10. Under perfectly competitive market structure, price of a product is determined by market force.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ዋጋ የሚወሰነው በገበያ ፍላጎትና አቅርቦት (Market forces) ነው።"
+                },
+                {
+                    q: "11. Which one of the following is not true about perfect competitive market structure?",
+                    options: [
+                        "A) Price and marginal revenue are equal for each unit sold",
+                        "B) Firms are price maker",
+                        "C) Demand is perfectly elastic",
+                        "D) A firm can sell whatever amount with the existing price"
+                    ],
+                    correct: 1,
+                    exp: "B: በ Perfect Competition ውስጥ ድርጅቶች Price Taker እንጂ Price Maker አይደሉም።"
+                },
+                {
+                    q: "12. An Ethiopian construction company built a road in Kenya; this activity would be:",
+                    options: [
+                        "A) Fully included in Ethiopian GDP",
+                        "B) Excluded from Ethiopian GNP",
+                        "C) Included in Ethiopian GNP",
+                        "D) Excluded from Kenyan GDP"
+                    ],
                     correct: 2,
-                    exp: "ትክክል! የግራር (Acacia) ዛፎች በቆላ እና በበረሃ (Kolla/Bereha) ክልሎች በስፋት ይገኛሉ።"
+                    exp: "C: የኢትዮጵያ ዜጎች በውጭ ሀገር የሚያመርቱት በ GNP ውስጥ ይካተታል።"
                 },
                 {
-                    q: "12. In summer, Ethiopia experiences lower temperatures contrary to high solar insolation due to:",
+                    q: "13. Suppose that a firm produces 200,000 units a year and sells them all for $10 each. Explicit costs = $1,500,000 and implicit costs = $300,000. What is accounting and economic profit?",
                     options: [
-                        "A) Latitude and global air pressure",
-                        "B) Altitude and ocean current",
-                        "C) Latitude and distance from the sea",
-                        "D) Altitude and cloud cover"
+                        "A) $400,000 accounting profit and $200,000 economic profit",
+                        "B) $300,000 accounting profit and $400,000 economic profit",
+                        "C) $500,000 accounting profit and $200,000 economic profit",
+                        "D) $200,000 accounting profit and $500,000 economic profit"
+                    ],
+                    correct: 2,
+                    exp: "C: TR = $2,000,000። Accounting Profit = 2,000,000 - 1,500,000 = $500,000፤ Economic Profit = 500,000 - 300,000 = $200,000።"
+                },
+                {
+                    q: "14. If Ethiopian GDP exceeds Ethiopian GNP, then:",
+                    options: [
+                        "A) Intermediate production exceeds final production",
+                        "B) Real GDP exceeds nominal GDP",
+                        "C) Ethiopians are producing more in foreign countries than foreigners in Ethiopia",
+                        "D) Foreigners are producing more in Ethiopia than Ethiopians are producing abroad"
                     ],
                     correct: 3,
-                    exp: "ትክክል! በክረምት ወቅት ያለው ከፍተኛ የከፍታ መጠን (Altitude) እና የደመና መሸፈን (Cloud cover) ሙቀቱን ይቀንሰዋል።"
+                    exp: "D: GDP > GNP ማለት የውጭ ዜጎች በኢትዮጵያ ውስጥ የሚያመርቱት ኢትዮጵያውያን በውጭ ከሚያመርቱት ሲበልጥ ነው።"
                 },
                 {
-                    q: "13. Public transportation and energy efficient technologies to reduce greenhouse gas emissions is categorized as:",
-                    options: ["A) Adaptation", "B) Mitigation", "C) Resilience", "D) Modification"],
-                    correct: 1,
-                    exp: "ትክክል! የበካይ ጋዞችን ልቀት መቀነስ የአየር ንብረት ለውጥን የማቃለል (Mitigation) ስልት ነው።"
-                },
-                {
-                    q: "14. Which man-made lake is CORRECTLY matched with its river?",
+                    q: "15. The current telecom market in Ethiopia is an example of:",
                     options: [
-                        "A) Koka -> Fincha river",
-                        "B) Melka Wakena -> Wabishebelle river",
-                        "C) Abasamuel -> Abay river",
-                        "D) Fincha -> Awash river"
-                    ],
-                    correct: 1,
-                    exp: "ትክክል! የመልካ ዋከና ሰው ሰራሽ ሐይቅ የተሰራው በዋቢ ሸበሌ (Wabishebelle River) ላይ ነው።"
-                },
-                {
-                    q: "15. Which of the following is a dominant plant species found in the Afro-alpine (Wurch) region?",
-                    options: [
-                        "A) Lobelia rhynchopetalum (Giberra)",
-                        "B) Hagenia Abyssinica (Kosso)",
-                        "C) Ficus sur (Sholla)",
-                        "D) Olea africana (Weyra)"
-                    ],
-                    correct: 0,
-                    exp: "ትክክል! ግበራ (Lobelia rhynchopetalum) እጅግ ከፍተኛ በሆኑ የቁር (Afro-alpine) አካባቢዎች ብቻ የሚበቅል ተክል ነው።"
-                },
-                {
-                    q: "16. Which altitudinal range has relatively short growing seasons?",
-                    options: [
-                        "A) 1600-2000 m a.s.l",
-                        "B) 500-1500 m a.s.l",
-                        "C) 2400-3000 m a.s.l",
-                        "D) Above 3300 m a.s.l"
+                        "A) Monopoly market",
+                        "B) Monopolistic competition",
+                        "C) Perfectly competitive market",
+                        "D) Duopoly market"
                     ],
                     correct: 3,
-                    exp: "ትክክል! ከ 3300 ሜትር በላይ ባሉ በጣም ቀዝቃዛ ቦታዎች የዕፅዋት እድገት ጊዜ (Growing season) እጅግ አጭር ነው።"
-                },
-                {
-                    q: "17. The spatial variation of temperature in Ethiopia is significantly determined by:",
-                    options: ["A) Latitude", "B) Distance from water bodies", "C) Vegetation cover", "D) Altitude"],
-                    correct: 3,
-                    exp: "ትክክል! በኢትዮጵያ የቦታዎች የሙቀት ልዩነት በዋናነት የሚወሰነው በመሬት ከፍታ (Altitude) ነው።"
+                    exp: "D: ሁለት አቅራቢዎች (ኢትዮ ቴሌኮም እና ሳፋሪኮም) ስላሉ ገበያው Duopoly ነው።"
                 }
             ],
-            geography_mid: [
+            econ_mid: [
                 {
-                    q: "1. The Gneissic high lands of Konso and the surrounding high lands separate the main Ethiopian rift from the Afar triangle.",
-                    options: ["A) True", "B) False"],
-                    correct: 1,
-                    exp: "ትክክል! የኮንሶ ከፍተኛ ቦታዎች ዋናውን የኢትዮጵያ ስምጥ ሸለቆ ከ Chew Bahir ስምጥ ሸለቆ እንጂ ከአፋር ትሪያንግል አይለዩትም።"
-                },
-                {
-                    q: "2. The Shewan Plateau has the largest proportion of elevated ground from the Western highlands physiographic subdivision.",
+                    q: "1. The smaller the proportion of income spent for a good, the lower price elasticity demand it will have.",
                     options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "ትክክል! የሸዋ አምባ (Shewan Plateau) በምዕራባዊ ከፍተኛ ቦታዎች ውስጥ ከፍተኛውን ስፋትና ከፍታ የያዘ ነው።"
+                    exp: "True: በገቢ ላይ አነስተኛ ወጪ የሚጠይቁ እቃዎች ፍላጎታቸው Inelastic ነው።"
                 },
                 {
-                    q: "3. Platinum has been mined in Ethiopia mainly in:",
-                    options: ["A) Adola", "B) Erta Ale", "C) Yubdo", "D) Dallol"],
-                    correct: 2,
-                    exp: "ትክክል! በኢትዮጵያ ፕላቲኒየም በስፋት የሚመረትበት የታወቀው ቦታ ዩብዶ (Yubdo - Western Wellega) ነው።"
+                    q: "2. Points on the PPF curve are attainable but less efficient as compared to points inside the PPF curve.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: በመስመሩ ላይ ያሉ ነጥቦች ሙሉ በሙሉ Efficient ናቸው።"
                 },
                 {
-                    q: "4. Which highland area is best known for GRAIN PRODUCTION (ስንዴና ገብስ) in Ethiopia?",
-                    options: ["A) Jemjem Plateau", "B) Sidama Highlands", "C) Arsi-Bale Highlands", "D) Hararghe Plateau"],
+                    q: "3. While micro-economics deals with the economy in its entirety, macro-economic deals with individual decision making units.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: Microeconomics የግለሰቦችን ሲያጠና Macroeconomics ጠቅላላ ኢኮኖሚውን ያጠናል።"
+                },
+                {
+                    q: "4. The flood accident on Gondar and Bahir Dar may decrease the supply of goods and services on these localities.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የተፈጥሮ አደጋ የምርት አቅርቦትን (Supply) ይቀንሳል።"
+                },
+                {
+                    q: "5. Positive economics is concerned with analysis of facts and attempts to describe the world as it is.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: Positive economics እውነታዎችን (Facts) የሚተነትን ነው።"
+                },
+                {
+                    q: "6. The market quantity and price equilibrium occurs where:",
+                    options: [
+                        "A) The market price is acceptable to participating consumers and producers",
+                        "B) Market quantity demanded equals market quantity supplied",
+                        "C) Consumers and producers would like a different price",
+                        "D) None of the above"
+                    ],
+                    correct: 1,
+                    exp: "B: የገበያ ሚዛን የሚፈጠረው ፍላጎትና አቅርቦት እኩል ሲሆኑ (Qd = Qs) ነው።"
+                },
+                {
+                    q: "7. Suppose commodity X has many close substitutes available, then:",
+                    options: [
+                        "A) The demand for that good will be relatively inelastic",
+                        "B) The supply of that good will be relatively elastic",
+                        "C) The supply of that good will be relatively inelastic",
+                        "D) The demand for that good will be relatively elastic"
+                    ],
+                    correct: 3,
+                    exp: "D: ተለዋጭ እቃዎች ሲበዙ የፍላጎት ልስላሴ Elastic ይሆናል።"
+                },
+                {
+                    q: "8. All of the following are advantages of capitalistic economy except:",
+                    options: [
+                        "A) Flexibility and adaptability",
+                        "B) High rate of capital formation",
+                        "C) Presence of income equality",
+                        "D) Utilization of resource"
+                    ],
                     correct: 2,
-                    exp: "ትክክል! የአርሲ እና ባሌ ከፍተኛ ቦታዎች በኢትዮጵያ የእህል ምርት ጎተራ በመባል ይታወቃሉ።"
+                    exp: "C: የካፒታሊስት ኢኮኖሚ የገቢ እኩልነትን አያመጣም።"
+                },
+                {
+                    q: "9. If the quantity demanded of a commodity is unresponsive to change in prices, then the demand is:",
+                    options: [
+                        "A) Perfectly inelastic",
+                        "B) Unitary elastic",
+                        "C) Perfectly elastic",
+                        "D) Unknown"
+                    ],
+                    correct: 0,
+                    exp: "A: የዋጋ ለውጥ በፍላጎት ላይ ለውጥ ካላመጣ Perfectly Inelastic ይባላል።"
+                },
+                {
+                    q: "10. For which of the following goods is price elasticity of demand relatively inelastic for Ethiopia?",
+                    options: [
+                        "A) Demand for automobile for majority households",
+                        "B) Demand for international branded clothing",
+                        "C) Demand for fertilizer for Ethiopia as a nation",
+                        "D) Demand for international tourist visits"
+                    ],
+                    correct: 2,
+                    exp: "C: ማዳበሪያ ለግብርና የግድ አስፈላጊ ስለሆነ ፍላጎቱ Inelastic ነው።"
+                },
+                {
+                    q: "11. Assume that Saron employs about 70% labor force for her farm, this process is associated with:",
+                    options: ["A) Where to produce", "B) How to produce", "C) What to produce", "D) For whom to produce"],
+                    correct: 1,
+                    exp: "B: የግብአት አጠቃቀም ከ 'How to produce' ጋር ይያያዛል።"
+                },
+                {
+                    q: "12. Suppose income rises by 10% and demand for commodity X rises by 25%. Then income elasticity is:",
+                    options: ["A) 3", "B) 0.5", "C) 2.5", "D) 0.33"],
+                    correct: 2,
+                    exp: "C: Ey = 25% / 10% = 2.5።"
+                },
+                {
+                    q: "13. Given price elasticity of demand for orange is -1/3 and slope is -0.5, quantity is 30 Kg, then price is:",
+                    options: ["A) 20", "B) 40", "C) 30", "D) 15"],
+                    correct: 0,
+                    exp: "A: Ed = (dQ/dP) * (P/Q) => -1/3 = -0.5 * (P/30) => P = 20።"
+                }
+            ],
+            logic_final: [
+                {
+                    q: "1. A word is vague when there is no clear borderline case for it to be or not to be applied to a particular case.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: Vagueness የሚፈጠረው የአንድ ቃል ወሰን ግልጽ ሳይሆን ሲቀር ነው።"
+                },
+                {
+                    q: "2. All words have an intensional meaning and an extensional meaning.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ሁሉም ቃላት በገሃዱ ዓለም ህልውና (Extensional meaning) የላቸውም።"
+                },
+                {
+                    q: "3. The indirect approach of appeal to the people fallacy is common in advertising industry.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ማስታወቂያዎች Appeal to the People (Indirect) በስፋት ይጠቀማሉ።"
+                },
+                {
+                    q: "4. Straw man fallacy is committed when the arguer cites the claims of another person who lacks the required expertise.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ይህ Appeal to Unqualified Authority እንጂ Straw Man አይደለም።"
+                },
+                {
+                    q: "5. False dichotomy always involves an 'either... or...' statement, at least implicitly.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: False Dichotomy ሁለት ጽንፎችን ብቻ በማቅረብ ይከራከራል።"
+                },
+                {
+                    q: "6. Which of the following best expresses the form of 'ad hominem tu quoque' fallacy?",
+                    options: [
+                        "A) X failed to follow his/her own advice. Therefore, X's claim should be rejected.",
+                        "B) X is biased or has a questionable motive.",
+                        "C) X is a bad person; therefore, claim rejected.",
+                        "D) X's view is false or unjustified."
+                    ],
+                    correct: 0,
+                    exp: "A: Tu quoque ማለት 'አንተም አታደርገውም (Hypocrite)' በማለት ምክርን ውድቅ ማድረግ ነው።"
+                },
+                {
+                    q: "7. 'Each cell in the human body is invisible. Therefore, the human body itself is invisible.' This fallacy is:",
+                    options: ["A) Composition", "B) Division", "C) Amphiboly", "D) Accident"],
+                    correct: 0,
+                    exp: "A: የክፍሉን ባህሪ ወደ ሙሉው አካል ማስተላለፍ Fallacy of Composition ይባላል።"
+                },
+                {
+                    q: "8. Which type of definition is common especially in the area of science and philosophy?",
+                    options: ["A) Persuasive", "B) Précising", "C) Lexical", "D) Theoretical"],
+                    correct: 3,
+                    exp: "D: በሳይንስና ፍልስፍና Theoretical Definition ጥቅም ላይ ይውላል።"
+                },
+                {
+                    q: "9. The view that 'my wife is not clever, therefore all wives are not clever' commits:",
+                    options: ["A) Begging the question", "B) Ad hominem abusive", "C) Composition", "D) Hasty generalization"],
+                    correct: 3,
+                    exp: "D: ከአንድ አነስተኛ ምሳሌ ተነስቶ ወደ አጠቃላይ ድምዳሜ መድረስ Hasty Generalization ነው።"
+                },
+                {
+                    q: "10. A fallacy that employs threats or intimidation is:",
+                    options: ["A) Straw man", "B) Appeal to force", "C) Appeal to pity", "D) Suppressed evidence"],
+                    correct: 1,
+                    exp: "B: በማስፈራራት የሚደረግ ክርክር Appeal to Force (Ad Baculum) ነው።"
+                },
+                {
+                    q: "11. 'Senior citizen means a purchaser must be at least 65 years old.' This definition is classified as:",
+                    options: ["A) Stipulative", "B) Précising", "C) Lexical", "D) Persuasive"],
+                    correct: 1,
+                    exp: "B: አሻሚነትን ለማስወገድ የተወሰነ ወሰን (65 ዓመት) መስጠት Précising Definition ነው።"
+                },
+                {
+                    q: "12. 'London, Paris, Madrid' for the term 'City' represents which method of definition?",
+                    options: ["A) Enumerative", "B) Subclass", "C) Etymological", "D) Operational"],
+                    correct: 0,
+                    exp: "A: አባላቱን በስማቸው በመጥቀስ ማብራራት Enumerative Definition ይባላል።"
+                },
+                {
+                    q: "13. 'Whatever you do, never buy a lottery ticket... you'll end up totally broke.' commits:",
+                    options: ["A) Missing the point", "B) Post hoc", "C) Slippery slope", "D) Begging the question"],
+                    correct: 2,
+                    exp: "C: ያለምክንያት ወደ አስከፊ ሰንሰለታማ ውጤት የሚወስድ ክርክር Slippery Slope ነው።"
+                },
+                {
+                    q: "14. 'Have you given up your criminal ways?' If answered 'yes', it commits:",
+                    options: ["A) Complex question", "B) False cause", "C) Suppressed evidence", "D) Appeal to pity"],
+                    correct: 0,
+                    exp: "A: ያደፈጠ ወጥመድ ጥያቄ የያዘ አረፍተ ነገር Complex Question ነው።"
                 }
             ],
             logic_mid: [
@@ -463,60 +606,258 @@
                     q: "1. Reading and knowing philosophy is sufficient for someone to be a philosopher.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "ትክክል! ፍልስፍናን ማንበብ ብቻውን ፈላስፋ አያደርግም።"
+                    exp: "False: ፍልስፍናን ማንበብ ብቻውን ፈላስፋ አያደርግም።"
                 },
                 {
-                    q: "2. An argument with actually true premises and false conclusion is always invalid.",
+                    q: "2. An argument that has actually true premises and actually false conclusion is always invalid.",
                     options: ["A) True", "B) False"],
                     correct: 0,
-                    exp: "ትክክል! True premises ኖረውት False conclusion ያለው ክርክር ሁልጊዜ Invalid ነው።"
-                }
-            ],
-            logic_final: [
-                {
-                    q: "1. A word is vague when there is no clear borderline case.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "ትክክል! Vagueness የሚፈጠረው የአንድ ቃል ወሰን ግልጽ ሳይሆን ሲቀር ነው።"
+                    exp: "True: True premises ኖረውት False conclusion ያለው ክርክር ሁልጊዜ Invalid ነው።"
                 },
                 {
-                    q: "2. 'Each cell in human body is invisible. Therefore, the body is invisible.' commits:",
-                    options: ["A) Composition", "B) Division", "C) Amphiboly", "D) Accident"],
-                    correct: 0,
-                    exp: "ትክክል! የክፍሉን ባህሪ ወደ ሙሉው አካል ማስተላለፍ Fallacy of Composition ይባላል።"
-                }
-            ],
-            econ_mid: [
-                {
-                    q: "1. Smaller proportion of income spent for a good, lower price elasticity of demand it will have.",
-                    options: ["A) True", "B) False"],
-                    correct: 0,
-                    exp: "ትክክል! በገቢ ላይ አነስተኛ ድርሻ ያላቸው እቃዎች ፍላጎታቸው Inelastic ነው።"
-                },
-                {
-                    q: "2. Income rises by 10% and demand rises by 25%. Income elasticity is:",
-                    options: ["A) 3", "B) 0.5", "C) 2.5", "D) 0.33"],
-                    correct: 2,
-                    exp: "ትክክል! Ey = 25% / 10% = 2.5።"
-                }
-            ],
-            econ_final: [
-                {
-                    q: "1. Under perfectly competitive market, some firm can gain advantage through advertising.",
+                    q: "3. Scientific arguments aimed at the discovery of a law of nature are usually deductive.",
                     options: ["A) True", "B) False"],
                     correct: 1,
-                    exp: "ትክክል! በ Perfect Competition ማስታወቂያ ተወዳዳሪ ጥቅም አያስገኝም።"
+                    exp: "False: ሳይንሳዊ ምርምሮች Inductive ናቸው።"
                 },
                 {
-                    q: "2. The current telecom market in Ethiopia is an example of:",
-                    options: ["A) Monopoly", "B) Monopolistic competition", "C) Perfect competition", "D) Duopoly market"],
+                    q: "4. Philosophy is a rational attempt to look at the world as a whole rather than separately.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ፍልስፍና ዓለምን በአጠቃላይ የሚመረምር መስክ ነው።"
+                },
+                {
+                    q: "5. 'An element is a collection of atoms...' This passage is:",
+                    options: ["A) Argument", "B) Expository passage", "C) Illustration", "D) Non-argument"],
                     correct: 3,
-                    exp: "ትክክል! ሁለት አቅራቢዎች ስላሉ ገበያው Duopoly ነው።"
+                    exp: "D: መረጃን የሚያብራራ ገላጭ ጽሑፍ እንጂ ክርክር አይደለም።"
+                },
+                {
+                    q: "6. A sound argument is the one that contains:",
+                    options: [
+                        "A) All true premises and strong argument",
+                        "B) Valid argument and all true premises",
+                        "C) Invalid argument and all true premises",
+                        "D) Strong argument and valid argument"
+                    ],
+                    correct: 1,
+                    exp: "B: Valid ሆኖ መነሻዎቹ እውነት ሲሆኑ Sound Argument ይባላል።"
+                },
+                {
+                    q: "7. 'Samerawit is a polytheist. Therefore, she believes in more than one god.' This argument is:",
+                    options: ["A) Inductive, cogent", "B) Deductive, invalid", "C) Deductive, valid", "D) Inductive, strong"],
+                    correct: 2,
+                    exp: "C: በትርጉሙ መሰረት ድምዳሜው የግድ የሚከተል (Deductive, Valid) ነው።"
+                },
+                {
+                    q: "8. Which of the following sentences is a statement?",
+                    options: [
+                        "A) Vladimir Putin is a brain surgeon.",
+                        "B) Let's go to a restaurant tonight.",
+                        "C) I suggest you to take vacation.",
+                        "D) Stop beating that drum right now!"
+                    ],
+                    correct: 0,
+                    exp: "A: እውነት ወይም ሀሰት ተብሎ ሊፈረጅ የሚችል ገላጭ አረፍተ-ነገር ነው።"
+                },
+                {
+                    q: "9. 'All birds are animals. A parrot is a bird. Therefore, a parrot is an animal.' This argument is:",
+                    options: [
+                        "A) Non-argumentative passage",
+                        "B) Deductive valid and unsound",
+                        "C) Inductive invalid and sound",
+                        "D) Deductive valid and sound argument"
+                    ],
+                    correct: 3,
+                    exp: "D: ቅርጹ Valid ሆኖ መረጃዎቹ እውነት ስለሆኑ Sound Argument ነው።"
+                },
+                {
+                    q: "10. 'The past five times my friend borrowed my laptop, it had a problem... likely next time too.' This is:",
+                    options: ["A) Analogy", "B) Argument from prediction", "C) Authority", "D) Sign"],
+                    correct: 1,
+                    exp: "B: ካለፈው ልምድ ተነስቶ ስለ ወደፊቱ መተንበይ Argument from Prediction ነው።"
+                }
+            ],
+            geography_mid: [
+                {
+                    q: "1. The Gneissic high lands of Konso and the surrounding high lands separate the main Ethiopian rift from the Afar triangle.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የኮንሶ ከፍተኛ ቦታዎች ዋናውን ስምጥ ሸለቆ ከ Chew Bahir ስምጥ ሸለቆ ይለያሉ።"
+                },
+                {
+                    q: "2. The systematic approach of geographical study examines a variety of geographical features in a certain areal extent.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: ይህ Regional Approach ይባላል።"
+                },
+                {
+                    q: "3. The uplift of the Arabo-Ethiopian landmass was one of the major geologic events during the Cenozoic era.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: በ Cenozoic Era የመሬት መነሳትና የስምጥ ሸለቆ መፈጠር ተከስቷል።"
+                },
+                {
+                    q: "4. The Shewan Plateau has the largest proportion of elevated ground from the Western highlands physiographic subdivision.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የሸዋ አምባ ከፍተኛውን ስፋትና ከፍታ ይዟል።"
+                },
+                {
+                    q: "5. The marshy area of broad and shallow depression covered by tall grasses is the prominent feature of Chew Bahir Rift.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የጨው ባህር ስምጥ ሸለቆ ረግረጋማና ረዣዥም ሳሮች የበቀሉበት ነው።"
+                },
+                {
+                    q: "6. Which of the following is/are WRONG about the physiographic effects of the formation of the Rift Valley?",
+                    options: [
+                        "A) It divides the Ethiopian Plateau into two",
+                        "B) It creates basins and fault depressions on which lakes are formed",
+                        "C) It causes the formation of the Dead Sea and Red Sea",
+                        "D) It subjects the land to intense folding"
+                    ],
+                    correct: 3,
+                    exp: "D: የስምጥ ሸለቆ መፈጠር ከመሰንጠቅ (Faulting) ጋር እንጂ ከመታጠፍ (Folding) ጋር አይገናኝም።"
+                },
+                {
+                    q: "7. Which is TRUE about the location of Ethiopia?",
+                    options: [
+                        "A) Because of latitudinal location, Ethiopia uses GMT+3",
+                        "B) Ethiopia has a defined sea outlet",
+                        "C) Due to latitudinal location, Ethiopia experiences tropical type of climate",
+                        "D) There is a three hour difference between extremes"
+                    ],
+                    correct: 2,
+                    exp: "C: ኢትዮጵያ በሞቃታማ (Tropical) የአየር ንብረት ክልል ውስጥ ትገኛለች።"
+                },
+                {
+                    q: "8. Among the following, which mountain is INCORRECTLY matched with its highland?",
+                    options: [
+                        "A) Mt Garamuleta -> Hararghe plateau",
+                        "B) Mt Tulu Demtu -> Bale highlands",
+                        "C) Mt Bada -> Sidama high lands",
+                        "D) Mt Chilalo -> Arsi highlands"
+                    ],
+                    correct: 2,
+                    exp: "C: ባዳ ተራራ የሚገኘው በአርሲ ከፍተኛ ቦታዎች ነው።"
+                },
+                {
+                    q: "9. Platinum has been mined in Ethiopia mainly in:",
+                    options: ["A) Adola", "B) Erta Ale", "C) Yubdo", "D) Dallol"],
+                    correct: 2,
+                    exp: "C: በኢትዮጵያ ፕላቲኒየም የሚመረትበት የታወቀው ቦታ ዩብዶ (Yubdo) ነው።"
+                },
+                {
+                    q: "10. Which highland area is best known for GRAIN PRODUCTION in Ethiopia?",
+                    options: ["A) Jemjem Plateau", "B) Sidama Highlands", "C) Arsi-Bale Highlands", "D) Hararghe Plateau"],
+                    correct: 2,
+                    exp: "C: የአርሲና ባሌ ከፍተኛ ቦታዎች የእህል ምርት ጎተራ በመባል ይታወቃሉ።"
+                },
+                {
+                    q: "11. Which lowlands of Ethiopia are the WETTEST and SURFACE WATER DEFICIT respectively?",
+                    options: [
+                        "A) Borena & Abay Dindir",
+                        "B) Omo & Baro",
+                        "C) Omo & Gibe",
+                        "D) Baro Lowland & Ogaden lowland"
+                    ],
+                    correct: 3,
+                    exp: "D: ባሮ በጣም እርጥበታማ ሲሆን ኦጋዴን ደግሞ የወለል ውሃ እጥረት አለበት።"
+                }
+            ],
+            geography_final: [
+                {
+                    q: "1. Ethiopia's wildlife resource is characterized by high level of uniqueness and endemicity.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ኢትዮጵያ በርካታ ብርቅዬ (Endemic) የዱር እንስሳት አሏት።"
+                },
+                {
+                    q: "2. The earth surface is the main source of heat for the lower atmosphere that transfers in the form of long-wave radiation and convection.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: የከባቢ አየር የታችኛው ክፍል ሙቀት የሚያገኘው ከመሬት በሚወጣው Long-wave radiation ነው።"
+                },
+                {
+                    q: "3. Despite their origin from highland areas, rivers in Ethiopia have immense navigation potential.",
+                    options: ["A) True", "B) False"],
+                    correct: 1,
+                    exp: "False: የኢትዮጵያ ወንዞች ተራራማና ፏፏቴ የበዛባቸው በመሆናቸው ለትራንስፖርት አያገለግሉም።"
+                },
+                {
+                    q: "4. In Ethiopia, the variation in the amount of solar radiation received daily is small throughout the year.",
+                    options: ["A) True", "B) False"],
+                    correct: 0,
+                    exp: "True: ለምድር ወገብ ቅርብ በመሆኗ የፀሐይ ብርሃን ልዩነት አነስተኛ ነው።"
+                },
+                {
+                    q: "5. Why do most parts of Ethiopia receive little or no rainfall during the winter season (Bega)?",
+                    options: [
+                        "A) Winds carry moisture from Atlantic",
+                        "B) Winds dominating during winter are of continental origin (NE Trade Winds)",
+                        "C) Position of ITCZ shifts North",
+                        "D) Westerlies energetic"
+                    ],
+                    correct: 1,
+                    exp: "B: የሰሜን ምሥራቅ ንፋሶች ከደረቅ የየብስ ክፍል ስለሚነሱ ዝናብ አልባ ናቸው።"
+                },
+                {
+                    q: "6. Identify the WRONG combination of wildlife and its habitat:",
+                    options: [
+                        "A) Walia Ibex -> Semien highlands",
+                        "B) Hippopotamus -> Bale Mountains",
+                        "C) Semien Fox -> Bale and Semien highlands",
+                        "D) Flamingos -> Abijata-Shalla national park"
+                    ],
+                    correct: 1,
+                    exp: "B: ጉማሬ የውሃ እንስሳ እንጂ የባሌ ተራሮች መገለጫ አይደለም።"
+                },
+                {
+                    q: "7. Which one of the following is TRUE about Ethiopian rivers?",
+                    options: [
+                        "A) Atbara to Mereb, Juba to Wabishebelle",
+                        "B) Never manifest variation in water quantity",
+                        "C) Ghenale largest in catchment",
+                        "D) Serve as physical boundary between regions and countries"
+                    ],
+                    correct: 3,
+                    exp: "D: ወንዞቻችን እንደ ተፈጥሯዊ ወሰን (Physical boundary) ሆነው ያገለግላሉ።"
+                },
+                {
+                    q: "8. Which traditional climate zone of Ethiopia is dominated by Acacia vegetation?",
+                    options: ["A) Woina Dega", "B) Dega", "C) Bereha / Kolla", "D) Wurch"],
+                    correct: 2,
+                    exp: "C: የግራር (Acacia) ዛፎች በቆላና በረሃ በስፋት ይገኛሉ።"
+                },
+                {
+                    q: "9. In summer, Ethiopia experiences lower temperatures contrary to high solar insolation due to:",
+                    options: ["A) Latitude and pressure", "B) Altitude and ocean current", "C) Distance from sea", "D) Altitude and cloud cover"],
+                    correct: 3,
+                    exp: "D: የመሬት ከፍታ እና የደመና መሸፈን ሙቀቱን ይቀንሰዋል።"
+                },
+                {
+                    q: "10. Which man-made lake is CORRECTLY matched with its river?",
+                    options: ["A) Koka -> Fincha", "B) Melka Wakena -> Wabishebelle river", "C) Abasamuel -> Abay", "D) Fincha -> Awash"],
+                    correct: 1,
+                    exp: "B: የመልካ ዋከና ሰው ሰራሽ ሐይቅ የተሰራው በዋቢ ሸበሌ ወንዝ ላይ ነው።"
+                },
+                {
+                    q: "11. Which of the following is a dominant plant species found in the Afro-alpine (Wurch) region?",
+                    options: ["A) Lobelia rhynchopetalum (Giberra)", "B) Hagenia Abyssinica (Kosso)", "C) Ficus sur (Sholla)", "D) Olea africana (Weyra)"],
+                    correct: 0,
+                    exp: "A: ግበራ (Lobelia rhynchopetalum) በከፍተኛ የቁር (Afro-alpine) ቦታዎች ብቻ የሚበቅል ነው።"
+                },
+                {
+                    q: "12. The spatial variation of temperature in Ethiopia is significantly determined by:",
+                    options: ["A) Latitude", "B) Distance from water bodies", "C) Vegetation cover", "D) Altitude"],
+                    correct: 3,
+                    exp: "D: በኢትዮጵያ የሙቀት ልዩነት በዋናነት የሚወሰነው በመሬት ከፍታ (Altitude) ነው።"
                 }
             ]
         };
 
-        let currentExam = 'geography_final';
+        let currentExam = 'econ_final';
         let currentQIndex = 0;
         let isAnswered = false;
 
@@ -524,12 +865,12 @@
             currentExam = type;
             currentQIndex = 0;
             const titles = {
-                geography_final: "🌍 Geography Final Exam Practice",
-                geography_mid: "🗺️ Geography Mid Exam Practice",
-                logic_mid: "💡 Logic Mid Exam Practice",
-                logic_final: "💡 Logic Final Exam Practice",
+                econ_final: "🎓 Economics Final Exam Practice",
                 econ_mid: "📝 Economics Mid Exam Practice",
-                econ_final: "🎓 Economics Final Exam Practice"
+                logic_final: "💡 Logic Final Exam Practice",
+                logic_mid: "💡 Logic Mid Exam Practice",
+                geography_final: "🌍 Geography Final Exam Practice",
+                geography_mid: "🗺️ Geography Mid Exam Practice"
             };
             document.getElementById('quizTitle').innerText = titles[type];
             loadQuestion();
@@ -604,7 +945,6 @@
                     updateCoins(50);
                     alert("🎉 50 Coins በተሳካ ሁኔታ ተጨምሮልዎታል!");
                 }).catch(() => {
-                    // Fallback for preview mode
                     updateCoins(50);
                     alert("🎉 (Preview Mode) 50 Coins ተጨምሯል!");
                 });
@@ -617,12 +957,12 @@
         // Unlock PDF Logic
         function unlockExamPDF() {
             const fileMap = {
-                geography_final: 'geography_final_2017',
-                geography_mid: 'geography_mid_2016',
-                logic_mid: 'logic_mid_2016',
-                logic_final: 'logic_final',
+                econ_final: 'econ_final_2016',
                 econ_mid: 'econ_mid_2016',
-                econ_final: 'econ_final_2016'
+                logic_final: 'logic_final',
+                logic_mid: 'logic_mid_2016',
+                geography_final: 'geography_final_2017',
+                geography_mid: 'geography_mid_2016'
             };
             const fileKey = fileMap[currentExam];
             if (userCoins >= 100) {
