@@ -626,7 +626,6 @@
 
             const listEl = document.getElementById('matItemsList');
             listEl.innerHTML = '';
-            category.items.enter(item => {}); // placeholder safe
             category.items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'mat-card';
@@ -813,7 +812,26 @@
                 alert("🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...");
                 redirectToBot(fileKey);
             } else {
-                alert("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ከላይ ያለውን 'ነፃ Coins ይፈልጋሉ?' የሚለውን በተን ተጭነው ማስታወቂያ ይመልከቱ።");
+                if (confirm("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ማስታወቂያ ማየት ይፈልጋሉ?")) {
+                    watchAdForUnlock(fileKey);
+                }
+            }
+        }
+
+        function watchAdForUnlock(fileKey) {
+            try {
+                if (!adController) {
+                    adController = window.Adsgram.init({ blockId: "int-44107" });
+                }
+                adController.show().then(() => {
+                    alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! ፋይሉ ወደ ቴሌግራም ቦት ይላካል።");
+                    redirectToBot(fileKey);
+                }).catch(() => {
+                    alert("⚠️ ማስታወቂያው አልተጠናቀቀም!");
+                });
+            } catch (e) {
+                alert("⚠️ ማስታወቂያ መጫን አልተቻለም።");
+                redirectToBot(fileKey);
             }
         }
 
@@ -882,7 +900,7 @@
                 document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
                 document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
                 document.getElementById('unBtn').innerText = "🔓 በ 100 Coins በቴሌግራም አውርድ";
-                document.getElementById('nextBtn').innerText = "ቀጣይ ጥያቄዎች ➡️";
+                document.getElementById('nextBtn').innerText = "ቀጣይ ጥያቄ ➡️";
             }
         }
 
