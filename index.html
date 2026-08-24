@@ -263,7 +263,7 @@
             <span class="progress-text" id="quizProgress">1 / 30</span>
         </div>
 
-        <div class="question-box" id="qText">Loading question...</div>
+        <div class="question-box" id="qText">ጥያቄዎች በመጫን ላይ ናቸው...</div>
         <div id="optionsContainer"></div>
 
         <div class="explanation" id="expBox"></div>
@@ -292,15 +292,18 @@
             document.getElementById('coinCount').innerText = userCoins;
         }
 
-        // Merge all 6 question banks
-        const examData = {
-            ...(window.economicsData || {}),
-            ...(window.logicData || {}),
-            ...(window.geographyData || {}),
-            ...(window.historyData || {}),
-            ...(window.emergingData || {}),
-            ...(window.globalData || {})
-        };
+        let examData = {};
+
+        function getMergedData() {
+            return {
+                ...(window.economicsData || {}),
+                ...(window.logicData || {}),
+                ...(window.geographyData || {}),
+                ...(window.historyData || {}),
+                ...(window.emergingData || {}),
+                ...(window.globalData || {})
+            };
+        }
 
         const titles = {
             econ_final: "🎓 Economics Final Exam Practice",
@@ -329,10 +332,12 @@
         }
 
         function loadQuestion() {
+            examData = getMergedData();
             isAnswered = false;
             const qList = examData[currentExam] || [];
+            
             if (!qList.length) {
-                document.getElementById('qText').innerText = "ጥያቄዎች በመጫን ላይ ናቸው...";
+                setTimeout(loadQuestion, 200);
                 return;
             }
 
@@ -463,8 +468,9 @@
             }
         }
 
-        // Start initial load
-        loadQuestion();
+        window.onload = function() {
+            loadQuestion();
+        };
     </script>
 </body>
 </html>
