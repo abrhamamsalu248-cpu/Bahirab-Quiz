@@ -18,6 +18,7 @@
     <script src="anthropology.js"></script>
     <script src="english.js"></script>
     <script src="psychology.js"></script>
+    <script src="entrepreneurship.js"></script>
 
     <style>
         :root {
@@ -238,6 +239,8 @@
     <div class="select-box">
         <label id="lblSelect">📚 የፈተና ዓይነት ይምረጡ (Select Exam):</label>
         <select class="exam-dropdown" id="examSelect" onchange="switchExam(this.value)">
+            <option value="entrepreneurship_final">🚀 Entrepreneurship (Final Exam)</option>
+            <option value="entrepreneurship_mid">🚀 Entrepreneurship (Mid Exam)</option>
             <option value="psychology_final">🧠 General Psychology (Final Exam)</option>
             <option value="english_final">📖 Communicative English Skills II (Final Exam)</option>
             <option value="english_mid">📖 Communicative English Skills II (Mid Exam)</option>
@@ -270,8 +273,8 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 id="quizTitle">🧠 General Psychology Final Exam</h3>
-            <span class="progress-text" id="quizProgress">1 / 32</span>
+            <h3 id="quizTitle">🚀 Entrepreneurship Final Exam</h3>
+            <span class="progress-text" id="quizProgress">1 / 17</span>
         </div>
 
         <div class="question-box" id="qText">ጥያቄዎች በመጫን ላይ ናቸው...</div>
@@ -307,6 +310,7 @@
 
         function getMergedData() {
             return {
+                ...(window.entrepreneurshipData || {}),
                 ...(window.psychologyData || {}),
                 ...(window.englishData || {}),
                 ...(window.anthropologyData || {}),
@@ -321,6 +325,8 @@
         }
 
         const titles = {
+            entrepreneurship_final: "🚀 Entrepreneurship Final Exam",
+            entrepreneurship_mid: "🚀 Entrepreneurship Mid Exam",
             psychology_final: "🧠 General Psychology Final Exam",
             english_final: "📖 Communicative English Skills II Final Exam",
             english_mid: "📖 Communicative English Skills II Mid Exam",
@@ -334,7 +340,7 @@
             emerging_mid: "🤖 Emerging Technologies Mid Exam Practice",
             history_final: "📜 History of Ethiopia Final Exam Practice",
             history_mid: "📜 History of Ethiopia Mid Exam Practice",
-            geography_final: "🌍 Geography Final Exam Practice",
+            geography_final: "🌍 Geography of Ethiopia Final Exam Practice",
             geography_mid: "🗺️ Geography of Ethiopia Mid Exam Practice",
             logic_final: "💡 Logic Final Exam Practice",
             logic_mid: "💡 Logic Mid Exam Practice",
@@ -342,7 +348,7 @@
             econ_mid: "📝 Economics Mid Exam Practice"
         };
 
-        let currentExam = 'psychology_final';
+        let currentExam = 'entrepreneurship_final';
         let currentQIndex = 0;
         let isAnswered = false;
 
@@ -438,6 +444,8 @@
 
         function unlockExamPDF() {
             const fileMap = {
+                entrepreneurship_final: 'entrepreneurship_final_2016',
+                entrepreneurship_mid: 'entrepreneurship_mid_2016',
                 psychology_final: 'psychology_final_2016',
                 english_final: 'english_final_2016',
                 english_mid: 'english_mid_2016',
