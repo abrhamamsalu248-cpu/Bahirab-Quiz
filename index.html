@@ -127,11 +127,8 @@
         }
 
         /* Home View (Grid Buttons) */
-        #homeView {
-            display: block;
-        }
         .home-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: var(--primary);
             margin-bottom: 10px;
@@ -163,24 +160,16 @@
         .course-btn span { font-size: 24px; }
         .course-btn:active { transform: scale(0.97); background: #f0fdf4; border-color: var(--success); }
 
-        /* Materials View (Categorized) */
-        #materialsView {
+        /* Materials Main View (Category Buttons) */
+        #materialsMainView {
+            display: block;
+        }
+        /* Materials Detail View (Items List) */
+        #materialsDetailView {
             display: none;
             text-align: left;
         }
-        .category-section {
-            margin-bottom: 20px;
-        }
-        .category-title {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--primary);
-            background: #e0f2fe;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--primary);
-        }
+
         .mat-card {
             background: var(--card-bg);
             border-radius: 10px;
@@ -351,7 +340,7 @@
         <button class="tab-btn" id="tabMats" onclick="switchTab('mats')">📥 የፈተና ፒዲኤፍ (Materials)</button>
     </div>
 
-    <!-- HOME VIEW: Course Selection Buttons -->
+    <!-- HOME VIEW: Course Selection Buttons (Quiz) -->
     <div id="homeView">
         <div class="home-title" id="lblSelect">📚 የፈተና ኮርስ ይምረጡ (Select Course):</div>
         <div class="course-grid">
@@ -379,10 +368,22 @@
         </div>
     </div>
 
-    <!-- MATERIALS VIEW (Categorized) -->
-    <div id="materialsView">
-        <div class="home-title">📥 የፈተና ፒዲኤፍ እና ማቴሪያሎች (በኮርስ ምድብ)</div>
-        <div id="materialCategories"></div>
+    <!-- MATERIALS VIEW (Categorized Buttons) -->
+    <div id="materialsView" style="display: none;">
+        <!-- Main Categories Grid -->
+        <div id="materialsMainView">
+            <div class="home-title" id="lblMatSelect">📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:</div>
+            <div class="course-grid" id="matCategoriesGrid"></div>
+        </div>
+
+        <!-- Detail Items List View -->
+        <div id="materialsDetailView">
+            <div class="back-bar">
+                <button class="btn-back" onclick="backToMatMain()">⬅️ ወደ ምድቦች ተመለስ</button>
+            </div>
+            <div class="home-title" id="detailCatTitle" style="margin-bottom: 12px; text-align: left;"></div>
+            <div id="matItemsList"></div>
+        </div>
     </div>
 
     <!-- QUIZ VIEW -->
@@ -429,7 +430,8 @@
 
         const categorizedMaterials = [
             {
-                category: "🌍 Global Trends",
+                id: "global",
+                name: "🌍 Global Trends",
                 items: [
                     { title: "Global Trend Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "global_trend_2015" },
                     { title: "Global Trend Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "global_trend_2016" },
@@ -441,7 +443,8 @@
                 ]
             },
             {
-                category: "📜 History of Ethiopia and the Horn",
+                id: "history",
+                name: "📜 History",
                 items: [
                     { title: "History Mid Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "history_2015" },
                     { title: "History Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "history_mid_2016" },
@@ -454,7 +457,8 @@
                 ]
             },
             {
-                category: "🗺️ Geography of Ethiopia and the Horn",
+                id: "geography",
+                name: "🗺️ Geography",
                 items: [
                     { title: "Geography Final Exam", desc: "Bahir Dar University • Freshman Course", key: "geography_final" },
                     { title: "Geography Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "geography_2014" },
@@ -469,7 +473,8 @@
                 ]
             },
             {
-                category: "💻 Emerging Technologies",
+                id: "emerging",
+                name: "💻 Emerging Tech",
                 items: [
                     { title: "Emerging Technology Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_mid" },
                     { title: "Emerging Technology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2016" },
@@ -480,7 +485,8 @@
                 ]
             },
             {
-                category: "⚖️ Moral and Civic Education",
+                id: "civics",
+                name: "⚖️ Civics & Ethics",
                 items: [
                     { title: "Civics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "civics_mid" },
                     { title: "Moral and Civic Education Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_2016" },
@@ -493,7 +499,8 @@
                 ]
             },
             {
-                category: "💡 Logic and Critical Thinking",
+                id: "logic",
+                name: "💡 Logic & Critical",
                 items: [
                     { title: "Logic Final Exam", desc: "Bahir Dar University • Freshman Course", key: "logic_final" },
                     { title: "Logic Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "logic_mid" },
@@ -510,7 +517,8 @@
                 ]
             },
             {
-                category: "📊 Economics",
+                id: "econ",
+                name: "📊 Economics",
                 items: [
                     { title: "Economics Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_mid_2016" },
                     { title: "Economics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2016" },
@@ -522,7 +530,8 @@
                 ]
             },
             {
-                category: "🧠 General Psychology",
+                id: "psychology",
+                name: "🧠 Psychology",
                 items: [
                     { title: "General Psychology Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_mid" },
                     { title: "General Psychology Final Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_final" },
@@ -532,7 +541,8 @@
                 ]
             },
             {
-                category: "🦴 Social Anthropology",
+                id: "anthro",
+                name: "🦴 Anthropology",
                 items: [
                     { title: "Anthropology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_mid_2016" },
                     { title: "Anthropology Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2016" },
@@ -542,7 +552,8 @@
                 ]
             },
             {
-                category: "💼 Entrepreneurship",
+                id: "entrepreneurship",
+                name: "💼 Entrepreneurship",
                 items: [
                     { title: "Entrepreneurship Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_mid_2016" },
                     { title: "Entrepreneurship Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_2016" },
@@ -551,7 +562,8 @@
                 ]
             },
             {
-                category: "🗣️ Communicative English Skills",
+                id: "english",
+                name: "🗣️ English Skills",
                 items: [
                     { title: "Communication Skills English Final Exam", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_final" },
                     { title: "Communication English Skills Two Mid 2016", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_2016" },
@@ -564,7 +576,8 @@
                 ]
             },
             {
-                category: "📐 Mathematics & Physics & Chemistry",
+                id: "math_physics",
+                name: "📐 Math, Physics & Chem",
                 items: [
                     { title: "General Chemistry Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "chemistry_mid" },
                     { title: "General Physics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "physics_mid" },
@@ -581,7 +594,8 @@
                 ]
             },
             {
-                category: "📱 ሌሎች መተግበሪያዎች እና ኮርሶች",
+                id: "others",
+                name: "📱 ሌሎች መተግበሪያዎች",
                 items: [
                     { title: "Freshman Modules and Exams Application", desc: "All-in-one Android App", key: "freshman_app" },
                     { title: "Inclusiveness Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "inclusiveness_2014" },
@@ -590,31 +604,43 @@
             }
         ];
 
-        function renderMaterials() {
-            const container = document.getElementById('materialCategories');
-            container.innerHTML = '';
-            
+        function renderMatCategories() {
+            const grid = document.getElementById('matCategoriesGrid');
+            grid.innerHTML = '';
             categorizedMaterials.forEach(cat => {
-                const section = document.createElement('div');
-                section.className = 'category-section';
-                
-                let itemsHTML = '';
-                cat.items.forEach(item => {
-                    itemsHTML += `
-                        <div class="mat-card">
-                            <h3>${item.title}</h3>
-                            <p>${item.desc}</p>
-                            <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ (ወይም ማስታወቂያ)</button>
-                        </div>
-                    `;
-                });
-
-                section.innerHTML = `
-                    <div class="category-title">${cat.category}</div>
-                    ${itemsHTML}
-                `;
-                container.appendChild(section);
+                const btn = document.createElement('button');
+                btn.className = 'course-btn';
+                btn.innerHTML = `<span>${cat.name.split(' ')[0]}</span>${cat.name.substring(2)}`;
+                btn.onclick = () => openMatCategory(cat.id);
+                grid.appendChild(btn);
             });
+        }
+
+        function openMatCategory(catId) {
+            const category = categorizedMaterials.find(c => c.id === catId);
+            if (!category) return;
+
+            document.getElementById('materialsMainView').style.display = 'none';
+            document.getElementById('materialsDetailView').style.display = 'block';
+            document.getElementById('detailCatTitle').innerText = category.name;
+
+            const listEl = document.getElementById('matItemsList');
+            listEl.innerHTML = '';
+            category.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'mat-card';
+                card.innerHTML = `
+                    <h3>${item.title}</h3>
+                    <p>${item.desc}</p>
+                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ (ወይም ማስታወቂያ)</button>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function backToMatMain() {
+            document.getElementById('materialsDetailView').style.display = 'none';
+            document.getElementById('materialsMainView').style.display = 'block';
         }
 
         function switchTab(tab) {
@@ -630,7 +656,8 @@
             } else if (tab === 'mats') {
                 document.getElementById('tabMats').classList.add('active');
                 document.getElementById('materialsView').style.display = 'block';
-                renderMaterials();
+                backToMatMain();
+                renderMatCategories();
             }
         }
 
@@ -850,6 +877,7 @@
             currentLang = currentLang === 'am' ? 'en' : 'am';
             if (currentLang === 'en') {
                 document.getElementById('lblSelect').innerText = "📚 Select Course:";
+                document.getElementById('lblMatSelect').innerText = "📚 Select Course Category:";
                 document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
                 document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
                 document.getElementById('backText').innerText = "Back to Courses";
@@ -862,6 +890,7 @@
                 document.getElementById('nextBtn').innerText = "Next Question ➡️";
             } else {
                 document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
+                document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
                 document.getElementById('tabQuiz').innerText = "✍️ የፈተና ጥያቄዎች (Quiz)";
                 document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
@@ -874,6 +903,10 @@
                 document.getElementById('nextBtn').innerText = "ቀጣይ ጥያቄ ➡️";
             }
         }
+
+        window.onload = function() {
+            renderMatCategories();
+        };
     </script>
 </body>
 </html>
