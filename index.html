@@ -376,7 +376,7 @@
 
         <div id="materialsDetailView">
             <div class="back-bar">
-                <button class="btn-back" onclick="backToMatMain()">⬅️ ወደ ምድቦች ተመለስ</button>
+                <button class="btn-back" onclick="backToMatMain()">⬅️ <span id="backMatText">ወደ ምድቦች ተመለስ</span></button>
             </div>
             <div class="home-title" id="detailCatTitle" style="margin-bottom: 12px; text-align: left;"></div>
             <div id="matItemsList"></div>
@@ -602,6 +602,8 @@
             }
         ];
 
+        let currentLang = 'am';
+
         function renderMatCategories() {
             const grid = document.getElementById('matCategoriesGrid');
             grid.innerHTML = '';
@@ -627,10 +629,11 @@
             category.items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'mat-card';
+                const btnText = currentLang === 'en' ? "🔓 Unlock (100 Coins)" : "🔓 በ 100 Coins አውርድ";
                 card.innerHTML = `
                     <h3>${item.title}</h3>
                     <p>${item.desc}</p>
-                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">🔓 በ 100 Coins አውርድ</button>
+                    <button class="btn-mat" onclick="unlockMaterial('${item.key}')">${btnText}</button>
                 `;
                 listEl.appendChild(card);
             });
@@ -762,11 +765,13 @@
             if (selectedIdx === current.correct) {
                 btnElement.classList.add('correct');
                 updateCoins(10);
-                document.getElementById('expBox').innerText = `🎉 ትክክል! (+10 Coins)\n💡 ${current.exp}`;
+                const correctMsg = currentLang === 'en' ? `🎉 Correct! (+10 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+10 Coins)\n💡 ${current.exp}`;
+                document.getElementById('expBox').innerText = correctMsg;
             } else {
                 btnElement.classList.add('wrong');
                 allBtns[current.correct].classList.add('correct');
-                document.getElementById('expBox').innerText = `❌ ተሳስተዋል!\n💡 ${current.exp}`;
+                const wrongMsg = currentLang === 'en' ? `❌ Incorrect!\n💡 ${current.exp}` : `❌ ተሳስተዋል!\n💡 ${current.exp}`;
+                document.getElementById('expBox').innerText = wrongMsg;
             }
 
             document.getElementById('expBox').style.display = 'block';
@@ -779,16 +784,18 @@
             if (currentQIndex < qList.length) {
                 loadQuestion();
             } else {
-                document.getElementById('qText').innerText = "🎉 እንኳን ደስ አለዎት! የዚህን ፈተና ጥያቄዎች ሰርተው አጠናቀዋል።";
+                const finishMsg = currentLang === 'en' ? "🎉 Congratulations! You have completed all questions in this exam." : "🎉 እንኳን ደስ አለዎት! የዚህን ፈተና ጥያቄዎች ሰርተው አጠናቀዋል።";
+                const scoreMsg = currentLang === 'en' ? `Your Total Score: 🪙 ${userCoins} Coins.` : `ያሎት አጠቃላይ ነጥብ፡ 🪙 ${userCoins} Coins ነው።`;
+                document.getElementById('qText').innerText = finishMsg;
                 document.getElementById('optionsContainer').innerHTML = '';
-                document.getElementById('expBox').innerText = `ያሎት አጠቃላይ ነጥብ፡ 🪙 ${userCoins} Coins ነው።`;
+                document.getElementById('expBox').innerText = scoreMsg;
                 document.getElementById('nextBtn').style.display = 'none';
             }
         }
 
         let adController = null;
 
-        // Watching Ad gives +100 Coins
+        // Watching Ad gives +100 Coins (Bilingual Alerts)
         function watchAdForCoins() {
             try {
                 if (!adController) {
@@ -796,22 +803,28 @@
                 }
                 adController.show().then(() => {
                     updateCoins(100);
-                    alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!");
+                    const msg = currentLang === 'en' ? "🎉 You watched the ad successfully! +100 Coins added!" : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+                    alert(msg);
                 }).catch(() => {
-                    alert("⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለወጡ ነፃ Coins ማግኘት አይችሉም!");
+                    const msg = currentLang === 'en' ? "⚠️ You did not finish watching the ad. No free coins rewarded!" : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለወጡ ነፃ Coins ማግኘት አይችሉም!";
+                    alert(msg);
                 });
             } catch (e) {
-                alert("⚠️ ማስታወቂያ መጫን አልተቻለም።");
+                const msg = currentLang === 'en' ? "⚠️ Failed to load ad. Please try again." : "⚠️ ማስታወቂያ መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+                alert(msg);
             }
         }
 
+        // Material Unlock (Bilingual Alerts)
         function unlockMaterial(fileKey) {
             if (userCoins >= 100) {
                 updateCoins(-100);
-                alert("🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...");
+                const msg = currentLang === 'en' ? "🔓 Unlocked! Redirecting to Telegram bot..." : "🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
+                alert(msg);
                 redirectToBot(fileKey);
             } else {
-                alert("⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ከላይ ያለውን 'ማስታወቂያ እይ' የሚለውን በተን ተጭነው Coins ያግኙ።");
+                const msg = currentLang === 'en' ? "⚠️ Not enough Coins (100 Coins needed)! Click 'Watch Ad' above to earn free Coins." : "⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ከላይ ያለውን 'ማስታወቂያ እይ' የሚለውን በተን ተጭነው Coins ያግኙ።";
+                alert(msg);
             }
         }
 
@@ -852,7 +865,6 @@
             }
         }
 
-        let currentLang = 'am';
         function toggleLang() {
             currentLang = currentLang === 'am' ? 'en' : 'am';
             if (currentLang === 'en') {
@@ -861,6 +873,7 @@
                 document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
                 document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
                 document.getElementById('backText').innerText = "Back to Courses";
+                document.getElementById('backMatText').innerText = "Back to Categories";
                 document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
                 document.getElementById('adSub').innerText = "Watch a quick ad to get +100 Coins.";
                 document.getElementById('adBtn').innerText = "⭐ Watch Ad";
@@ -874,6 +887,7 @@
                 document.getElementById('tabQuiz').innerText = "✍️ የፈተና ጥያቄዎች (Quiz)";
                 document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
+                document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
                 document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
                 document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በማየት +100 Coins ያግኙ።";
                 document.getElementById('adBtn').innerText = "⭐ ማስታወቂያ እይ";
