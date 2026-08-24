@@ -69,7 +69,7 @@ window.anthropologyData = {
                 "D) None"
             ],
             correct: 1,
-            exp: "B: የራsን ባህሪ ብቻ ትክክለኛ አድርጎ በመውሰድ የሌሎችን ባህል በራሱ መስፈርት መመዘንና መተቸት Ethnocentrism (የባህርይ ከፍ ያለ ስሜት) ይባላል።"
+            exp: "B: የራስን ባህሪ ብቻ ትክክለኛ አድርጎ በመውሰድ የሌሎችን ባህል በራሱ መስፈርት መመዘንና መተቸት Ethnocentrism (የባህርይ ከፍ ያለ ስሜት) ይባላል።"
         },
         {
             q: "11. Which one of the following is not true about the perspectives of anthropology?",
@@ -169,7 +169,7 @@ window.anthropologyData = {
             q: "20. ________ refers to a thorough close-up study of a particular social and cultural environment.",
             options: ["A) Ethnology", "B) Ethnography", "C) Archaeology", "D) Survey"],
             correct: 1,
-            exp: "B: ስለ አንድ ማህበረሰብ ባህል በጥልቀትና በቅርበት የሚደረግ የフィールドወርክ ጥናት Ethnography ይባላል።"
+            exp: "B: ስለ አንድ ማህበረሰብ ባህል በጥልቀትና በቅርበት የሚደረግ የጥናት ሂደት Ethnography ይባላል።"
         },
         {
             q: "21. ________ is the 18th-century intellectual atmosphere that emphasized human progress and the power of reason.",
@@ -213,7 +213,7 @@ window.anthropologyData = {
             q: "6. A marriage form which unites multiple wives with a man at a time is less common than one which unites multiple husbands with a woman.",
             options: ["A) True", "B) False"],
             correct: 0,
-            exp: "True: ከአንድ በላይ ሚስቶችን ማግባት (Polygyny) ከአንድ በላይ ባሎችን ካማጋባት (Polyandry) ጋር ሲነጻጸር በዓለም ላይ በብዛት የሚዘወተር ነው።"
+            exp: "True: ከአንድ በላይ ሚስቶችን ማግባት (Polygyny) ከአንድ በላይ ባሎችን ከማግባት (Polyandry) ጋር ሲነጻጸር በዓለም ላይ በብዛት የሚዘወተር ነው።"
         },
         {
             q: "7. Incest taboo that operates at nuclear family structure is a cultural universal.",
@@ -299,7 +299,7 @@ window.anthropologyData = {
                 "D) Segregated at market places"
             ],
             correct: 0,
-            exp: "A: Spatial (የቦታ) marginalization የሚገለጸው ከተሞች ዳርቻ (peripheral places) እንዲሰፍሩ በመደረግ፣ በመሬትና በቦታ ሲገለሉ እንጂ ሌሎች እንዲያልፉ በመጠብቅ አይደለም።"
+            exp: "A: Spatial (የቦታ) marginalization የሚገለጸው በከተሞች ዳርቻ (peripheral places) እንዲሰፍሩ በመደረግ፣ በመሬትና በቦታ ሲገለሉ እንጂ ሌሎች እንዲያልፉ በመጠበቅ አይደለም።"
         },
         {
             q: "18. Which of the following is not considered as the reason to encourage polygyny?",
@@ -310,7 +310,7 @@ window.anthropologyData = {
                 "D) Small number of Women"
             ],
             correct: 3,
-            exp: "D: ሴቶች ከወንዶች በአነስተኛ ቁጥር መገኘት (Small number of women) Polygyny-ን አያበረታታም (ይልቁንም የሴቶች ቁጥር መብዛት ለዚህ ምክንያት ሊሆን ይችላል)።"
+            exp: "D: የሴቶች ቁጥር አነስተኛ መሆን Polygyny-ን አያበረታታም፤ ይልቁንም የሴቶች ቁጥር መብዛት ለዚህ ምክንያት ሊሆን ይችላል።"
         },
         {
             q: "19. Which one of the following reasons makes it difficult to have a universally valid definition of marriage?",
@@ -321,7 +321,7 @@ window.anthropologyData = {
                 "D) All"
             ],
             correct: 3,
-            exp: "D: በባህሎች መካከል ያለው ልዩነት፣ የብዙ ትዳር አይነቶች እና የአንድ جنس ጋብቻዎች መኖር የጋብቻን ዓለም አቀፍ አንድ ወጥ ፍቺ አስቸጋሪ አድርጎታል።"
+            exp: "D: በባህሎች መካከል ያለው ልዩነት፣ የብዙ ትዳር አይነቶች እና የአንድ ጾታ ጋብቻዎች መኖር የጋብቻን ዓለም አቀፍ አንድ ወጥ ፍቺ አስቸጋሪ አድርጎታል።"
         },
         {
             q: "20. A descent rule that allows people to count their hereditary descent solely through unilineal path is said to be ________.",
@@ -376,7 +376,7 @@ window.anthropologyData = {
                 "D) Participation in ethnic personal networks"
             ],
             correct: 1,
-            exp: "B: በጎሳ ድርጅቶች ውስጥ መሳተፍ (Involvement in ethnic organizations) ከውስጣዊ ስሜት ውጪ በውጪ የሚታይ ተግባራዊ (Subjective/Behavioral) ማሳያ ነው።"
+            exp: "B: በጎሳ ድርጅቶች ውስጥ መሳተፍ (Involvement in ethnic organizations) ከውስጣዊ ስሜት ውጪ በውጪ የሚታይ ተግባራዊ ማሳያ ነው።"
         },
         {
             q: "25. A relationship parents of a husband have with the siblings of a wife can be expressed as ________.",
@@ -394,4 +394,11 @@ window.anthropologyData = {
             options: [
                 "A) Bride wealth",
                 "B) Bride service",
-    
+                "C) Gift exchange",
+                "D) Dowry"
+            ],
+            correct: 2,
+            exp: "C: በሁለቱም ቤተሰቦች መካከል እኩል የስጦታ ልውውጥ የሚደረግበት የኢኮኖሚ ልውውጥ Gift Exchange ይባላል።"
+        }
+    ]
+};
