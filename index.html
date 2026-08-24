@@ -328,7 +328,7 @@
     <div class="earn-banner">
         <div>
             <h4 id="adTitle">⭐ ነፃ Coins ይፈልጋሉ?</h4>
-            <p id="adSub">አጭር ማስታወቂያ በማየት +100 Coins ያግኙ።</p>
+            <p id="adSub">አጭር ማስታወቂያ በማየት +100 Coins (1 የፈተና PDF) ያግኙ።</p>
         </div>
         <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ</button>
     </div>
@@ -805,8 +805,8 @@
                     if (result && result.done) {
                         updateCoins(100);
                         const msg = currentLang === 'en' 
-                            ? "🎉 You watched the ad successfully! +100 Coins added!" 
-                            : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+                            ? "🎉 You watched the ad successfully! +100 Coins (1 Exam PDF unlock) added!" 
+                            : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins (1 የፈተና PDF ማውረጃ) ተጨምሮልዎታል!";
                         alert(msg);
                     } else {
                         const msg = currentLang === 'en' 
@@ -836,7 +836,7 @@
                 alert(msg);
                 redirectToBot(fileKey);
             } else {
-                const msg = currentLang === 'en' ? "⚠️ Not enough Coins (100 Coins needed)! Click 'Watch Ad' above to earn free Coins." : "⚠️ በቂ Coins (100 Coins) የለዎትም! ነፃ Coins ለማግኘት ከላይ ያለውን 'ማስታወቂያ እይ' የሚለውን በተን ተጭነው Coins ያግኙ።";
+                const msg = currentLang === 'en' ? "⚠️ Not enough Coins (100 Coins needed = 1 Exam PDF)! Click 'Watch Ad' above to earn free Coins." : "⚠️ በቂ Coins (100 Coins = 1 የፈተና PDF) የለዎትም! ነፃ Coins ለማግኘት ከላይ ያለውን 'ማስታወቂያ እይ' የሚለውን በተን ተጭነው Coins ያግኙ።";
                 alert(msg);
             }
         }
@@ -888,7 +888,7 @@
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('backMatText').innerText = "Back to Categories";
                 document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
-                document.getElementById('adSub').innerText = "Watch a quick ad to get +100 Coins.";
+                document.getElementById('adSub').innerText = "Watch a quick ad to get +100 Coins (1 Exam PDF unlock).";
                 document.getElementById('adBtn').innerText = "⭐ Watch Ad";
                 document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
                 document.getElementById('unSub').innerText = "Unlock full exam paper for 100 Coins.";
@@ -902,7 +902,7 @@
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
                 document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
-                document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በማየት +100 Coins ያግኙ።";
+                document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በማየት +100 Coins (1 የፈተና PDF) ያግኙ።";
                 document.getElementById('adBtn').innerText = "⭐ ማስታወቂያ እይ";
                 document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
                 document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
