@@ -320,7 +320,7 @@
 
     <div class="top-bar">
         <div class="coin-box">
-            🪙 <span id="coinCount">50</span> Coins
+            🪙 <span id="coinCount">300</span> Coins
         </div>
         <button class="lang-switch" onclick="toggleLang()">🌐 Amh / Eng</button>
     </div>
@@ -328,7 +328,7 @@
     <div class="earn-banner">
         <div>
             <h4 id="adTitle">⭐ ነፃ Coins ይፈልጋሉ?</h4>
-            <p id="adSub">አጭር ማስታወቂያ በማየት +50 Coins ያግኙ።</p>
+            <p id="adSub">አጭር ማስታወቂያ በማየት +100 Coins ያግኙ።</p>
         </div>
         <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ</button>
     </div>
@@ -416,7 +416,8 @@
             tg.expand();
         }
 
-        let userCoins = parseInt(localStorage.getItem('bahirab_coins')) || 50;
+        // Welcome Bonus: 300 Coins
+        let userCoins = parseInt(localStorage.getItem('bahirab_coins')) || 300;
         document.getElementById('coinCount').innerText = userCoins;
 
         function updateCoins(amount) {
@@ -757,10 +758,11 @@
             const current = qList[currentQIndex];
             const allBtns = document.querySelectorAll('.option-btn');
 
+            // Correct Answer gives +10 Coins
             if (selectedIdx === current.correct) {
                 btnElement.classList.add('correct');
-                updateCoins(20);
-                document.getElementById('expBox').innerText = `🎉 ትክክል! (+20 Coins)\n💡 ${current.exp}`;
+                updateCoins(10);
+                document.getElementById('expBox').innerText = `🎉 ትክክል! (+10 Coins)\n💡 ${current.exp}`;
             } else {
                 btnElement.classList.add('wrong');
                 allBtns[current.correct].classList.add('correct');
@@ -785,14 +787,16 @@
         }
 
         let adController = null;
+
+        // Watching Ad gives +100 Coins
         function watchAdForCoins() {
             try {
                 if (!adController) {
                     adController = window.Adsgram.init({ blockId: "int-44107" });
                 }
                 adController.show().then(() => {
-                    updateCoins(50);
-                    alert("🎉 50 Coins በተሳካ ሁኔታ ተጨምሮልዎታል!");
+                    updateCoins(100);
+                    alert("🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!");
                 }).catch(() => {
                     alert("⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለወጡ ነፃ Coins ማግኘት አይችሉም!");
                 });
@@ -858,7 +862,7 @@
                 document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
-                document.getElementById('adSub').innerText = "Watch a quick ad to get +50 Coins.";
+                document.getElementById('adSub').innerText = "Watch a quick ad to get +100 Coins.";
                 document.getElementById('adBtn').innerText = "⭐ Watch Ad";
                 document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
                 document.getElementById('unSub').innerText = "Unlock full exam paper for 100 Coins.";
@@ -871,7 +875,7 @@
                 document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
-                document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በማየት +50 Coins ያግኙ።";
+                document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በማየት +100 Coins ያግኙ።";
                 document.getElementById('adBtn').innerText = "⭐ ማስታወቂያ እይ";
                 document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
                 document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
