@@ -1,8 +1,9 @@
-// ai.js - Bahirab AI Assistant with Error Inspection
-const _k1 = "AQ.Ab8RN6IAUIwQw";
-const _k2 = "BDjV0LByB68esH38";
-const _k3 = "7upzwaEQ-4FB-qg-A-gBA";
-const GEMINI_API_KEY = _k1 + _k2 + _k3;
+// ai.js - Bahirab Comprehensive AI Study Assistant
+const _k1 = "AQ.Ab8RN6JxsvK";
+const _k2 = "HS20poZEGYHTtY";
+const _k3 = "_lSyQ4CdSNqPT0";
+const _k4 = "NyL08b5Kz8w";
+const GEMINI_API_KEY = _k1 + _k2 + _k3 + _k4;
 
 async function sendAiMessage() {
     const inputEl = document.getElementById('aiInput');
@@ -43,7 +44,7 @@ async function sendAiMessage() {
             body: JSON.stringify({
                 contents: [{
                     parts: [{
-                        text: "You are a helpful and smart study tutor for Ethiopian university students. Answer clearly and concisely in the requested language (Amharic or English):\n\n" + prompt
+                        text: "You are a comprehensive, smart, and friendly AI study assistant for Ethiopian university students. Answer any question asked (academic, freshman/senior courses, general knowledge, coding, problem-solving, or general explanations) clearly, concisely, and accurately in the requested language (Amharic or English):\n\n" + prompt
                     }]
                 }]
             })
@@ -54,7 +55,6 @@ async function sendAiMessage() {
         if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
             aiDiv.innerText = data.candidates[0].content.parts[0].text;
         } else if (data.error) {
-            // Displays exact Google API Error
             aiDiv.innerText = `⚠️ API Error: ${data.error.message || data.error.status}`;
         } else {
             throw new Error("No response content");
