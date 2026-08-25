@@ -109,6 +109,11 @@
             cursor: pointer;
             white-space: nowrap;
         }
+        .btn-earn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
 
         /* Tabs Nav (3 Buttons Layout) */
         .tabs-nav {
@@ -426,7 +431,7 @@
     <div class="earn-banner">
         <div>
             <h4 id="adTitle">⭐ ነፃ 100 Coins ይውሰዱ!</h4>
-            <p id="adSub">አጭር ማስታወቂያ በመመልከት +100 Coins በነፃ ያግኙ።</p>
+            <p id="adSub">አጭር ማስታወቂያ በመመልከት +100 Coins በነፃ ያግኙ። (<span id="adLimitCount">6</span> የቀረ)</p>
         </div>
         <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ (+100)</button>
     </div>
@@ -482,9 +487,9 @@
         </div>
     </div>
 
-    <!-- MODULES VIEW (250 Coins) -->
+    <!-- MODULES VIEW (100 Coins) -->
     <div id="modulesView" style="display: none;">
-        <div class="home-title" id="lblModuleTitle">📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 250 Coins):</div>
+        <div class="home-title" id="lblModuleTitle">📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 100 Coins):</div>
         <div id="modulesListContainer"></div>
     </div>
 
@@ -523,7 +528,6 @@
             tg.expand();
         }
 
-        // Fixed Coin Logic: Welcome Bonus only once, persists 0 or any balance
         let userCoins;
         if (localStorage.getItem('bahirab_coins') !== null) {
             userCoins = parseInt(localStorage.getItem('bahirab_coins'));
@@ -555,6 +559,67 @@
             } catch(err) {
                 console.log("Error logging ad view:", err);
             }
+        }
+
+        /* --- 6 AD LIMIT & 5-HOUR COUNTDOWN LOGIC --- */
+        const MAX_ADS_PER_BATCH = 6;
+        const COOLDOWN_HOURS = 5;
+        const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
+
+        let adBatchCount = parseInt(localStorage.getItem('bahirab_ad_batch_count') || "0");
+        let adBatchResetTime = parseInt(localStorage.getItem('bahirab_ad_reset_time') || "0");
+
+        function updateAdLimitUI() {
+            const now = Date.now();
+            const btn = document.getElementById('adBtn');
+            const limitText = document.getElementById('adLimitCount');
+
+            if (adBatchResetTime && now < adBatchResetTime) {
+                const remainingMs = adBatchResetTime - now;
+                const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+                const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
+                
+                const timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                
+                btn.disabled = true;
+                btn.innerText = `⏳ ${timeStr}`;
+                if (limitText) limitText.innerText = "0";
+            } else {
+                if (adBatchResetTime && now >= adBatchResetTime) {
+                    adBatchCount = 0;
+                    adBatchResetTime = 0;
+                    localStorage.setItem('bahirab_ad_batch_count', 0);
+                    localStorage.removeItem('bahirab_ad_reset_time');
+                }
+                
+                const remaining = MAX_ADS_PER_BATCH - adBatchCount;
+                btn.disabled = false;
+                btn.innerText = currentLang === 'en' ? "⭐ Watch Ad (+100)" : "⭐ ማስታወቂያ እይ (+100)";
+                if (limitText) limitText.innerText = remaining;
+            }
+        }
+
+        setInterval(updateAdLimitUI, 1000);
+
+        function handleAdWatchedSuccess() {
+            updateCoins(100);
+            sendAdWatchToServer();
+            
+            adBatchCount++;
+            localStorage.setItem('bahirab_ad_batch_count', adBatchCount);
+
+            if (adBatchCount >= MAX_ADS_PER_BATCH) {
+                adBatchResetTime = Date.now() + COOLDOWN_MS;
+                localStorage.setItem('bahirab_ad_reset_time', adBatchResetTime);
+            }
+
+            updateAdLimitUI();
+
+            const msg = currentLang === 'en' 
+                ? "🎉 You watched the ad successfully! +100 Coins added!" 
+                : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+            alert(msg);
         }
 
         const categorizedMaterials = [
@@ -742,15 +807,14 @@
             if (currentLang === 'en') {
                 document.getElementById('lblSelect').innerText = "📚 Select Course:";
                 document.getElementById('lblMatSelect').innerText = "📚 Select Exam Category:";
-                document.getElementById('lblModuleTitle').innerText = "📚 Freshman Modules (250 Coins):";
+                document.getElementById('lblModuleTitle').innerText = "📚 Freshman Modules (100 Coins):";
                 document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
                 document.getElementById('tabMats').innerText = "📥 Exams (100 Coins)";
-                document.getElementById('tabMods').innerText = "📚 Modules (250 Coins)";
+                document.getElementById('tabMods').innerText = "📚 Modules (100 Coins)";
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('backMatText').innerText = "Back to Categories";
                 document.getElementById('adTitle').innerText = "⭐ Get Free 100 Coins!";
-                document.getElementById('adSub').innerText = "Watch a short ad and earn +100 Coins instantly.";
-                document.getElementById('adBtn').innerText = "⭐ Watch Ad (+100)";
+                document.getElementById('adSub').innerHTML = 'Watch a short ad and earn +100 Coins instantly. (<span id="adLimitCount">6</span> remaining)';
                 document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
                 document.getElementById('unSub').innerText = "Unlock full exam paper for 100 Coins.";
                 document.getElementById('unBtn').innerText = "🔓 Unlock in Telegram (100 Coins)";
@@ -759,15 +823,14 @@
             } else {
                 document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
                 document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
-                document.getElementById('lblModuleTitle').innerText = "📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 250 Coins):";
+                document.getElementById('lblModuleTitle').innerText = "📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 100 Coins):";
                 document.getElementById('tabQuiz').innerText = "✍️ ጥያቄዎች (Quiz)";
                 document.getElementById('tabMats').innerText = "📥 ፈተናዎች (Exams)";
                 document.getElementById('tabMods').innerText = "📚 ሞጁሎች (Modules)";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
                 document.getElementById('adTitle').innerText = "⭐ ነፃ 100 Coins ይውሰዱ!";
-                document.getElementById('adSub').innerText = "አጭር ማስታወቂያ በመመልከት +100 Coins በነፃ ያግኙ።";
-                document.getElementById('adBtn').innerText = "⭐ ማስታወቂያ እይ (+100)";
+                document.getElementById('adSub').innerHTML = 'አጭር ማስታወቂያ በመመልከት +100 Coins በነፃ ያግኙ። (<span id="adLimitCount">6</span> የቀረ)';
                 document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
                 document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
                 document.getElementById('unBtn').innerText = "🔓 በ 100 Coins በቴሌግራም አውርድ";
@@ -775,6 +838,7 @@
                 document.getElementById('langSwitchBtn').innerText = "🌐 Amh / Eng";
             }
             renderModulesList();
+            updateAdLimitUI();
         }
 
         function toggleLang() {
@@ -831,7 +895,7 @@
             modules.forEach(mod => {
                 const card = document.createElement('div');
                 card.className = 'mat-card';
-                const btnText = currentLang === 'en' ? "📖 Unlock Module (250 Coins)" : "📖 ሞጁሉን በ 250 Coins አውርድ";
+                const btnText = currentLang === 'en' ? "📖 Unlock Module (100 Coins)" : "📖 ሞጁሉን በ 100 Coins አውርድ";
                 card.innerHTML = `
                     <h3>${mod.title}</h3>
                     <p>${mod.desc}</p>
@@ -1007,14 +1071,18 @@
 
         // Watching Ad with Monetag Rewarded Interstitial + Adsgram Fallback
         function watchAdForCoins() {
+            const now = Date.now();
+            if (adBatchResetTime && now < adBatchResetTime) {
+                const msg = currentLang === 'en' 
+                    ? "⏳ You have reached the limit of 6 ads. Please wait for the countdown timer to finish!" 
+                    : "⏳ የ 6 ማስታወቂያዎች ገደብ ላይ ደርሰዋል። እባክዎ የ 5 ሰዓቱ ቆጣሪ እስኪያልቅ ይጠብቁ!";
+                alert(msg);
+                return;
+            }
+
             if (typeof show_11650948 === 'function') {
                 show_11650948().then(() => {
-                    updateCoins(100);
-                    sendAdWatchToServer(); // 📺 ለሰርቨሩ መረጃውን ይልካል
-                    const msg = currentLang === 'en' 
-                        ? "🎉 You watched the ad successfully! +100 Coins added!" 
-                        : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
-                    alert(msg);
+                    handleAdWatchedSuccess();
                 }).catch(() => {
                     const msg = currentLang === 'en' 
                         ? "⚠️ Ad was closed or failed to load. Please try again." 
@@ -1029,12 +1097,7 @@
                     if (adController) {
                         adController.show().then((result) => {
                             if (result && result.done) {
-                                updateCoins(100);
-                                sendAdWatchToServer(); // 📺 ለሰርቨሩ መረጃውን ይልካል
-                                const msg = currentLang === 'en' 
-                                    ? "🎉 You watched the ad successfully! +100 Coins added!" 
-                                    : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
-                                alert(msg);
+                                handleAdWatchedSuccess();
                             } else {
                                 const msg = currentLang === 'en' 
                                     ? "⚠️ You skipped the ad early. No coins rewarded!" 
@@ -1072,15 +1135,15 @@
             }
         }
 
-        // Module Unlock (250 Coins)
+        // Module Unlock (100 Coins)
         function unlockModule(fileKey) {
-            if (userCoins >= 250) {
-                updateCoins(-250);
+            if (userCoins >= 100) {
+                updateCoins(-100);
                 const msg = currentLang === 'en' ? "🔓 Module Unlocked! Redirecting to Telegram bot..." : "🔓 ሞጁሉ ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
                 alert(msg);
                 redirectToBot(fileKey);
             } else {
-                const msg = currentLang === 'en' ? "⚠️ Not enough Coins! (Need 250 Coins for Modules) Earn coins by answering quizzes or watching ads." : "⚠️ በቂ Coins የለዎትም! (ለሞጁል 250 Coins ያስፈልጋል) ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በማየት Coins ያግኙ።";
+                const msg = currentLang === 'en' ? "⚠️ Not enough Coins! (Need 100 Coins for Modules) Earn coins by answering quizzes or watching ads." : "⚠️ በቂ Coins የለዎትም! (ለሞጁል 100 Coins ያስፈልጋል) ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በማየት Coins ያግኙ።";
                 alert(msg);
             }
         }
@@ -1133,6 +1196,8 @@
             } else {
                 document.getElementById('langModal').style.display = 'flex';
             }
+            
+            updateAdLimitUI();
         };
     </script>
 </body>
