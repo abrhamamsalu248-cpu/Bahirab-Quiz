@@ -1,0 +1,20 @@
+window.freshmanModules = [
+    { title: "Anthropology Module", desc: "Freshman Course Module • PDF", key: "mod_anthro" },
+    { title: "Module for Communicative English Language Skills I", desc: "Freshman Course Module • PDF", key: "mod_english_one" },
+    { title: "Communication English Skills II", desc: "Freshman Course Module • PDF", key: "mod_english_two" },
+    { title: "Entrepreneurship Module", desc: "Freshman Course Module • PDF", key: "mod_entrepreneurship" },
+    { title: "General Physics Module", desc: "Freshman Course Module • PDF", key: "mod_physics" },
+    { title: "General Psychology Module", desc: "Freshman Course Module • PDF", key: "mod_psychology" },
+    { title: "Geography of Ethiopia and The Horn", desc: "Freshman Course Module • PDF", key: "mod_geography" },
+    { title: "Global Affairs Module", desc: "Freshman Course Module • PDF", key: "mod_global" },
+    { title: "Inclusiveness Module", desc: "Freshman Course Module • PDF", key: "mod_inclusiveness" },
+    { title: "Introduction to Economics", desc: "Freshman Course Module • PDF", key: "mod_economics" },
+    { title: "Logic and Critical Thinking", desc: "Freshman Course Module • PDF", key: "mod_logic" },
+    { title: "Mathematics for Natural Science", desc: "Freshman Course Module • PDF", key: "mod_math_natural" },
+    { title: "Mathematics for Social Sciences", desc: "Freshman Course Module • PDF", key: "mod_math_social" },
+    { title: "Module for General Biology", desc: "Freshman Course Module • PDF", key: "mod_biology" },
+    { title: "Module for General Chemistry", desc: "Freshman Course Module • PDF", key: "mod_chemistry" },
+    { title: "Module for History of Ethiopia and The Horn", desc: "Freshman Course Module • PDF", key: "mod_history" },
+    { title: "Moral and Citizenship Education", desc: "Freshman Course Module • PDF", key: "mod_civics" },
+    { title: "Physical Fitness Module", desc: "Freshman Course Module • PDF", key: "mod_fitness" }
+];
