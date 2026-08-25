@@ -317,15 +317,94 @@
             cursor: pointer;
             width: 100%;
         }
+
+        /* Language Selector Modal */
+        .lang-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+        .lang-modal-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+        .lang-modal-card h3 {
+            margin: 10px 0 6px 0;
+            font-size: 16px;
+            color: var(--primary);
+        }
+        .lang-modal-card p {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin: 0 0 18px 0;
+            line-height: 1.4;
+        }
+        .lang-modal-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn-lang-choice {
+            background: #f8fafc;
+            border: 1.5px solid var(--border);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-lang-choice:active {
+            background: #e0f2fe;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
+
+    <!-- Language Selection Pop-up Modal -->
+    <div id="langModal" class="lang-modal-overlay" style="display: none;">
+        <div class="lang-modal-card">
+            <div style="font-size: 38px;">🌐</div>
+            <h3>ቋንቋ ይምረጡ / Choose Language</h3>
+            <p>እባክዎ የሚፈልጉትን ቋንቋ ይምረጡ<br>Please select your preferred language</p>
+            <div class="lang-modal-btns">
+                <button class="btn-lang-choice" onclick="selectInitialLang('am')">
+                    <span>🇪🇹</span> አማርኛ (Amharic)
+                </button>
+                <button class="btn-lang-choice" onclick="selectInitialLang('en')">
+                    <span>🇬🇧</span> English
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="top-bar">
         <div class="coin-box">
             🪙 <span id="coinCount">300</span> Coins
         </div>
-        <button class="lang-switch" onclick="toggleLang()">🌐 Amh / Eng</button>
+        <button class="lang-switch" id="langSwitchBtn" onclick="toggleLang()">🌐 Amh / Eng</button>
     </div>
 
     <div class="earn-banner">
@@ -612,6 +691,53 @@
         ];
 
         let currentLang = 'am';
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('bahirab_lang', lang);
+
+            if (currentLang === 'en') {
+                document.getElementById('lblSelect').innerText = "📚 Select Course:";
+                document.getElementById('lblMatSelect').innerText = "📚 Select Course Category:";
+                document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
+                document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
+                document.getElementById('backText').innerText = "Back to Courses";
+                document.getElementById('backMatText').innerText = "Back to Categories";
+                document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
+                document.getElementById('adSub').innerText = "Earn Coins by completing quizzes or optionally watching rewarded ads.";
+                document.getElementById('adBtn').innerText = "⭐ Watch Ad";
+                document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
+                document.getElementById('unSub').innerText = "Unlock full exam paper for 100 Coins.";
+                document.getElementById('unBtn').innerText = "🔓 Unlock in Telegram (100 Coins)";
+                document.getElementById('nextBtn').innerText = "Next Question ➡️";
+                document.getElementById('langSwitchBtn').innerText = "🌐 Eng / አማ";
+            } else {
+                document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
+                document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
+                document.getElementById('tabQuiz').innerText = "✍️ የፈተና ጥያቄዎች (Quiz)";
+                document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
+                document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
+                document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
+                document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
+                document.getElementById('adSub').innerText = "ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በመመልከት Coins ያግኙ።";
+                document.getElementById('adBtn').innerText = "⭐ ማስታወቂያ እይ";
+                document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
+                document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
+                document.getElementById('unBtn').innerText = "🔓 በ 100 Coins በቴሌግራም አውርድ";
+                document.getElementById('nextBtn').innerText = "ቀጣይ ጥያቄ ➡️";
+                document.getElementById('langSwitchBtn').innerText = "🌐 Amh / Eng";
+            }
+        }
+
+        function toggleLang() {
+            const nextLang = currentLang === 'am' ? 'en' : 'am';
+            applyLanguage(nextLang);
+        }
+
+        function selectInitialLang(lang) {
+            applyLanguage(lang);
+            document.getElementById('langModal').style.display = 'none';
+        }
 
         function renderMatCategories() {
             const grid = document.getElementById('matCategoriesGrid');
@@ -906,41 +1032,16 @@
             }
         }
 
-        function toggleLang() {
-            currentLang = currentLang === 'am' ? 'en' : 'am';
-            if (currentLang === 'en') {
-                document.getElementById('lblSelect').innerText = "📚 Select Course:";
-                document.getElementById('lblMatSelect').innerText = "📚 Select Course Category:";
-                document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
-                document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
-                document.getElementById('backText').innerText = "Back to Courses";
-                document.getElementById('backMatText').innerText = "Back to Categories";
-                document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
-                document.getElementById('adSub').innerText = "Earn Coins by completing quizzes or optionally watching rewarded ads.";
-                document.getElementById('adBtn').innerText = "⭐ Watch Ad";
-                document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
-                document.getElementById('unSub').innerText = "Unlock full exam paper for 100 Coins.";
-                document.getElementById('unBtn').innerText = "🔓 Unlock in Telegram (100 Coins)";
-                document.getElementById('nextBtn').innerText = "Next Question ➡️";
-            } else {
-                document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
-                document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
-                document.getElementById('tabQuiz').innerText = "✍️ የፈተና ጥያቄዎች (Quiz)";
-                document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
-                document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
-                document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
-                document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
-                document.getElementById('adSub').innerText = "ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በመመልከት Coins ያግኙ።";
-                document.getElementById('adBtn').innerText = "⭐ ማስታወቂያ እይ";
-                document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
-                document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
-                document.getElementById('unBtn').innerText = "🔓 በ 100 Coins በቴሌግራም አውርድ";
-                document.getElementById('nextBtn').innerText = "ቀጣይ ጥያቄ ➡️";
-            }
-        }
-
         window.onload = function() {
             renderMatCategories();
+
+            // Language Prompt on First Visit
+            const savedLang = localStorage.getItem('bahirab_lang');
+            if (savedLang) {
+                applyLanguage(savedLang);
+            } else {
+                document.getElementById('langModal').style.display = 'flex';
+            }
         };
     </script>
 </body>
