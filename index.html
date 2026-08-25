@@ -521,6 +521,7 @@
 
     <script>
         const BACKEND_URL = "https://bahirab-bot-server.onrender.com";
+        const SMARTLINK_URL = "https://omg10.com/4/11654019"; // Monetag SmartLink
 
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
@@ -558,6 +559,25 @@
                 }
             } catch(err) {
                 console.log("Error logging ad view:", err);
+            }
+        }
+
+        /* --- SMARTLINK ONCE DAILY TRIGGER --- */
+        function triggerSmartlinkOnceDaily() {
+            const today = new Date().toISOString().slice(0, 10);
+            const lastTrigger = localStorage.getItem('bahirab_smartlink_last_date');
+
+            if (lastTrigger !== today) {
+                localStorage.setItem('bahirab_smartlink_last_date', today);
+                try {
+                    if (tg && tg.openLink) {
+                        tg.openLink(SMARTLINK_URL, { try_instant_view: false });
+                    } else {
+                        window.open(SMARTLINK_URL, '_blank');
+                    }
+                } catch (e) {
+                    console.log("SmartLink trigger error:", e);
+                }
             }
         }
 
@@ -981,6 +1001,8 @@
         let isAnswered = false;
 
         function openExam(type) {
+            triggerSmartlinkOnceDaily(); // 👈 SmartLink እዚህ ጋር ተካቷል
+
             currentExam = type;
             currentQIndex = 0;
             document.getElementById('mainTabs').style.display = 'none';
