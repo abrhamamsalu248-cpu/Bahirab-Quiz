@@ -1,4 +1,4 @@
-// ai.js - Bahirab Comprehensive AI Study Assistant
+// ai.js - Bahirab Comprehensive AI Study Assistant (Fixed Version)
 const _k1 = "AQ.Ab8RN6JxsvK";
 const _k2 = "HS20poZEGYHTtY";
 const _k3 = "_lSyQ4CdSNqPT0";
@@ -37,30 +37,47 @@ async function sendAiMessage() {
     chatBox.appendChild(aiDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: "You are a comprehensive, smart, and friendly AI study assistant for Ethiopian university students. Answer any question asked (academic, freshman/senior courses, general knowledge, coding, problem-solving, or general explanations) clearly, concisely, and accurately in the requested language (Amharic or English):\n\n" + prompt
+    // List of model endpoints to try
+    const endpoints = [
+        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`
+    ];
+
+    let answered = false;
+
+    for (const url of endpoints) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: "You are a comprehensive, smart, and friendly AI study assistant for Ethiopian university students. Answer any question asked (academic, freshman/senior courses, general knowledge, coding, math, or general explanations) clearly, accurately, and politely in the requested language (Amharic or English):\n\n" + prompt
+                        }]
                     }]
-                }]
-            })
-        });
+                })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
-            aiDiv.innerText = data.candidates[0].content.parts[0].text;
-        } else if (data.error) {
-            aiDiv.innerText = `⚠️ API Error: ${data.error.message || data.error.status}`;
-        } else {
-            throw new Error("No response content");
+            if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+                aiDiv.innerText = data.candidates[0].content.parts[0].text;
+                answered = true;
+                break;
+            }
+        } catch (e) {
+            // Try next model endpoint
+            continue;
         }
-    } catch (err) {
-        aiDiv.innerText = `⚠️ Error: ${err.message || 'Connection failed'}`;
     }
+
+    if (!answered) {
+        aiDiv.innerText = currentLang === 'en' 
+            ? "⚠️ Could not connect to AI service. Please check your network or try again." 
+            : "⚠️ መልስ ማግኘት አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+    }
+
     chatBox.scrollTop = chatBox.scrollHeight;
 }
