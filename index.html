@@ -511,7 +511,7 @@
         document.getElementById('coinCount').innerText = userCoins;
 
         function updateCoins(amount) {
-            userCoins += amount;
+            userCoins = Math.max(0, userCoins + amount);
             localStorage.setItem('bahirab_coins', userCoins);
             document.getElementById('coinCount').innerText = userCoins;
         }
@@ -923,9 +923,11 @@
                 const correctMsg = currentLang === 'en' ? `🎉 Correct! (+5 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+5 Coins)\n💡 ${current.exp}`;
                 document.getElementById('expBox').innerText = correctMsg;
             } else {
+                // Incorrect Answer deducts -5 Coins
                 btnElement.classList.add('wrong');
                 allBtns[current.correct].classList.add('correct');
-                const wrongMsg = currentLang === 'en' ? `❌ Incorrect!\n💡 ${current.exp}` : `❌ ተሳስተዋል!\n💡 ${current.exp}`;
+                updateCoins(-5);
+                const wrongMsg = currentLang === 'en' ? `❌ Incorrect! (-5 Coins)\n💡 ${current.exp}` : `❌ ተሳስተዋል! (-5 Coins)\n💡 ${current.exp}`;
                 document.getElementById('expBox').innerText = wrongMsg;
             }
 
