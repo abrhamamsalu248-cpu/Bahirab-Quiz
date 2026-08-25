@@ -10,6 +10,9 @@
     <!-- Monetag Telegram Mini App SDK -->
     <script src='//libtl.com/sdk.js' data-zone='11650948' data-sdk='show_11650948'></script>
 
+    <!-- Modules Data -->
+    <script src="modules.js"></script>
+
     <!-- External Question Banks -->
     <script src="economics.js"></script>
     <script src="logic.js"></script>
@@ -107,22 +110,23 @@
             white-space: nowrap;
         }
 
-        /* Tabs Nav */
+        /* Tabs Nav (3 Buttons Layout) */
         .tabs-nav {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             margin-bottom: 14px;
         }
         .tab-btn {
             flex: 1;
             background: #e2e8f0;
             border: none;
-            padding: 10px;
+            padding: 10px 4px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 11px;
             color: var(--text-sub);
             cursor: pointer;
+            text-align: center;
         }
         .tab-btn.active {
             background: var(--primary);
@@ -163,7 +167,7 @@
         .course-btn span { font-size: 24px; }
         .course-btn:active { transform: scale(0.97); background: #f0fdf4; border-color: var(--success); }
 
-        /* Materials Main View */
+        /* Materials & Modules View */
         #materialsMainView {
             display: block;
         }
@@ -176,14 +180,26 @@
             background: var(--card-bg);
             border-radius: 10px;
             padding: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.04);
             border: 1px solid var(--border);
+            text-align: left;
         }
         .mat-card h3 { margin: 0 0 4px 0; font-size: 14px; color: #111; }
         .mat-card p { color: var(--text-sub); font-size: 11px; margin-bottom: 8px; }
         .btn-mat {
             background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .btn-module {
+            background-color: #0284c7;
             color: white;
             border: none;
             padding: 8px;
@@ -415,10 +431,11 @@
         <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ (+100)</button>
     </div>
 
-    <!-- Main Navigation Tabs -->
+    <!-- Main Navigation Tabs (3 Tabs) -->
     <div class="tabs-nav" id="mainTabs">
-        <button class="tab-btn active" id="tabQuiz" onclick="switchTab('quiz')">✍️ የፈተና ጥያቄዎች (Quiz)</button>
-        <button class="tab-btn" id="tabMats" onclick="switchTab('mats')">📥 የፈተና ፒዲኤፍ (Materials)</button>
+        <button class="tab-btn active" id="tabQuiz" onclick="switchTab('quiz')">✍️ ጥያቄዎች (Quiz)</button>
+        <button class="tab-btn" id="tabMats" onclick="switchTab('mats')">📥 ፈተናዎች (Exams)</button>
+        <button class="tab-btn" id="tabMods" onclick="switchTab('mods')">📚 ሞጁሎች (Modules)</button>
     </div>
 
     <!-- HOME VIEW: Course Selection Buttons (Quiz) -->
@@ -449,7 +466,7 @@
         </div>
     </div>
 
-    <!-- MATERIALS VIEW -->
+    <!-- MATERIALS VIEW (Exams) -->
     <div id="materialsView" style="display: none;">
         <div id="materialsMainView">
             <div class="home-title" id="lblMatSelect">📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:</div>
@@ -463,6 +480,12 @@
             <div class="home-title" id="detailCatTitle" style="margin-bottom: 12px; text-align: left;"></div>
             <div id="matItemsList"></div>
         </div>
+    </div>
+
+    <!-- MODULES VIEW (250 Coins) -->
+    <div id="modulesView" style="display: none;">
+        <div class="home-title" id="lblModuleTitle">📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 250 Coins):</div>
+        <div id="modulesListContainer"></div>
     </div>
 
     <!-- QUIZ VIEW -->
@@ -718,9 +741,11 @@
 
             if (currentLang === 'en') {
                 document.getElementById('lblSelect').innerText = "📚 Select Course:";
-                document.getElementById('lblMatSelect').innerText = "📚 Select Course Category:";
+                document.getElementById('lblMatSelect').innerText = "📚 Select Exam Category:";
+                document.getElementById('lblModuleTitle').innerText = "📚 Freshman Modules (250 Coins):";
                 document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
-                document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
+                document.getElementById('tabMats').innerText = "📥 Exams (100 Coins)";
+                document.getElementById('tabMods').innerText = "📚 Modules (250 Coins)";
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('backMatText').innerText = "Back to Categories";
                 document.getElementById('adTitle').innerText = "⭐ Get Free 100 Coins!";
@@ -734,8 +759,10 @@
             } else {
                 document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
                 document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
-                document.getElementById('tabQuiz').innerText = "✍️ የፈተና ጥያቄዎች (Quiz)";
-                document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
+                document.getElementById('lblModuleTitle').innerText = "📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 250 Coins):";
+                document.getElementById('tabQuiz').innerText = "✍️ ጥያቄዎች (Quiz)";
+                document.getElementById('tabMats').innerText = "📥 ፈተናዎች (Exams)";
+                document.getElementById('tabMods').innerText = "📚 ሞጁሎች (Modules)";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
                 document.getElementById('adTitle').innerText = "⭐ ነፃ 100 Coins ይውሰዱ!";
@@ -747,6 +774,7 @@
                 document.getElementById('nextBtn').innerText = "ቀጣይ ጥያቄ ➡️";
                 document.getElementById('langSwitchBtn').innerText = "🌐 Amh / Eng";
             }
+            renderModulesList();
         }
 
         function toggleLang() {
@@ -794,6 +822,25 @@
             });
         }
 
+        function renderModulesList() {
+            const container = document.getElementById('modulesListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const modules = window.freshmanModules || [];
+            modules.forEach(mod => {
+                const card = document.createElement('div');
+                card.className = 'mat-card';
+                const btnText = currentLang === 'en' ? "📖 Unlock Module (250 Coins)" : "📖 ሞጁሉን በ 250 Coins አውርድ";
+                card.innerHTML = `
+                    <h3>${mod.title}</h3>
+                    <p>${mod.desc}</p>
+                    <button class="btn-module" onclick="unlockModule('${mod.key}')">${btnText}</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
         function backToMatMain() {
             document.getElementById('materialsDetailView').style.display = 'none';
             document.getElementById('materialsMainView').style.display = 'block';
@@ -802,8 +849,10 @@
         function switchTab(tab) {
             document.getElementById('tabQuiz').classList.remove('active');
             document.getElementById('tabMats').classList.remove('active');
+            document.getElementById('tabMods').classList.remove('active');
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('materialsView').style.display = 'none';
+            document.getElementById('modulesView').style.display = 'none';
             document.getElementById('quizView').style.display = 'none';
 
             if (tab === 'quiz') {
@@ -814,6 +863,10 @@
                 document.getElementById('materialsView').style.display = 'block';
                 backToMatMain();
                 renderMatCategories();
+            } else if (tab === 'mods') {
+                document.getElementById('tabMods').classList.add('active');
+                document.getElementById('modulesView').style.display = 'block';
+                renderModulesList();
             }
         }
 
@@ -1006,7 +1059,7 @@
             }
         }
 
-        // Material Unlock (Bilingual Alerts)
+        // Exam Unlock (100 Coins)
         function unlockMaterial(fileKey) {
             if (userCoins >= 100) {
                 updateCoins(-100);
@@ -1014,7 +1067,20 @@
                 alert(msg);
                 redirectToBot(fileKey);
             } else {
-                const msg = currentLang === 'en' ? "⚠️ Not enough Coins! Earn coins by completing quizzes or optionally watching rewarded ads." : "⚠️ በቂ Coins የለዎትም! ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በመመልከት Coins ማግኘት ይችላሉ።";
+                const msg = currentLang === 'en' ? "⚠️ Not enough Coins! (Need 100 Coins) Earn coins by doing quizzes or watching ads." : "⚠️ በቂ Coins የለዎትም! (100 Coins ያስፈልጋል) ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በማየት ያግኙ።";
+                alert(msg);
+            }
+        }
+
+        // Module Unlock (250 Coins)
+        function unlockModule(fileKey) {
+            if (userCoins >= 250) {
+                updateCoins(-250);
+                const msg = currentLang === 'en' ? "🔓 Module Unlocked! Redirecting to Telegram bot..." : "🔓 ሞጁሉ ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
+                alert(msg);
+                redirectToBot(fileKey);
+            } else {
+                const msg = currentLang === 'en' ? "⚠️ Not enough Coins! (Need 250 Coins for Modules) Earn coins by answering quizzes or watching ads." : "⚠️ በቂ Coins የለዎትም! (ለሞጁል 250 Coins ያስፈልጋል) ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በማየት Coins ያግኙ።";
                 alert(msg);
             }
         }
@@ -1058,6 +1124,7 @@
 
         window.onload = function() {
             renderMatCategories();
+            renderModulesList();
 
             // Language Prompt on First Visit
             const savedLang = localStorage.getItem('bahirab_lang');
