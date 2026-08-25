@@ -1,4 +1,4 @@
-// ai.js - Bahirab Comprehensive AI Study Assistant
+// ai.js - Bahirab AI Assistant with Error Inspection
 const _k1 = "AQ.Ab8RN6IAUIwQw";
 const _k2 = "BDjV0LByB68esH38";
 const _k3 = "7upzwaEQ-4FB-qg-A-gBA";
@@ -17,7 +17,7 @@ async function sendAiMessage() {
         return;
     }
 
-    // Deduct 10 Coins for each AI request
+    // Deduct 10 Coins
     updateCoins(-10);
 
     const chatBox = document.getElementById('aiChatBox');
@@ -43,22 +43,24 @@ async function sendAiMessage() {
             body: JSON.stringify({
                 contents: [{
                     parts: [{
-                        text: "You are a comprehensive, smart, and friendly AI assistant for Ethiopian university students. Answer any question asked (academic, freshman/senior courses, general knowledge, coding, math, essay help, or general explanations) clearly, accurately, and comprehensively in the language requested (Amharic or English):\n\n" + prompt
+                        text: "You are a helpful and smart study tutor for Ethiopian university students. Answer clearly and concisely in the requested language (Amharic or English):\n\n" + prompt
                     }]
                 }]
             })
         });
 
         const data = await response.json();
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
+
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
             aiDiv.innerText = data.candidates[0].content.parts[0].text;
+        } else if (data.error) {
+            // Displays exact Google API Error
+            aiDiv.innerText = `⚠️ API Error: ${data.error.message || data.error.status}`;
         } else {
-            throw new Error("No response from AI");
+            throw new Error("No response content");
         }
     } catch (err) {
-        aiDiv.innerText = currentLang === 'en' 
-            ? "⚠️ Could not connect to AI. Please try again." 
-            : "⚠️ መልስ ማግኘት አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+        aiDiv.innerText = `⚠️ Error: ${err.message || 'Connection failed'}`;
     }
     chatBox.scrollTop = chatBox.scrollHeight;
 }
