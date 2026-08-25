@@ -419,8 +419,14 @@
             tg.expand();
         }
 
-        // Welcome Bonus: 300 Coins
-        let userCoins = parseInt(localStorage.getItem('bahirab_coins')) || 300;
+        // Fixed Coin Logic: Welcome Bonus only once, persists 0 or any balance
+        let userCoins;
+        if (localStorage.getItem('bahirab_coins') !== null) {
+            userCoins = parseInt(localStorage.getItem('bahirab_coins'));
+        } else {
+            userCoins = 300;
+            localStorage.setItem('bahirab_coins', userCoins);
+        }
         document.getElementById('coinCount').innerText = userCoins;
 
         function updateCoins(amount) {
