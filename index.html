@@ -492,6 +492,8 @@
     </div>
 
     <script>
+        const BACKEND_URL = "https://bahirab-bot-server.onrender.com";
+
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
             tg.ready();
@@ -512,6 +514,24 @@
             userCoins += amount;
             localStorage.setItem('bahirab_coins', userCoins);
             document.getElementById('coinCount').innerText = userCoins;
+        }
+
+        function sendAdWatchToServer() {
+            try {
+                const userId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user)
+                    ? tg.initDataUnsafe.user.id
+                    : null;
+
+                if (userId && BACKEND_URL.startsWith("http")) {
+                    fetch(`${BACKEND_URL}/api/track-ad`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: userId })
+                    }).catch(e => console.log("Ad tracking network skip:", e));
+                }
+            } catch(err) {
+                console.log("Error logging ad view:", err);
+            }
         }
 
         const categorizedMaterials = [
@@ -935,6 +955,7 @@
             if (typeof show_11650948 === 'function') {
                 show_11650948().then(() => {
                     updateCoins(100);
+                    sendAdWatchToServer(); // 📺 ለሰርቨሩ መረጃውን ይልካል
                     const msg = currentLang === 'en' 
                         ? "🎉 You watched the ad successfully! +100 Coins added!" 
                         : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
@@ -954,6 +975,7 @@
                         adController.show().then((result) => {
                             if (result && result.done) {
                                 updateCoins(100);
+                                sendAdWatchToServer(); // 📺 ለሰርቨሩ መረጃውን ይልካል
                                 const msg = currentLang === 'en' 
                                     ? "🎉 You watched the ad successfully! +100 Coins added!" 
                                     : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
