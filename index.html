@@ -22,8 +22,6 @@
     <script src="english.js"></script>
     <script src="psychology.js"></script>
     <script src="entrepreneurship.js"></script>
-    <!-- AI Script -->
-    <script src="ai.js"></script>
 
     <style>
         :root {
@@ -112,20 +110,19 @@
         /* Tabs Nav */
         .tabs-nav {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin-bottom: 14px;
         }
         .tab-btn {
             flex: 1;
             background: #e2e8f0;
             border: none;
-            padding: 10px 4px;
+            padding: 10px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 11px;
+            font-size: 13px;
             color: var(--text-sub);
             cursor: pointer;
-            white-space: nowrap;
         }
         .tab-btn.active {
             background: var(--primary);
@@ -321,72 +318,6 @@
             width: 100%;
         }
 
-        /* AI Tutor View */
-        #aiView {
-            display: none;
-        }
-        .ai-chat-box {
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            height: 360px;
-            overflow-y: auto;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .chat-msg {
-            max-width: 85%;
-            padding: 10px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            line-height: 1.4;
-            user-select: text;
-            -webkit-user-select: text;
-            white-space: pre-wrap;
-        }
-        .chat-msg.user {
-            background: #e0f2fe;
-            color: #0369a1;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-        .chat-msg.ai {
-            background: #f1f5f9;
-            color: var(--text-main);
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border: 1px solid #e2e8f0;
-        }
-        .ai-input-wrap {
-            display: flex;
-            gap: 8px;
-        }
-        .ai-input {
-            flex: 1;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            padding: 10px 12px;
-            font-size: 13px;
-            outline: none;
-            background: #fff;
-        }
-        .ai-input:focus {
-            border-color: var(--primary);
-        }
-        .btn-ai-send {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
         /* Language Selector Modal */
         .lang-modal-overlay {
             position: fixed;
@@ -488,7 +419,6 @@
     <div class="tabs-nav" id="mainTabs">
         <button class="tab-btn active" id="tabQuiz" onclick="switchTab('quiz')">✍️ የፈተና ጥያቄዎች (Quiz)</button>
         <button class="tab-btn" id="tabMats" onclick="switchTab('mats')">📥 የፈተና ፒዲኤፍ (Materials)</button>
-        <button class="tab-btn" id="tabAi" onclick="switchTab('ai')">🤖 AI አስረጅ</button>
     </div>
 
     <!-- HOME VIEW: Course Selection Buttons (Quiz) -->
@@ -532,23 +462,6 @@
             </div>
             <div class="home-title" id="detailCatTitle" style="margin-bottom: 12px; text-align: left;"></div>
             <div id="matItemsList"></div>
-        </div>
-    </div>
-
-    <!-- AI TUTOR VIEW -->
-    <div id="aiView">
-        <div class="home-title" id="lblAiTitle">🤖 AI Study Assistant (አስረጅ)</div>
-        <div style="font-size: 11px; text-align: center; color: var(--text-sub); margin-bottom: 8px;" id="aiCostNotice">
-            🪙 1 ጥያቄ = 10 Coins
-        </div>
-        <div class="ai-chat-box" id="aiChatBox">
-            <div class="chat-msg ai" id="aiWelcomeMsg">
-                ሰላም! እኔ የ Bahirab የጥናት AI ረዳት ነኝ። ማብራሪያ ወይም የትምህርት ጥያቄ ካለህ ጻፍልኝ!
-            </div>
-        </div>
-        <div class="ai-input-wrap">
-            <input type="text" id="aiInput" class="ai-input" placeholder="ጥያቄዎን እዚህ ይጻፉ..." onkeydown="if(event.key==='Enter') sendAiMessage()">
-            <button class="btn-ai-send" onclick="sendAiMessage()">ላክ 🚀</button>
         </div>
     </div>
 
@@ -786,13 +699,8 @@
             if (currentLang === 'en') {
                 document.getElementById('lblSelect').innerText = "📚 Select Course:";
                 document.getElementById('lblMatSelect').innerText = "📚 Select Course Category:";
-                document.getElementById('tabQuiz').innerText = "✍️ Quizzes";
-                document.getElementById('tabMats').innerText = "📥 PDFs";
-                if (document.getElementById('tabAi')) document.getElementById('tabAi').innerText = "🤖 AI Tutor";
-                if (document.getElementById('lblAiTitle')) document.getElementById('lblAiTitle').innerText = "🤖 AI Study Assistant";
-                if (document.getElementById('aiInput')) document.getElementById('aiInput').placeholder = "Ask any academic question here...";
-                if (document.getElementById('aiCostNotice')) document.getElementById('aiCostNotice').innerText = "🪙 1 Question = 10 Coins";
-                if (document.getElementById('aiWelcomeMsg')) document.getElementById('aiWelcomeMsg').innerText = "Hello! I am your Bahirab AI Study Assistant. Ask me any question or explanation!";
+                document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
+                document.getElementById('tabMats').innerText = "📥 Exam PDFs (Materials)";
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('backMatText').innerText = "Back to Categories";
                 document.getElementById('adTitle').innerText = "⭐ Need Free Coins?";
@@ -808,11 +716,6 @@
                 document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
                 document.getElementById('tabQuiz').innerText = "✍️ የፈተና ጥያቄዎች (Quiz)";
                 document.getElementById('tabMats').innerText = "📥 የፈተና ፒዲኤፍ (Materials)";
-                if (document.getElementById('tabAi')) document.getElementById('tabAi').innerText = "🤖 AI አስረጅ";
-                if (document.getElementById('lblAiTitle')) document.getElementById('lblAiTitle').innerText = "🤖 AI Study Assistant (አስረጅ)";
-                if (document.getElementById('aiInput')) document.getElementById('aiInput').placeholder = "ጥያቄዎን እዚህ ይጻፉ...";
-                if (document.getElementById('aiCostNotice')) document.getElementById('aiCostNotice').innerText = "🪙 1 ጥያቄ = 10 Coins";
-                if (document.getElementById('aiWelcomeMsg')) document.getElementById('aiWelcomeMsg').innerText = "ሰላም! እኔ የ Bahirab የጥናት AI ረዳት ነኝ። ማብራሪያ ወይም የትምህርት ጥያቄ ካለህ ጻፍልኝ!";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
                 document.getElementById('adTitle').innerText = "⭐ ነፃ Coins ይፈልጋሉ?";
@@ -879,11 +782,9 @@
         function switchTab(tab) {
             document.getElementById('tabQuiz').classList.remove('active');
             document.getElementById('tabMats').classList.remove('active');
-            if (document.getElementById('tabAi')) document.getElementById('tabAi').classList.remove('active');
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('materialsView').style.display = 'none';
             document.getElementById('quizView').style.display = 'none';
-            if (document.getElementById('aiView')) document.getElementById('aiView').style.display = 'none';
 
             if (tab === 'quiz') {
                 document.getElementById('tabQuiz').classList.add('active');
@@ -893,9 +794,6 @@
                 document.getElementById('materialsView').style.display = 'block';
                 backToMatMain();
                 renderMatCategories();
-            } else if (tab === 'ai') {
-                if (document.getElementById('tabAi')) document.getElementById('tabAi').classList.add('active');
-                if (document.getElementById('aiView')) document.getElementById('aiView').style.display = 'block';
             }
         }
 
@@ -1148,3 +1046,4 @@
     </script>
 </body>
 </html>
+
