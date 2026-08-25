@@ -7,6 +7,9 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
+    <!-- Monetag Telegram Mini App SDK -->
+    <script src='//libtl.com/sdk.js' data-zone='11650948' data-sdk='show_11650948'></script>
+
     <!-- External Question Banks -->
     <script src="economics.js"></script>
     <script src="logic.js"></script>
@@ -795,36 +798,55 @@
 
         let adController = null;
 
-        // Watching Ad with Strict Adsgram Verification & Bilingual Alerts
+        // Watching Ad with Monetag / Adsgram Integration & Bilingual Alerts
         function watchAdForCoins() {
-            try {
-                if (!adController) {
-                    adController = window.Adsgram.init({ blockId: "44491" });
-                }
-                adController.show().then((result) => {
-                    if (result && result.done) {
-                        updateCoins(100);
-                        const msg = currentLang === 'en' 
-                            ? "🎉 You watched the ad successfully! +100 Coins added!" 
-                            : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
-                        alert(msg);
-                    } else {
-                        const msg = currentLang === 'en' 
-                            ? "⚠️ You skipped the ad early. No coins rewarded!" 
-                            : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
-                        alert(msg);
-                    }
+            if (typeof show_11650948 === 'function') {
+                show_11650948().then(() => {
+                    updateCoins(100);
+                    const msg = currentLang === 'en' 
+                        ? "🎉 You watched the ad successfully! +100 Coins added!" 
+                        : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+                    alert(msg);
                 }).catch(() => {
                     const msg = currentLang === 'en' 
                         ? "⚠️ Ad was closed or failed to load. Please try again." 
                         : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
                     alert(msg);
                 });
-            } catch (e) {
-                const msg = currentLang === 'en' 
-                    ? "⚠️ Failed to initialize ad service." 
-                    : "⚠️ የማስታወቂያ አገልግሎቱን መክፈት አልተቻለም።";
-                alert(msg);
+            } else {
+                try {
+                    if (!adController && window.Adsgram) {
+                        adController = window.Adsgram.init({ blockId: "44491" });
+                    }
+                    if (adController) {
+                        adController.show().then((result) => {
+                            if (result && result.done) {
+                                updateCoins(100);
+                                const msg = currentLang === 'en' 
+                                    ? "🎉 You watched the ad successfully! +100 Coins added!" 
+                                    : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+                                alert(msg);
+                            } else {
+                                const msg = currentLang === 'en' 
+                                    ? "⚠️ You skipped the ad early. No coins rewarded!" 
+                                    : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
+                                alert(msg);
+                            }
+                        }).catch(() => {
+                            const msg = currentLang === 'en' 
+                                ? "⚠️ Ad was closed or failed to load. Please try again." 
+                                : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+                            alert(msg);
+                        });
+                    } else {
+                        throw new Error("Ad provider not loaded");
+                    }
+                } catch (e) {
+                    const msg = currentLang === 'en' 
+                        ? "⚠️ Failed to initialize ad service." 
+                        : "⚠️ የማስታወቂያ አገልግሎቱን መክፈት አልተቻለም።";
+                    alert(msg);
+                }
             }
         }
 
