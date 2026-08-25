@@ -598,7 +598,7 @@
                     { title: "Critical Thinking Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "critical_thinking_mid_2017" },
                     { title: "Logic Final Exam (Bahirab Set 2)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_802" },
                     { title: "Logic Final Exam 2017 (Set 1)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_808" },
-                    { title: "Logic Final Exam 2017 (Other Sem.)", desc: "Bahir Dar University FL Logic", key: "logic_final_809" },
+                    { title: "Logic Final Exam 2017 (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_809" },
                     { title: "Logic Final Exam 2017 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_818" }
                 ]
             },
@@ -1026,8 +1026,9 @@
         function redirectToBot(fileKey) {
             if (tg && tg.initData) {
                 tg.openTelegramLink("https://t.me/BahirabQuiz_Bot?start=" + fileKey);
+                setTimeout(() => { tg.close(); }, 800);
             } else {
-                window.open("https://t.me/BahirabQuiz_Bot?start=" + fileKey, "_blank");
+                window.location.href = "https://t.me/BahirabQuiz_Bot?start=" + fileKey;
             }
         }
 
