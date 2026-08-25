@@ -598,7 +598,7 @@
                     { title: "Critical Thinking Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "critical_thinking_mid_2017" },
                     { title: "Logic Final Exam (Bahirab Set 2)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_802" },
                     { title: "Logic Final Exam 2017 (Set 1)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_808" },
-                    { title: "Logic Final Exam 2017 (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_809" },
+                    { title: "Logic Final Exam 2017 (Other Sem.)", desc: "Bahir Dar University FL Logic", key: "logic_final_809" },
                     { title: "Logic Final Exam 2017 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "logic_final_818" }
                 ]
             },
@@ -896,11 +896,11 @@
             const current = qList[currentQIndex];
             const allBtns = document.querySelectorAll('.option-btn');
 
-            // Correct Answer gives +10 Coins
+            // Correct Answer gives +5 Coins
             if (selectedIdx === current.correct) {
                 btnElement.classList.add('correct');
-                updateCoins(10);
-                const correctMsg = currentLang === 'en' ? `🎉 Correct! (+10 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+10 Coins)\n💡 ${current.exp}`;
+                updateCoins(5);
+                const correctMsg = currentLang === 'en' ? `🎉 Correct! (+5 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+5 Coins)\n💡 ${current.exp}`;
                 document.getElementById('expBox').innerText = correctMsg;
             } else {
                 btnElement.classList.add('wrong');
