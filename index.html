@@ -1101,7 +1101,7 @@
 
         let adController = null;
 
-        // Watching Ad with Monetag Rewarded Interstitial + Adsgram Fallback
+        // Watching Ad directly with Adsgram Rewarded Video
         function watchAdForCoins() {
             const activeTimestamps = getActiveAdTimestamps();
             if (activeTimestamps.length >= MAX_ADS) {
@@ -1119,45 +1119,37 @@
                 return;
             }
 
-            if (typeof show_11650948 === 'function') {
-                show_11650948().then(() => {
-                    handleAdWatchedSuccess();
-                }).catch(() => {
-                    const msg = currentLang === 'en' 
-                        ? "⚠️ Ad was closed or failed to load. Please try again." 
-                        : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
-                    alert(msg);
-                });
-            } else {
-                try {
-                    if (!adController && window.Adsgram) {
-                        adController = window.Adsgram.init({ blockId: "44491" });
-                    }
-                    if (adController) {
-                        adController.show().then((result) => {
-                            if (result && result.done) {
-                                handleAdWatchedSuccess();
-                            } else {
-                                const msg = currentLang === 'en' 
-                                    ? "⚠️ You skipped the ad early. No coins rewarded!" 
-                                    : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
-                                alert(msg);
-                            }
-                        }).catch(() => {
+            try {
+                if (!adController && window.Adsgram) {
+                    adController = window.Adsgram.init({ blockId: "44491" });
+                }
+                if (adController) {
+                    adController.show().then((result) => {
+                        if (result && result.done) {
+                            handleAdWatchedSuccess();
+                        } else {
                             const msg = currentLang === 'en' 
-                                ? "⚠️ Ad was closed or failed to load. Please try again." 
-                                : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+                                ? "⚠️ You skipped the ad early. No coins rewarded!" 
+                                : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
                             alert(msg);
-                        });
-                    } else {
-                        throw new Error("Ad provider not loaded");
-                    }
-                } catch (e) {
+                        }
+                    }).catch(() => {
+                        const msg = currentLang === 'en' 
+                            ? "⚠️ Ad was closed or failed to load. Please try again." 
+                            : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+                        alert(msg);
+                    });
+                } else {
                     const msg = currentLang === 'en' 
-                        ? "⚠️ Failed to initialize ad service." 
-                        : "⚠️ የማስታወቂያ አገልግሎቱን መክፈት አልተቻለም።";
+                        ? "⚠️ Adsgram service is not available right now." 
+                        : "⚠️ የማስታወቂያ አገልግሎቱ በአሁኑ ሰዓት ዝግጁ አይደለም።";
                     alert(msg);
                 }
+            } catch (e) {
+                const msg = currentLang === 'en' 
+                    ? "⚠️ Failed to initialize ad service." 
+                    : "⚠️ የማስታወቂያ አገልግሎቱን መክፈት አልተቻለም።";
+                alert(msg);
             }
         }
 
