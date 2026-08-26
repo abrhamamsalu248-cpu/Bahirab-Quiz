@@ -1267,7 +1267,7 @@
             document.getElementById('nextBtn').style.display = 'none';
         }
 
-        async function handleSelect(selectedIdx, btnElement) {
+        function handleSelect(selectedIdx, btnElement) {
             if (isAnswered) return;
             isAnswered = true;
 
@@ -1276,36 +1276,15 @@
             const allBtns = document.querySelectorAll('.option-btn');
             const isCorrect = (selectedIdx === current.correct);
 
-            // Correct Answer UI
+            // 1. የመልሱን ከለር ወዲያውኑ መቀየር
             if (isCorrect) {
                 btnElement.classList.add('correct');
             } else {
-                // Incorrect Answer UI
                 btnElement.classList.add('wrong');
                 allBtns[current.correct].classList.add('correct');
             }
 
-            // 🔒 Server-Side Answer Submission (+5 / -5 Coins)
-            if (tg && tg.initData) {
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/quiz/submit-answer`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            initData: tg.initData,
-                            isCorrect: isCorrect
-                        })
-                    });
-                    const data = await res.json();
-                    if (data.coins !== undefined) {
-                        userCoins = data.coins;
-                        document.getElementById('coinCount').innerText = userCoins;
-                    }
-                } catch(e) {
-                    console.log("Answer error:", e);
-                }
-            }
-
+            // 2. ማብራሪያውን እና ቀጣይ በተኑን በቅጽበት ማሳየት (ያለ ምንም መዘግየት)
             const msg = isCorrect
                 ? (currentLang === 'en' ? `🎉 Correct! (+5 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+5 Coins)\n💡 ${current.exp}`)
                 : (currentLang === 'en' ? `❌ Incorrect! (-5 Coins)\n💡 ${current.exp}` : `❌ ተሳስተዋል! (-5 Coins)\n💡 ${current.exp}`);
@@ -1313,6 +1292,26 @@
             document.getElementById('expBox').innerText = msg;
             document.getElementById('expBox').style.display = 'block';
             document.getElementById('nextBtn').style.display = 'block';
+
+            // 3. የነጥብ ማሻሻያውን ከበስተጀርባ (Background) ለሰርቨር መላክ
+            if (tg && tg.initData) {
+                fetch(`${BACKEND_URL}/api/quiz/submit-answer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        initData: tg.initData,
+                        isCorrect: isCorrect
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.coins !== undefined) {
+                        userCoins = data.coins;
+                        document.getElementById('coinCount').innerText = userCoins;
+                    }
+                })
+                .catch(e => console.log("Answer background sync error:", e));
+            }
         }
 
         function nextQuestion() {
