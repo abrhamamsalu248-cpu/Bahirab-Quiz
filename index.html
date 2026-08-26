@@ -84,22 +84,37 @@
             cursor: pointer;
         }
 
+        /* 2 Separate Earn Banners Container */
+        .earn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
         .earn-banner {
-            background: linear-gradient(135deg, #0284c7, #0369a1);
             color: white;
             border-radius: 12px;
-            padding: 12px 16px;
+            padding: 10px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
             text-align: left;
         }
-        .earn-banner div h4 { margin: 0 0 2px 0; font-size: 14px; }
+
+        .earn-banner-adsgram {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+        }
+
+        .earn-banner-monetag {
+            background: linear-gradient(135deg, #4f46e5, #3730a3);
+        }
+
+        .earn-banner div h4 { margin: 0 0 2px 0; font-size: 13px; }
         .earn-banner div p { margin: 0; font-size: 11px; opacity: 0.9; }
+
         .btn-earn {
-            background: #f59e0b;
             color: white;
             border: none;
             padding: 8px 12px;
@@ -108,9 +123,16 @@
             font-size: 12px;
             cursor: pointer;
             white-space: nowrap;
+            margin-left: 8px;
+        }
+        .btn-earn-adsgram {
+            background: #f59e0b;
+        }
+        .btn-earn-monetag {
+            background: #10b981;
         }
         .btn-earn:disabled {
-            background: #9ca3af;
+            background: #9ca3af !important;
             cursor: not-allowed;
             opacity: 0.85;
         }
@@ -428,12 +450,25 @@
         <button class="lang-switch" id="langSwitchBtn" onclick="toggleLang()">🌐 Amh / Eng</button>
     </div>
 
-    <div class="earn-banner">
-        <div>
-            <h4 id="adTitle">⭐ ነፃ 100 Coins ይውሰዱ!</h4>
-            <p id="adSub">አጭር ማስታወቂያ በመመልከት +100 Coins በነፃ ያግኙ። (<span id="adLimitCount">6</span> የቀረ)</p>
+    <!-- 2 Separate Earn Banners (Adsgram & Monetag) -->
+    <div class="earn-container">
+        <!-- 1. Adsgram Button -->
+        <div class="earn-banner earn-banner-adsgram">
+            <div>
+                <h4 id="adTitleAdsgram">📺 Adsgram ቪዲዮ (+100)</h4>
+                <p id="adSubAdsgram">የ Adsgram ቪዲዮ በማየት +100 Coins ያግኙ። (<span id="adLimitAdsgram">6</span> የቀረ)</p>
+            </div>
+            <button class="btn-earn btn-earn-adsgram" id="adBtnAdsgram" onclick="watchAdsgramAd()">📺 እይ (+100)</button>
         </div>
-        <button class="btn-earn" id="adBtn" onclick="watchAdForCoins()">⭐ ማስታወቂያ እይ (+100)</button>
+
+        <!-- 2. Monetag Button -->
+        <div class="earn-banner earn-banner-monetag">
+            <div>
+                <h4 id="adTitleMonetag">⚡ Monetag ማስታወቂያ (+100)</h4>
+                <p id="adSubMonetag">የ Monetag አድ በማየት +100 Coins ያግኙ። (<span id="adLimitMonetag">6</span> የቀረ)</p>
+            </div>
+            <button class="btn-earn btn-earn-monetag" id="adBtnMonetag" onclick="watchMonetagAd()">⚡ እይ (+100)</button>
+        </div>
     </div>
 
     <!-- Main Navigation Tabs (3 Tabs) -->
@@ -581,13 +616,13 @@
             }
         }
 
-        /* --- INDIVIDUAL 5-HOUR ROLLING COOLDOWN (6 AD SLOTS) --- */
+        /* --- 5-HOUR ROLLING COOLDOWN (MAX 6 FOR EACH AD PROVIDER) --- */
         const MAX_ADS = 6;
         const COOLDOWN_HOURS = 5;
         const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
 
-        function getActiveAdTimestamps() {
-            const raw = localStorage.getItem('bahirab_ad_timestamps');
+        function getTimestamps(storageKey) {
+            const raw = localStorage.getItem(storageKey);
             let timestamps = [];
             try {
                 timestamps = raw ? JSON.parse(raw) : [];
@@ -595,63 +630,150 @@
                 timestamps = [];
             }
             const now = Date.now();
-            // 5 ሰዓት ያላለፋቸውን ማስታወቂያዎች ብቻ ይለያል
             const active = timestamps.filter(t => (now - t) < COOLDOWN_MS);
             if (active.length !== timestamps.length) {
-                localStorage.setItem('bahirab_ad_timestamps', JSON.stringify(active));
+                localStorage.setItem(storageKey, JSON.stringify(active));
             }
             return active.sort((a, b) => a - b);
         }
 
         function updateAdLimitUI() {
-            const activeTimestamps = getActiveAdTimestamps();
-            const availableAds = MAX_ADS - activeTimestamps.length;
             const now = Date.now();
-            const btn = document.getElementById('adBtn');
-            const limitText = document.getElementById('adLimitCount');
 
-            if (limitText) {
-                limitText.innerText = Math.max(0, availableAds);
+            // 1. Adsgram Limits
+            const adsgramTimes = getTimestamps('bahirab_adsgram_timestamps');
+            const adsgramAvail = MAX_ADS - adsgramTimes.length;
+            const adsgramBtn = document.getElementById('adBtnAdsgram');
+            const adsgramLimitText = document.getElementById('adLimitAdsgram');
+            if (adsgramLimitText) adsgramLimitText.innerText = Math.max(0, adsgramAvail);
+
+            if (adsgramAvail > 0) {
+                adsgramBtn.disabled = false;
+                adsgramBtn.innerText = currentLang === 'en' ? "📺 Watch (+100)" : "📺 እይ (+100)";
+            } else {
+                const earliest = adsgramTimes[0];
+                const rem = Math.max(0, (earliest + COOLDOWN_MS) - now);
+                const h = Math.floor(rem / (1000 * 60 * 60));
+                const m = Math.floor((rem % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((rem % (1000 * 60)) / 1000);
+                adsgramBtn.disabled = true;
+                adsgramBtn.innerText = `⏳ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
             }
 
-            if (availableAds > 0) {
-                btn.disabled = false;
-                btn.innerText = currentLang === 'en' ? "⭐ Watch Ad (+100)" : "⭐ ማስታወቂያ እይ (+100)";
+            // 2. Monetag Limits
+            const monetagTimes = getTimestamps('bahirab_monetag_timestamps');
+            const monetagAvail = MAX_ADS - monetagTimes.length;
+            const monetagBtn = document.getElementById('adBtnMonetag');
+            const monetagLimitText = document.getElementById('adLimitMonetag');
+            if (monetagLimitText) monetagLimitText.innerText = Math.max(0, monetagAvail);
+
+            if (monetagAvail > 0) {
+                monetagBtn.disabled = false;
+                monetagBtn.innerText = currentLang === 'en' ? "⚡ Watch (+100)" : "⚡ እይ (+100)";
             } else {
-                // 6ቱም አልቀው ከሆነ ቀድሞ የታየው አድ እስኪሞላ የሚቀረውን ሰዓት ያሳያል
-                const earliestTime = activeTimestamps[0];
-                const remainingMs = Math.max(0, (earliestTime + COOLDOWN_MS) - now);
-                const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-                const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                
-                const timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-                btn.disabled = true;
-                btn.innerText = `⏳ ${timeStr}`;
+                const earliest = monetagTimes[0];
+                const rem = Math.max(0, (earliest + COOLDOWN_MS) - now);
+                const h = Math.floor(rem / (1000 * 60 * 60));
+                const m = Math.floor((rem % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((rem % (1000 * 60)) / 1000);
+                monetagBtn.disabled = true;
+                monetagBtn.innerText = `⏳ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
             }
         }
 
         setInterval(updateAdLimitUI, 1000);
 
-        function handleAdWatchedSuccess() {
-            updateCoins(100);
-            sendAdWatchToServer();
+        let adController = null;
 
-            const activeTimestamps = getActiveAdTimestamps();
-            activeTimestamps.push(Date.now());
-            localStorage.setItem('bahirab_ad_timestamps', JSON.stringify(activeTimestamps));
-
-            // 👈 ተጠቃሚው 3ኛውን ማስታወቂያ አይቶ ሲመልስ SmartLink (Popunder) በቀን 1 ጊዜ እንዲከፈት ይደረጋል
-            if (activeTimestamps.length === 3) {
-                triggerSmartlinkOnceDaily();
+        // --- 📺 1. ADSGRAM AD FUNCTION ---
+        function watchAdsgramAd() {
+            const times = getTimestamps('bahirab_adsgram_timestamps');
+            if (times.length >= MAX_ADS) {
+                const msg = currentLang === 'en' 
+                    ? "⏳ Adsgram limit reached! Please wait for the timer." 
+                    : "⏳ የ Adsgram ቪዲዮ ገደብ ላይ ደርሰዋል! እባክዎ ቆጣሪው እስኪያልቅ ይጠብቁ።";
+                alert(msg);
+                return;
             }
 
-            updateAdLimitUI();
+            try {
+                if (!adController && window.Adsgram) {
+                    adController = window.Adsgram.init({ blockId: "44491" });
+                }
+                if (adController) {
+                    adController.show().then((result) => {
+                        if (result && result.done) {
+                            updateCoins(100);
+                            sendAdWatchToServer();
+                            const active = getTimestamps('bahirab_adsgram_timestamps');
+                            active.push(Date.now());
+                            localStorage.setItem('bahirab_adsgram_timestamps', JSON.stringify(active));
+                            
+                            if (active.length === 3) triggerSmartlinkOnceDaily();
+                            updateAdLimitUI();
 
-            const msg = currentLang === 'en' 
-                ? "🎉 You watched the ad successfully! +100 Coins added!" 
-                : "🎉 ማስታወቂያውን በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
-            alert(msg);
+                            const msg = currentLang === 'en' 
+                                ? "🎉 Adsgram video watched! +100 Coins added!" 
+                                : "🎉 የ Adsgram ቪዲዮ በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+                            alert(msg);
+                        } else {
+                            const msg = currentLang === 'en' 
+                                ? "⚠️ You skipped the video early. No coins rewarded!" 
+                                : "⚠️ ቪዲዮውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
+                            alert(msg);
+                        }
+                    }).catch(() => {
+                        const msg = currentLang === 'en' 
+                            ? "⚠️ Adsgram ad failed to load. Please try again later." 
+                            : "⚠️ የ Adsgram ቪዲዮ መጫን አልተቻለም። እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ።";
+                        alert(msg);
+                    });
+                } else {
+                    alert("⚠️ Adsgram not ready");
+                }
+            } catch (e) {
+                alert("⚠️ Adsgram error: " + e.message);
+            }
+        }
+
+        // --- ⚡ 2. MONETAG AD FUNCTION ---
+        function watchMonetagAd() {
+            const times = getTimestamps('bahirab_monetag_timestamps');
+            if (times.length >= MAX_ADS) {
+                const msg = currentLang === 'en' 
+                    ? "⏳ Monetag limit reached! Please wait for the timer." 
+                    : "⏳ የ Monetag ማስታወቂያ ገደብ ላይ ደርሰዋል! እባክዎ ቆጣሪው እስኪያልቅ ይጠብቁ።";
+                alert(msg);
+                return;
+            }
+
+            if (typeof show_11650948 === 'function') {
+                show_11650948().then(() => {
+                    updateCoins(100);
+                    sendAdWatchToServer();
+                    const active = getTimestamps('bahirab_monetag_timestamps');
+                    active.push(Date.now());
+                    localStorage.setItem('bahirab_monetag_timestamps', JSON.stringify(active));
+                    
+                    if (active.length === 3) triggerSmartlinkOnceDaily();
+                    updateAdLimitUI();
+
+                    const msg = currentLang === 'en' 
+                        ? "🎉 Monetag ad watched! +100 Coins added!" 
+                        : "🎉 የ Monetag ማስታወቂያ በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
+                    alert(msg);
+                }).catch(() => {
+                    const msg = currentLang === 'en' 
+                        ? "⚠️ Monetag ad closed or failed. Please try again." 
+                        : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
+                    alert(msg);
+                });
+            } else {
+                const msg = currentLang === 'en' 
+                    ? "⚠️ Monetag SDK is loading. Please retry in a moment." 
+                    : "⚠️ የ Monetag አገልግሎት በመጫን ላይ ነው። እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ።";
+                alert(msg);
+            }
         }
 
         const categorizedMaterials = [
@@ -845,8 +967,17 @@
                 document.getElementById('tabMods').innerText = "📚 Modules (100 Coins)";
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('backMatText').innerText = "Back to Categories";
-                document.getElementById('adTitle').innerText = "⭐ Get Free 100 Coins!";
-                document.getElementById('adSub').innerHTML = 'Watch a short ad and earn +100 Coins instantly. (<span id="adLimitCount">6</span> remaining)';
+                
+                // Adsgram Banner
+                document.getElementById('adTitleAdsgram').innerText = "📺 Adsgram Video (+100)";
+                document.getElementById('adSubAdsgram').innerHTML = 'Watch Adsgram video & earn +100 Coins. (<span id="adLimitAdsgram">6</span> left)';
+                document.getElementById('adBtnAdsgram').innerText = "📺 Watch (+100)";
+                
+                // Monetag Banner
+                document.getElementById('adTitleMonetag').innerText = "⚡ Monetag Ad (+100)";
+                document.getElementById('adSubMonetag').innerHTML = 'Watch Monetag ad & earn +100 Coins. (<span id="adLimitMonetag">6</span> left)';
+                document.getElementById('adBtnMonetag').innerText = "⚡ Watch (+100)";
+
                 document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
                 document.getElementById('unSub').innerText = "Unlock full exam paper for 100 Coins.";
                 document.getElementById('unBtn').innerText = "🔓 Unlock in Telegram (100 Coins)";
@@ -861,8 +992,17 @@
                 document.getElementById('tabMods').innerText = "📚 ሞጁሎች (Modules)";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
-                document.getElementById('adTitle').innerText = "⭐ ነፃ 100 Coins ይውሰዱ!";
-                document.getElementById('adSub').innerHTML = 'አጭር ማስታወቂያ በመመልከት +100 Coins በነፃ ያግኙ። (<span id="adLimitCount">6</span> የቀረ)';
+                
+                // Adsgram Banner
+                document.getElementById('adTitleAdsgram').innerText = "📺 Adsgram ቪዲዮ (+100)";
+                document.getElementById('adSubAdsgram').innerHTML = 'የ Adsgram ቪዲዮ በማየት +100 Coins ያግኙ። (<span id="adLimitAdsgram">6</span> የቀረ)';
+                document.getElementById('adBtnAdsgram').innerText = "📺 እይ (+100)";
+                
+                // Monetag Banner
+                document.getElementById('adTitleMonetag').innerText = "⚡ Monetag ማስታወቂያ (+100)";
+                document.getElementById('adSubMonetag').innerHTML = 'የ Monetag አድ በማየት +100 Coins ያግኙ። (<span id="adLimitMonetag">6</span> የቀረ)';
+                document.getElementById('adBtnMonetag').innerText = "⚡ እይ (+100)";
+
                 document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
                 document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
                 document.getElementById('unBtn').innerText = "🔓 በ 100 Coins በቴሌግራም አውርድ";
@@ -1096,60 +1236,6 @@
                 document.getElementById('optionsContainer').innerHTML = '';
                 document.getElementById('expBox').innerText = scoreMsg;
                 document.getElementById('nextBtn').style.display = 'none';
-            }
-        }
-
-        let adController = null;
-
-        // Watching Ad directly with Adsgram Rewarded Video
-        function watchAdForCoins() {
-            const activeTimestamps = getActiveAdTimestamps();
-            if (activeTimestamps.length >= MAX_ADS) {
-                const earliestTime = activeTimestamps[0];
-                const remainingMs = Math.max(0, (earliestTime + COOLDOWN_MS) - Date.now());
-                const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-                const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                const timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-                const msg = currentLang === 'en' 
-                    ? `⏳ Ad limit reached! Next ad slot will be ready in ${timeStr}.` 
-                    : `⏳ የ 6 ማስታወቂያዎች ገደብ ላይ ደርሰዋል! የሚቀጥለው ማስታወቂያ በ ${timeStr} ውስጥ ይሞላል።`;
-                alert(msg);
-                return;
-            }
-
-            try {
-                if (!adController && window.Adsgram) {
-                    adController = window.Adsgram.init({ blockId: "44491" });
-                }
-                if (adController) {
-                    adController.show().then((result) => {
-                        if (result && result.done) {
-                            handleAdWatchedSuccess();
-                        } else {
-                            const msg = currentLang === 'en' 
-                                ? "⚠️ You skipped the ad early. No coins rewarded!" 
-                                : "⚠️ ማስታወቂያውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
-                            alert(msg);
-                        }
-                    }).catch(() => {
-                        const msg = currentLang === 'en' 
-                            ? "⚠️ Ad was closed or failed to load. Please try again." 
-                            : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
-                        alert(msg);
-                    });
-                } else {
-                    const msg = currentLang === 'en' 
-                        ? "⚠️ Adsgram service is not available right now." 
-                        : "⚠️ የማስታወቂያ አገልግሎቱ በአሁኑ ሰዓት ዝግጁ አይደለም።";
-                    alert(msg);
-                }
-            } catch (e) {
-                const msg = currentLang === 'en' 
-                    ? "⚠️ Failed to initialize ad service." 
-                    : "⚠️ የማስታወቂያ አገልግሎቱን መክፈት አልተቻለም።";
-                alert(msg);
             }
         }
 
