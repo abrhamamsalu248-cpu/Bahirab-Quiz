@@ -311,6 +311,16 @@
             box-sizing: border-box;
         }
         .option-btn:active { background: #e5e7eb; }
+        
+        /* የተመረጠበት ሁኔታ (Selected before confirm) */
+        .option-btn.selected {
+            background: #e0f2fe !important;
+            border-color: var(--primary) !important;
+            color: var(--primary) !important;
+            font-weight: bold;
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
         .option-btn.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #15803d !important; font-weight: bold; }
         .option-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #b91c1c !important; }
 
@@ -338,6 +348,10 @@
             width: 100%;
             margin-top: 10px;
             display: none;
+        }
+        
+        .confirm-btn {
+            background: #0284c7;
         }
 
         .unlock-card {
@@ -542,6 +556,9 @@
 
             <div class="question-box" id="qText">ጥያቄዎች በመጫን ላይ ናቸው...</div>
             <div id="optionsContainer"></div>
+
+            <!-- አዲሱ የማረጋገጫ በተን (Confirm Button) -->
+            <button class="nav-btn confirm-btn" id="confirmBtn" onclick="confirmAnswer()">✔️ መልስ አረጋግጥ (Confirm Answer)</button>
 
             <div class="explanation" id="expBox"></div>
             <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">ቀጣይ ጥያቄ ➡️</button>
@@ -1039,6 +1056,7 @@
                 document.getElementById('adSubMonetag').innerHTML = 'Watch Monetag ad & earn +100 Coins. (<span id="adLimitMonetag">6</span> left)';
                 document.getElementById('adBtnMonetag').innerText = "⚡ Watch (+100)";
 
+                document.getElementById('confirmBtn').innerText = "✔️ Confirm Answer";
                 document.getElementById('unTitle').innerText = "📥 Need full solved Exam PDF?";
                 document.getElementById('unSub').innerText = "Unlock full exam paper for 100 Coins.";
                 document.getElementById('unBtn').innerText = "🔓 Unlock in Telegram (100 Coins)";
@@ -1064,6 +1082,7 @@
                 document.getElementById('adSubMonetag').innerHTML = 'የ Monetag አድ በማየት +100 Coins ያግኙ። (<span id="adLimitMonetag">6</span> የቀረ)';
                 document.getElementById('adBtnMonetag').innerText = "⚡ እይ (+100)";
 
+                document.getElementById('confirmBtn').innerText = "✔️ መልስ አረጋግጥ (Confirm Answer)";
                 document.getElementById('unTitle').innerText = "📥 ሙሉውን የተፈታ የፈተና PDF ይፈልጋሉ?";
                 document.getElementById('unSub').innerText = "የተሟላውን የፈተና ፒዲኤፍ እና ማብራሪያ በ 100 Coins አውርድ።";
                 document.getElementById('unBtn').innerText = "🔓 በ 100 Coins በቴሌግራም አውርድ";
@@ -1212,6 +1231,7 @@
         let currentExam = 'entrepreneurship_final';
         let currentQIndex = 0;
         let isAnswered = false;
+        let selectedOptionIdx = null;
 
         function openExam(type) {
             currentExam = type;
@@ -1233,6 +1253,7 @@
         function loadQuestion() {
             examData = getMergedData();
             isAnswered = false;
+            selectedOptionIdx = null;
             const qList = examData[currentExam] || [];
             
             if (!qList.length) {
@@ -1263,28 +1284,48 @@
                 optContainer.appendChild(btn);
             });
 
+            document.getElementById('confirmBtn').style.display = 'none';
             document.getElementById('expBox').style.display = 'none';
             document.getElementById('nextBtn').style.display = 'none';
         }
 
+        // ተማሪው ምርጫ ሲነካ (ሀሳቡን መቀየር ይችላል)
         function handleSelect(selectedIdx, btnElement) {
             if (isAnswered) return;
+            
+            selectedOptionIdx = selectedIdx;
+            
+            // የነበረውን የምርጫ ከለር አጥፍቶ አዲሱን መምረጥ
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+
+            // የማረጋገጫ በተኑን ማሳየት
+            document.getElementById('confirmBtn').style.display = 'block';
+        }
+
+        // ተማሪው እርግጠኛ ሆኖ "መልስ አረጋግጥ" ሲል የሚሰራ
+        function confirmAnswer() {
+            if (isAnswered || selectedOptionIdx === null) return;
             isAnswered = true;
+
+            document.getElementById('confirmBtn').style.display = 'none';
 
             const qList = examData[currentExam];
             const current = qList[currentQIndex];
             const allBtns = document.querySelectorAll('.option-btn');
-            const isCorrect = (selectedIdx === current.correct);
+            const isCorrect = (selectedOptionIdx === current.correct);
 
-            // 1. የመልሱን ከለር ወዲያውኑ መቀየር
+            // 1. የመልሶችን ከለር ማሳየት
+            allBtns.forEach(b => b.classList.remove('selected'));
             if (isCorrect) {
-                btnElement.classList.add('correct');
+                allBtns[selectedOptionIdx].classList.add('correct');
             } else {
-                btnElement.classList.add('wrong');
+                allBtns[selectedOptionIdx].classList.add('wrong');
                 allBtns[current.correct].classList.add('correct');
             }
 
-            // 2. ማብራሪያውን እና ቀጣይ በተኑን በቅጽበት ማሳየት (ያለ ምንም መዘግየት)
+            // 2. ማብራሪያውን እና የቀጣይ ጥያቄ በተኑን ማሳየት
             const msg = isCorrect
                 ? (currentLang === 'en' ? `🎉 Correct! (+5 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+5 Coins)\n💡 ${current.exp}`)
                 : (currentLang === 'en' ? `❌ Incorrect! (-5 Coins)\n💡 ${current.exp}` : `❌ ተሳስተዋል! (-5 Coins)\n💡 ${current.exp}`);
@@ -1293,7 +1334,7 @@
             document.getElementById('expBox').style.display = 'block';
             document.getElementById('nextBtn').style.display = 'block';
 
-            // 3. የነጥብ ማሻሻያውን ከበስተጀርባ (Background) ለሰርቨር መላክ
+            // 3. ውጤቱን ለሰርቨር መላክ
             if (tg && tg.initData) {
                 fetch(`${BACKEND_URL}/api/quiz/submit-answer`, {
                     method: 'POST',
@@ -1325,6 +1366,7 @@
                 document.getElementById('qText').innerText = finishMsg;
                 document.getElementById('optionsContainer').innerHTML = '';
                 document.getElementById('expBox').innerText = scoreMsg;
+                document.getElementById('confirmBtn').style.display = 'none';
                 document.getElementById('nextBtn').style.display = 'none';
             }
         }
