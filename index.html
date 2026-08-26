@@ -603,15 +603,26 @@
             const lastTrigger = localStorage.getItem('bahirab_smartlink_last_date');
 
             if (lastTrigger !== today) {
-                localStorage.setItem('bahirab_smartlink_last_date', today);
-                try {
-                    if (tg && tg.openLink) {
-                        tg.openLink(SMARTLINK_URL, { try_instant_view: false });
-                    } else {
+                const message = currentLang === 'en'
+                    ? "Visit our partner link to earn +150 extra coins and support the platform. Would you like to proceed?"
+                    : "ተጨማሪ +150 ነጥብ (Bonus Coins) ለማግኘት እና መተግበሪያውን ለመደገፍ ይህን አጭር ሊንክ ይጎብኙ። መቀጠል ይፈልጋሉ?";
+
+                if (tg && tg.showConfirm) {
+                    tg.showConfirm(message, (confirmed) => {
+                        if (confirmed) {
+                            localStorage.setItem('bahirab_smartlink_last_date', today);
+                            updateCoins(150);
+                            if (tg.openLink) {
+                                tg.openLink(SMARTLINK_URL, { try_instant_view: false });
+                            }
+                        }
+                    });
+                } else {
+                    if (confirm(message)) {
+                        localStorage.setItem('bahirab_smartlink_last_date', today);
+                        updateCoins(150);
                         window.open(SMARTLINK_URL, '_blank');
                     }
-                } catch (e) {
-                    console.log("SmartLink trigger error:", e);
                 }
             }
         }
