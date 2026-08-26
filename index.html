@@ -581,42 +581,53 @@
             }
         }
 
-        /* --- 6 AD LIMIT & 5-HOUR COUNTDOWN LOGIC --- */
-        const MAX_ADS_PER_BATCH = 6;
+        /* --- INDIVIDUAL 5-HOUR ROLLING COOLDOWN (6 AD SLOTS) --- */
+        const MAX_ADS = 6;
         const COOLDOWN_HOURS = 5;
         const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
 
-        let adBatchCount = parseInt(localStorage.getItem('bahirab_ad_batch_count') || "0");
-        let adBatchResetTime = parseInt(localStorage.getItem('bahirab_ad_reset_time') || "0");
+        function getActiveAdTimestamps() {
+            const raw = localStorage.getItem('bahirab_ad_timestamps');
+            let timestamps = [];
+            try {
+                timestamps = raw ? JSON.parse(raw) : [];
+            } catch(e) {
+                timestamps = [];
+            }
+            const now = Date.now();
+            // 5 ሰዓት ያላለፋቸውን ማስታወቂያዎች ብቻ ይለያል
+            const active = timestamps.filter(t => (now - t) < COOLDOWN_MS);
+            if (active.length !== timestamps.length) {
+                localStorage.setItem('bahirab_ad_timestamps', JSON.stringify(active));
+            }
+            return active.sort((a, b) => a - b);
+        }
 
         function updateAdLimitUI() {
+            const activeTimestamps = getActiveAdTimestamps();
+            const availableAds = MAX_ADS - activeTimestamps.length;
             const now = Date.now();
             const btn = document.getElementById('adBtn');
             const limitText = document.getElementById('adLimitCount');
 
-            if (adBatchResetTime && now < adBatchResetTime) {
-                const remainingMs = adBatchResetTime - now;
+            if (limitText) {
+                limitText.innerText = Math.max(0, availableAds);
+            }
+
+            if (availableAds > 0) {
+                btn.disabled = false;
+                btn.innerText = currentLang === 'en' ? "⭐ Watch Ad (+100)" : "⭐ ማስታወቂያ እይ (+100)";
+            } else {
+                // 6ቱም አልቀው ከሆነ ቀድሞ የታየው አድ እስኪሞላ የሚቀረውን ሰዓት ያሳያል
+                const earliestTime = activeTimestamps[0];
+                const remainingMs = Math.max(0, (earliestTime + COOLDOWN_MS) - now);
                 const hours = Math.floor(remainingMs / (1000 * 60 * 60));
                 const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
                 const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
                 
                 const timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-                
                 btn.disabled = true;
                 btn.innerText = `⏳ ${timeStr}`;
-                if (limitText) limitText.innerText = "0";
-            } else {
-                if (adBatchResetTime && now >= adBatchResetTime) {
-                    adBatchCount = 0;
-                    adBatchResetTime = 0;
-                    localStorage.setItem('bahirab_ad_batch_count', 0);
-                    localStorage.removeItem('bahirab_ad_reset_time');
-                }
-                
-                const remaining = MAX_ADS_PER_BATCH - adBatchCount;
-                btn.disabled = false;
-                btn.innerText = currentLang === 'en' ? "⭐ Watch Ad (+100)" : "⭐ ማስታወቂያ እይ (+100)";
-                if (limitText) limitText.innerText = remaining;
             }
         }
 
@@ -625,13 +636,14 @@
         function handleAdWatchedSuccess() {
             updateCoins(100);
             sendAdWatchToServer();
-            
-            adBatchCount++;
-            localStorage.setItem('bahirab_ad_batch_count', adBatchCount);
 
-            if (adBatchCount >= MAX_ADS_PER_BATCH) {
-                adBatchResetTime = Date.now() + COOLDOWN_MS;
-                localStorage.setItem('bahirab_ad_reset_time', adBatchResetTime);
+            const activeTimestamps = getActiveAdTimestamps();
+            activeTimestamps.push(Date.now());
+            localStorage.setItem('bahirab_ad_timestamps', JSON.stringify(activeTimestamps));
+
+            // 👈 ተጠቃሚው 3ኛውን ማስታወቂያ አይቶ ሲመልስ SmartLink (Popunder) በቀን 1 ጊዜ እንዲከፈት ይደረጋል
+            if (activeTimestamps.length === 3) {
+                triggerSmartlinkOnceDaily();
             }
 
             updateAdLimitUI();
@@ -1001,8 +1013,6 @@
         let isAnswered = false;
 
         function openExam(type) {
-            triggerSmartlinkOnceDaily(); // 👈 SmartLink እዚህ ጋር ተካቷል
-
             currentExam = type;
             currentQIndex = 0;
             document.getElementById('mainTabs').style.display = 'none';
@@ -1093,11 +1103,18 @@
 
         // Watching Ad with Monetag Rewarded Interstitial + Adsgram Fallback
         function watchAdForCoins() {
-            const now = Date.now();
-            if (adBatchResetTime && now < adBatchResetTime) {
+            const activeTimestamps = getActiveAdTimestamps();
+            if (activeTimestamps.length >= MAX_ADS) {
+                const earliestTime = activeTimestamps[0];
+                const remainingMs = Math.max(0, (earliestTime + COOLDOWN_MS) - Date.now());
+                const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+                const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
+                const timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
                 const msg = currentLang === 'en' 
-                    ? "⏳ You have reached the limit of 6 ads. Please wait for the countdown timer to finish!" 
-                    : "⏳ የ 6 ማስታወቂያዎች ገደብ ላይ ደርሰዋል። እባክዎ የ 5 ሰዓቱ ቆጣሪ እስኪያልቅ ይጠብቁ!";
+                    ? `⏳ Ad limit reached! Next ad slot will be ready in ${timeStr}.` 
+                    : `⏳ የ 6 ማስታወቂያዎች ገደብ ላይ ደርሰዋል! የሚቀጥለው ማስታወቂያ በ ${timeStr} ውስጥ ይሞላል።`;
                 alert(msg);
                 return;
             }
