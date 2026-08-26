@@ -585,7 +585,7 @@
             }
         }
 
-        // --- 🔒 2. SERVER COIN UPDATE (+/-) ---
+        // --- 🔒 2. SERVER COIN UPDATE (+/- Fallback) ---
         async function updateCoins(amount) {
             if (!tg || !tg.initData) return;
             try {
@@ -598,12 +598,34 @@
                     })
                 });
                 const data = await res.json();
-                if (data.success) {
+                if (data.success && data.coins !== undefined) {
                     userCoins = data.coins;
                     document.getElementById('coinCount').innerText = userCoins;
                 }
             } catch(e) {
                 console.log("Update coins error:", e);
+            }
+        }
+
+        // --- 🔒 3. SERVER AD REWARD CLAIM ---
+        async function claimRewardFromServer(adType) {
+            if (!tg || !tg.initData) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/ads/reward`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        initData: tg.initData,
+                        adType: adType
+                    })
+                });
+                const data = await res.json();
+                if (data.success && data.coins !== undefined) {
+                    userCoins = data.coins;
+                    document.getElementById('coinCount').innerText = userCoins;
+                }
+            } catch(e) {
+                console.log("Reward claim error:", e);
             }
         }
 
@@ -742,7 +764,7 @@
                 if (adController) {
                     adController.show().then((result) => {
                         if (result && result.done) {
-                            updateCoins(150);
+                            claimRewardFromServer('adsgram');
                             sendAdWatchToServer();
                             const active = getTimestamps('bahirab_adsgram_timestamps');
                             active.push(Date.now());
@@ -788,7 +810,7 @@
 
             if (typeof show_11650948 === 'function') {
                 show_11650948().then(() => {
-                    updateCoins(100);
+                    claimRewardFromServer('monetag');
                     sendAdWatchToServer();
                     const active = getTimestamps('bahirab_monetag_timestamps');
                     active.push(Date.now());
@@ -1207,15 +1229,24 @@
             document.getElementById('homeView').style.display = 'block';
         }
 
+        let loadRetries = 0;
         function loadQuestion() {
             examData = getMergedData();
             isAnswered = false;
             const qList = examData[currentExam] || [];
             
             if (!qList.length) {
-                setTimeout(loadQuestion, 150);
+                if (loadRetries < 15) {
+                    loadRetries++;
+                    setTimeout(loadQuestion, 150);
+                } else {
+                    loadRetries = 0;
+                    alert(currentLang === 'en' ? "⚠️ Questions could not load. Please check your connection." : "⚠️ ጥያቄዎችን መጫን አልተቻለም። እባክዎ ኢንተርኔትዎን ፈትሸው እንደገና ይሞክሩ።");
+                    goHome();
+                }
                 return;
             }
+            loadRetries = 0;
 
             const current = qList[currentQIndex];
             document.getElementById('quizProgress').innerText = `${currentQIndex + 1} / ${qList.length}`;
@@ -1236,29 +1267,50 @@
             document.getElementById('nextBtn').style.display = 'none';
         }
 
-        function handleSelect(selectedIdx, btnElement) {
+        async function handleSelect(selectedIdx, btnElement) {
             if (isAnswered) return;
             isAnswered = true;
 
             const qList = examData[currentExam];
             const current = qList[currentQIndex];
             const allBtns = document.querySelectorAll('.option-btn');
+            const isCorrect = (selectedIdx === current.correct);
 
-            // Correct Answer gives +5 Coins
-            if (selectedIdx === current.correct) {
+            // Correct Answer UI
+            if (isCorrect) {
                 btnElement.classList.add('correct');
-                updateCoins(5);
-                const correctMsg = currentLang === 'en' ? `🎉 Correct! (+5 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+5 Coins)\n💡 ${current.exp}`;
-                document.getElementById('expBox').innerText = correctMsg;
             } else {
-                // Incorrect Answer deducts -5 Coins
+                // Incorrect Answer UI
                 btnElement.classList.add('wrong');
                 allBtns[current.correct].classList.add('correct');
-                updateCoins(-5);
-                const wrongMsg = currentLang === 'en' ? `❌ Incorrect! (-5 Coins)\n💡 ${current.exp}` : `❌ ተሳስተዋል! (-5 Coins)\n💡 ${current.exp}`;
-                document.getElementById('expBox').innerText = wrongMsg;
             }
 
+            // 🔒 Server-Side Answer Submission (+5 / -5 Coins)
+            if (tg && tg.initData) {
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/quiz/submit-answer`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            initData: tg.initData,
+                            isCorrect: isCorrect
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.coins !== undefined) {
+                        userCoins = data.coins;
+                        document.getElementById('coinCount').innerText = userCoins;
+                    }
+                } catch(e) {
+                    console.log("Answer error:", e);
+                }
+            }
+
+            const msg = isCorrect
+                ? (currentLang === 'en' ? `🎉 Correct! (+5 Coins)\n💡 ${current.exp}` : `🎉 ትክክል! (+5 Coins)\n💡 ${current.exp}`)
+                : (currentLang === 'en' ? `❌ Incorrect! (-5 Coins)\n💡 ${current.exp}` : `❌ ተሳስተዋል! (-5 Coins)\n💡 ${current.exp}`);
+
+            document.getElementById('expBox').innerText = msg;
             document.getElementById('expBox').style.display = 'block';
             document.getElementById('nextBtn').style.display = 'block';
         }
