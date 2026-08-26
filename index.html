@@ -1330,10 +1330,13 @@
             }
         }
 
-        // Exam Unlock (100 Coins)
+        // Exam & Module Unlock (100 Coins) - Multi-language with Earning Guide
         async function unlockMaterial(fileKey) {
             if (!tg || !tg.initData) {
-                alert("⚠️ እባክዎ መተግበሪያውን በቴሌግራም ውስጥ ይክፈቱ!");
+                const notInTgMsg = currentLang === 'en' 
+                    ? "⚠️ Please open the app inside Telegram!" 
+                    : "⚠️ እባክዎ መተግበሪያውን በቴሌግራም ውስጥ ይክፈቱ!";
+                alert(notInTgMsg);
                 return;
             }
 
@@ -1351,14 +1354,23 @@
                 if (data.success) {
                     userCoins = data.coins;
                     document.getElementById('coinCount').innerText = userCoins;
-                    const msg = currentLang === 'en' ? "🔓 Unlocked! Redirecting to Telegram bot..." : "🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
+                    const msg = currentLang === 'en' 
+                        ? "🔓 Unlocked! Redirecting to Telegram bot..." 
+                        : "🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
                     alert(msg);
                     redirectToBot(fileKey);
                 } else {
-                    alert(data.message || (currentLang === 'en' ? "⚠️ Not enough Coins! (Need 100 Coins)" : "⚠️ በቂ Coins የለዎትም! (100 Coins ያስፈልጋል)"));
+                    // ነጥብ ሲያጥር እንዴት ማግኘት እንደሚችሉ የሚያሳየው መልእክት
+                    const noCoinMsg = currentLang === 'en'
+                        ? "⚠️ Not enough Coins! (Need 100 Coins)\n\n💡 How to earn Coins:\n• Watch Adsgram / Monetag ads (+150 / +100 Coins)\n• Answer Quiz practice questions correctly (+5 Coins)"
+                        : "⚠️ በቂ Coins የለዎትም! (100 Coins ያስፈልጋል)\n\n💡 Coins ለማግኘት፦\n• የ Adsgram / Monetag ማስታወቂያዎችን ይመልከቱ (+150 / +100 Coins)\n• የፈተና ጥያቄዎችን በትክክል ይመልሱ (+5 Coins)";
+                    alert(noCoinMsg);
                 }
             } catch (err) {
-                alert("⚠️ ከሰርቨር ጋር መገናኘት አልተቻለም። እባክዎ እንደገና ይሞክሩ!");
+                const errMsg = currentLang === 'en' 
+                    ? "⚠️ Server connection failed. Please try again!" 
+                    : "⚠️ ከሰርቨር ጋር መገናኘት አልተቻለም። እባክዎ እንደገና ይሞክሩ!";
+                alert(errMsg);
             }
         }
 
