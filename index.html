@@ -452,7 +452,7 @@
 
     <!-- 2 Separate Earn Banners (Adsgram & Monetag) -->
     <div class="earn-container">
-        <!-- 1. Adsgram Button -->
+        <!-- 1. Adsgram Button (+150 Coins) -->
         <div class="earn-banner earn-banner-adsgram">
             <div>
                 <h4 id="adTitleAdsgram">📺 Adsgram ቪዲዮ (+150)</h4>
@@ -461,7 +461,7 @@
             <button class="btn-earn btn-earn-adsgram" id="adBtnAdsgram" onclick="watchAdsgramAd()">📺 እይ (+150)</button>
         </div>
 
-        <!-- 2. Monetag Button -->
+        <!-- 2. Monetag Button (+100 Coins) -->
         <div class="earn-banner earn-banner-monetag">
             <div>
                 <h4 id="adTitleMonetag">⚡ Monetag ማስታወቂያ (+100)</h4>
@@ -1236,113 +1236,6 @@
                 document.getElementById('optionsContainer').innerHTML = '';
                 document.getElementById('expBox').innerText = scoreMsg;
                 document.getElementById('nextBtn').style.display = 'none';
-            }
-        }
-
-        let adController = null;
-
-        // --- 📺 1. ADSGRAM AD FUNCTION (+150 COINS) ---
-        function watchAdsgramAd() {
-            const times = getTimestamps('bahirab_adsgram_timestamps');
-            if (times.length >= MAX_ADS) {
-                const earliestTime = times[0];
-                const remainingMs = Math.max(0, (earliestTime + COOLDOWN_MS) - Date.now());
-                const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-                const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                const timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-                const msg = currentLang === 'en' 
-                    ? `⏳ Adsgram limit reached! Next ad slot will be ready in ${timeStr}.` 
-                    : `⏳ የ Adsgram ቪዲዮ ገደብ ላይ ደርሰዋል! የሚቀጥለው ማስታወቂያ በ ${timeStr} ውስጥ ይሞላል።`;
-                alert(msg);
-                return;
-            }
-
-            try {
-                if (!adController && window.Adsgram) {
-                    adController = window.Adsgram.init({ blockId: "44491" });
-                }
-                if (adController) {
-                    adController.show().then((result) => {
-                        if (result && result.done) {
-                            updateCoins(150); // 👈 +150 Coins for Adsgram
-                            sendAdWatchToServer();
-                            const active = getTimestamps('bahirab_adsgram_timestamps');
-                            active.push(Date.now());
-                            localStorage.setItem('bahirab_adsgram_timestamps', JSON.stringify(active));
-                            
-                            if (active.length === 3) triggerSmartlinkOnceDaily();
-                            updateAdLimitUI();
-
-                            const msg = currentLang === 'en' 
-                                ? "🎉 Adsgram video watched! +150 Coins added!" 
-                                : "🎉 የ Adsgram ቪዲዮ በተሳካ ሁኔታ አይተዋል! +150 Coins ተጨምሮልዎታል!";
-                            alert(msg);
-                        } else {
-                            const msg = currentLang === 'en' 
-                                ? "⚠️ You skipped the video early. No coins rewarded!" 
-                                : "⚠️ ቪዲዮውን ሳያጠናቅቁ ስለዘለሉት Coins አልተጨመረልዎትም!";
-                            alert(msg);
-                        }
-                    }).catch(() => {
-                        const msg = currentLang === 'en' 
-                            ? "⚠️ Adsgram ad failed to load. Please try again later." 
-                            : "⚠️ የ Adsgram ቪዲዮ መጫን አልተቻለም። እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ።";
-                        alert(msg);
-                    });
-                } else {
-                    alert("⚠️ Adsgram not ready");
-                }
-            } catch (e) {
-                alert("⚠️ Adsgram error: " + e.message);
-            }
-        }
-
-        // --- ⚡ 2. MONETAG AD FUNCTION (+100 COINS) ---
-        function watchMonetagAd() {
-            const times = getTimestamps('bahirab_monetag_timestamps');
-            if (times.length >= MAX_ADS) {
-                const earliestTime = times[0];
-                const remainingMs = Math.max(0, (earliestTime + COOLDOWN_MS) - Date.now());
-                const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-                const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                const timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-                const msg = currentLang === 'en' 
-                    ? `⏳ Monetag limit reached! Next ad slot will be ready in ${timeStr}.` 
-                    : `⏳ የ Monetag ማስታወቂያ ገደብ ላይ ደርሰዋል! የሚቀጥለው ማስታወቂያ በ ${timeStr} ውስጥ ይሞላል።`;
-                alert(msg);
-                return;
-            }
-
-            if (typeof show_11650948 === 'function') {
-                show_11650948().then(() => {
-                    updateCoins(100);
-                    sendAdWatchToServer();
-                    const active = getTimestamps('bahirab_monetag_timestamps');
-                    active.push(Date.now());
-                    localStorage.setItem('bahirab_monetag_timestamps', JSON.stringify(active));
-                    
-                    if (active.length === 3) triggerSmartlinkOnceDaily();
-                    updateAdLimitUI();
-
-                    const msg = currentLang === 'en' 
-                        ? "🎉 Monetag ad watched! +100 Coins added!" 
-                        : "🎉 የ Monetag ማስታወቂያ በተሳካ ሁኔታ አይተዋል! +100 Coins ተጨምሮልዎታል!";
-                    alert(msg);
-                }).catch(() => {
-                    const msg = currentLang === 'en' 
-                        ? "⚠️ Monetag ad closed or failed. Please try again." 
-                        : "⚠️ ማስታወቂያው ተቋርጧል ወይም መጫን አልተቻለም። እባክዎ እንደገና ይሞክሩ።";
-                    alert(msg);
-                });
-            } else {
-                const msg = currentLang === 'en' 
-                    ? "⚠️ Monetag SDK is loading. Please retry in a moment." 
-                    : "⚠️ የ Monetag አገልግሎት በመጫን ላይ ነው። እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ።";
-                alert(msg);
             }
         }
 
