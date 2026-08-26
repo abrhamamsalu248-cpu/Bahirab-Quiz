@@ -8,7 +8,7 @@
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
     <!-- Monetag Telegram Mini App SDK -->
-    <script src='//libtl.com/sdk.js' data-zone='11650948' data-sdk='show_11650948'></script>
+    <script src='https://libtl.com/sdk.js' data-zone='11650948' data-sdk='show_11650948'></script>
 
     <!-- Modules Data -->
     <script src="modules.js"></script>
@@ -445,7 +445,7 @@
 
     <div class="top-bar">
         <div class="coin-box">
-            🪙 <span id="coinCount">300</span> Coins
+            🪙 <span id="coinCount">...</span> Coins
         </div>
         <button class="lang-switch" id="langSwitchBtn" onclick="toggleLang()">🌐 Amh / Eng</button>
     </div>
@@ -564,19 +564,47 @@
             tg.expand();
         }
 
-        let userCoins;
-        if (localStorage.getItem('bahirab_coins') !== null) {
-            userCoins = parseInt(localStorage.getItem('bahirab_coins'));
-        } else {
-            userCoins = 300;
-            localStorage.setItem('bahirab_coins', userCoins);
-        }
-        document.getElementById('coinCount').innerText = userCoins;
+        let userCoins = 300;
 
-        function updateCoins(amount) {
-            userCoins = Math.max(0, userCoins + amount);
-            localStorage.setItem('bahirab_coins', userCoins);
-            document.getElementById('coinCount').innerText = userCoins;
+        // --- 🔒 1. SERVER COIN SYNC ---
+        async function syncCoinsFromServer() {
+            if (!tg || !tg.initData) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/user/sync`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ initData: tg.initData })
+                });
+                const data = await res.json();
+                if (data.coins !== undefined) {
+                    userCoins = data.coins;
+                    document.getElementById('coinCount').innerText = userCoins;
+                }
+            } catch(e) {
+                console.log("Sync error:", e);
+            }
+        }
+
+        // --- 🔒 2. SERVER COIN UPDATE (+/-) ---
+        async function updateCoins(amount) {
+            if (!tg || !tg.initData) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/user/update-coins`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        initData: tg.initData,
+                        amount: amount
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    userCoins = data.coins;
+                    document.getElementById('coinCount').innerText = userCoins;
+                }
+            } catch(e) {
+                console.log("Update coins error:", e);
+            }
         }
 
         function sendAdWatchToServer() {
@@ -714,7 +742,7 @@
                 if (adController) {
                     adController.show().then((result) => {
                         if (result && result.done) {
-                            updateCoins(150); // 👈 +150 Coins for Adsgram
+                            updateCoins(150);
                             sendAdWatchToServer();
                             const active = getTimestamps('bahirab_adsgram_timestamps');
                             active.push(Date.now());
@@ -1251,29 +1279,40 @@
         }
 
         // Exam Unlock (100 Coins)
-        function unlockMaterial(fileKey) {
-            if (userCoins >= 100) {
-                updateCoins(-100);
-                const msg = currentLang === 'en' ? "🔓 Unlocked! Redirecting to Telegram bot..." : "🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
-                alert(msg);
-                redirectToBot(fileKey);
-            } else {
-                const msg = currentLang === 'en' ? "⚠️ Not enough Coins! (Need 100 Coins) Earn coins by doing quizzes or watching ads." : "⚠️ በቂ Coins የለዎትም! (100 Coins ያስፈልጋል) ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በማየት ያግኙ።";
-                alert(msg);
+        async function unlockMaterial(fileKey) {
+            if (!tg || !tg.initData) {
+                alert("⚠️ እባክዎ መተግበሪያውን በቴሌግራም ውስጥ ይክፈቱ!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/user/unlock-material`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        initData: tg.initData,
+                        fileKey: fileKey
+                    })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    userCoins = data.coins;
+                    document.getElementById('coinCount').innerText = userCoins;
+                    const msg = currentLang === 'en' ? "🔓 Unlocked! Redirecting to Telegram bot..." : "🔓 ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
+                    alert(msg);
+                    redirectToBot(fileKey);
+                } else {
+                    alert(data.message || (currentLang === 'en' ? "⚠️ Not enough Coins! (Need 100 Coins)" : "⚠️ በቂ Coins የለዎትም! (100 Coins ያስፈልጋል)"));
+                }
+            } catch (err) {
+                alert("⚠️ ከሰርቨር ጋር መገናኘት አልተቻለም። እባክዎ እንደገና ይሞክሩ!");
             }
         }
 
         // Module Unlock (100 Coins)
         function unlockModule(fileKey) {
-            if (userCoins >= 100) {
-                updateCoins(-100);
-                const msg = currentLang === 'en' ? "🔓 Module Unlocked! Redirecting to Telegram bot..." : "🔓 ሞጁሉ ተከፍቷል! ወደ ቴሌግራም ቦት እየወሰደዎት ነው...";
-                alert(msg);
-                redirectToBot(fileKey);
-            } else {
-                const msg = currentLang === 'en' ? "⚠️ Not enough Coins! (Need 100 Coins for Modules) Earn coins by answering quizzes or watching ads." : "⚠️ በቂ Coins የለዎትም! (ለሞጁል 100 Coins ያስፈልጋል) ጥያቄዎችን በመሥራት ወይም ማስታወቂያዎችን በማየት Coins ያግኙ።";
-                alert(msg);
-            }
+            unlockMaterial(fileKey);
         }
 
         function unlockExamPDF() {
@@ -1325,6 +1364,7 @@
                 document.getElementById('langModal').style.display = 'flex';
             }
             
+            syncCoinsFromServer();
             updateAdLimitUI();
         };
     </script>
