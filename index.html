@@ -538,32 +538,32 @@
         <button class="tab-btn" id="tabMods" onclick="switchTab('mods')">📚 ሞጁሎች (Modules)</button>
     </div>
 
-    <!-- HOME VIEW: Course Selection Buttons (Quiz) -->
+    <!-- HOME VIEW: Course Selection Buttons (Quiz) - Sorted Alphabetically A to Z -->
     <div id="homeView">
         <div class="home-title" id="lblSelect">📚 የፈተና ኮርስ ይምረጡ (Select Course):</div>
         <div class="course-grid">
-            <button class="course-btn" onclick="openExam('physics_final')"><span>⚛️</span>General Physics (Final)</button>
-            <button class="course-btn" onclick="openExam('entrepreneurship_final')"><span>🚀</span>Entrepreneurship (Final)</button>
-            <button class="course-btn" onclick="openExam('entrepreneurship_mid')"><span>🚀</span>Entrepreneurship (Mid)</button>
-            <button class="course-btn" onclick="openExam('psychology_final')"><span>🧠</span>General Psychology</button>
-            <button class="course-btn" onclick="openExam('english_final')"><span>📖</span>English Skills (Final)</button>
-            <button class="course-btn" onclick="openExam('english_mid')"><span>📖</span>English Skills (Mid)</button>
             <button class="course-btn" onclick="openExam('anthro_final')"><span>🏺</span>Anthropology (Final)</button>
             <button class="course-btn" onclick="openExam('anthro_mid')"><span>🏺</span>Anthropology (Mid)</button>
             <button class="course-btn" onclick="openExam('civics_final')"><span>⚖️</span>Civics (Final)</button>
             <button class="course-btn" onclick="openExam('civics_mid')"><span>⚖️</span>Civics (Mid)</button>
-            <button class="course-btn" onclick="openExam('global_final')"><span>🌐</span>Global Trends (Final)</button>
-            <button class="course-btn" onclick="openExam('global_mid')"><span>🌐</span>Global Trends (Mid)</button>
-            <button class="course-btn" onclick="openExam('emerging_final')"><span>🤖</span>Emerging Tech (Final)</button>
-            <button class="course-btn" onclick="openExam('emerging_mid')"><span>🤖</span>Emerging Tech (Mid)</button>
-            <button class="course-btn" onclick="openExam('history_final')"><span>📜</span>History (Final)</button>
-            <button class="course-btn" onclick="openExam('history_mid')"><span>📜</span>History (Mid)</button>
-            <button class="course-btn" onclick="openExam('geography_final')"><span>🌍</span>Geography (Final)</button>
-            <button class="course-btn" onclick="openExam('geography_mid')"><span>🗺️</span>Geography (Mid)</button>
-            <button class="course-btn" onclick="openExam('logic_final')"><span>💡</span>Logic (Final)</button>
-            <button class="course-btn" onclick="openExam('logic_mid')"><span>💡</span>Logic (Mid)</button>
             <button class="course-btn" onclick="openExam('econ_final')"><span>🎓</span>Economics (Final)</button>
             <button class="course-btn" onclick="openExam('econ_mid')"><span>📝</span>Economics (Mid)</button>
+            <button class="course-btn" onclick="openExam('emerging_final')"><span>🤖</span>Emerging Tech (Final)</button>
+            <button class="course-btn" onclick="openExam('emerging_mid')"><span>🤖</span>Emerging Tech (Mid)</button>
+            <button class="course-btn" onclick="openExam('english_final')"><span>📖</span>English Skills (Final)</button>
+            <button class="course-btn" onclick="openExam('english_mid')"><span>📖</span>English Skills (Mid)</button>
+            <button class="course-btn" onclick="openExam('entrepreneurship_final')"><span>🚀</span>Entrepreneurship (Final)</button>
+            <button class="course-btn" onclick="openExam('entrepreneurship_mid')"><span>🚀</span>Entrepreneurship (Mid)</button>
+            <button class="course-btn" onclick="openExam('geography_final')"><span>🌍</span>Geography (Final)</button>
+            <button class="course-btn" onclick="openExam('geography_mid')"><span>🗺️</span>Geography (Mid)</button>
+            <button class="course-btn" onclick="openExam('global_final')"><span>🌐</span>Global Trends (Final)</button>
+            <button class="course-btn" onclick="openExam('global_mid')"><span>🌐</span>Global Trends (Mid)</button>
+            <button class="course-btn" onclick="openExam('history_final')"><span>📜</span>History (Final)</button>
+            <button class="course-btn" onclick="openExam('history_mid')"><span>📜</span>History (Mid)</button>
+            <button class="course-btn" onclick="openExam('logic_final')"><span>💡</span>Logic (Final)</button>
+            <button class="course-btn" onclick="openExam('logic_mid')"><span>💡</span>Logic (Mid)</button>
+            <button class="course-btn" onclick="openExam('physics_final')"><span>⚛️</span>Physics (Final)</button>
+            <button class="course-btn" onclick="openExam('psychology_final')"><span>🧠</span>Psychology (General)</button>
         </div>
     </div>
 
@@ -1256,10 +1256,10 @@
         }
 
         const titles = {
-            physics_final: "⚛️ General Physics Final Exam Practice",
+            physics_final: "⚛️ Physics Final Exam Practice",
+            psychology_final: "🧠 General Psychology Practice",
             entrepreneurship_final: "🚀 Entrepreneurship Final Exam",
             entrepreneurship_mid: "🚀 Entrepreneurship Mid Exam",
-            psychology_final: "🧠 General Psychology Final Exam",
             english_final: "📖 Communicative English Skills II Final Exam",
             english_mid: "📖 Communicative English Skills II Mid Exam",
             anthro_final: "🏺 Social Anthropology Final Exam Practice",
@@ -1280,7 +1280,7 @@
             econ_mid: "📝 Economics Mid Exam Practice"
         };
 
-        let currentExam = 'entrepreneurship_final';
+        let currentExam = 'anthro_final';
         let currentQIndex = 0;
         let isAnswered = false;
         let selectedOptionIdx = null;
