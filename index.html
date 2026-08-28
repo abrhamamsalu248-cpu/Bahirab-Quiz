@@ -354,6 +354,52 @@
             background: #0284c7;
         }
 
+        /* Result Scorecard & Restart Button */
+        .scorecard-box {
+            background: #f8fafc;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .scorecard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .score-stat {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 6px;
+        }
+        .score-stat-val {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .score-stat-lbl {
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+        .btn-restart {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
         .unlock-card {
             background: #ffffff;
             border: 1.5px dashed var(--primary);
@@ -562,6 +608,9 @@
 
             <div class="explanation" id="expBox"></div>
             <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">ቀጣይ ጥያቄ ➡️</button>
+
+            <!-- የውጤት ካርድ ማሳያ (Result Box) -->
+            <div id="quizResultBox" style="display: none;"></div>
         </div>
 
         <div class="unlock-card">
@@ -1232,13 +1281,38 @@
         let currentQIndex = 0;
         let isAnswered = false;
         let selectedOptionIdx = null;
+        let examScore = { correct: 0, wrong: 0 };
+
+        function saveExamProgress() {
+            const dataToSave = {
+                index: currentQIndex,
+                score: examScore
+            };
+            localStorage.setItem(`bahirab_quiz_progress_${currentExam}`, JSON.stringify(dataToSave));
+        }
 
         function openExam(type) {
             currentExam = type;
-            currentQIndex = 0;
+            
+            const savedProgress = localStorage.getItem(`bahirab_quiz_progress_${type}`);
+            if (savedProgress) {
+                try {
+                    const parsed = JSON.parse(savedProgress);
+                    currentQIndex = parsed.index || 0;
+                    examScore = parsed.score || { correct: 0, wrong: 0 };
+                } catch(e) {
+                    currentQIndex = 0;
+                    examScore = { correct: 0, wrong: 0 };
+                }
+            } else {
+                currentQIndex = 0;
+                examScore = { correct: 0, wrong: 0 };
+            }
+
             document.getElementById('mainTabs').style.display = 'none';
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('quizView').style.display = 'block';
+            document.getElementById('quizResultBox').style.display = 'none';
             document.getElementById('quizTitle').innerText = titles[type];
             loadQuestion();
         }
@@ -1268,6 +1342,15 @@
                 return;
             }
             loadRetries = 0;
+
+            if (currentQIndex >= qList.length) {
+                showQuizResults();
+                return;
+            }
+
+            document.getElementById('quizResultBox').style.display = 'none';
+            document.getElementById('qText').style.display = 'block';
+            document.getElementById('optionsContainer').style.display = 'block';
 
             const current = qList[currentQIndex];
             document.getElementById('quizProgress').innerText = `${currentQIndex + 1} / ${qList.length}`;
@@ -1316,6 +1399,14 @@
             const allBtns = document.querySelectorAll('.option-btn');
             const isCorrect = (selectedOptionIdx === current.correct);
 
+            if (isCorrect) {
+                examScore.correct++;
+            } else {
+                examScore.wrong++;
+            }
+
+            saveExamProgress();
+
             // 1. የመልሶችን ከለር ማሳየት
             allBtns.forEach(b => b.classList.remove('selected'));
             if (isCorrect) {
@@ -1358,17 +1449,96 @@
         function nextQuestion() {
             const qList = examData[currentExam];
             currentQIndex++;
+            saveExamProgress();
+
             if (currentQIndex < qList.length) {
                 loadQuestion();
             } else {
-                const finishMsg = currentLang === 'en' ? "🎉 Congratulations! You have completed all questions in this exam." : "🎉 እንኳን ደስ አለዎት! የዚህን ፈተና ጥያቄዎች ሰርተው አጠናቀዋል።";
-                const scoreMsg = currentLang === 'en' ? `Your Total Score: 🪙 ${userCoins} Coins.` : `ያሎት አጠቃላይ ነጥብ፡ 🪙 ${userCoins} Coins ነው።`;
-                document.getElementById('qText').innerText = finishMsg;
-                document.getElementById('optionsContainer').innerHTML = '';
-                document.getElementById('expBox').innerText = scoreMsg;
-                document.getElementById('confirmBtn').style.display = 'none';
-                document.getElementById('nextBtn').style.display = 'none';
+                showQuizResults();
             }
+        }
+
+        function showQuizResults() {
+            const qList = examData[currentExam] || [];
+            const total = qList.length;
+            const accuracy = total > 0 ? Math.round((examScore.correct / total) * 100) : 0;
+
+            document.getElementById('qText').style.display = 'none';
+            document.getElementById('optionsContainer').style.display = 'none';
+            document.getElementById('confirmBtn').style.display = 'none';
+            document.getElementById('expBox').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('quizProgress').innerText = `${total} / ${total}`;
+
+            const resultBox = document.getElementById('quizResultBox');
+            resultBox.style.display = 'block';
+
+            if (currentLang === 'en') {
+                resultBox.innerHTML = `
+                    <div class="scorecard-box">
+                        <div style="font-size: 34px;">🏆</div>
+                        <h3 style="margin: 6px 0 2px 0; color: var(--primary);">Exam Completed!</h3>
+                        <p style="font-size: 12px; color: var(--text-sub); margin: 0 0 10px 0;">Here is your performance summary:</p>
+                        
+                        <div class="scorecard-grid">
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--success);">${examScore.correct}</div>
+                                <div class="score-stat-lbl">✅ Correct</div>
+                            </div>
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--danger);">${examScore.wrong}</div>
+                                <div class="score-stat-lbl">❌ Incorrect</div>
+                            </div>
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--primary);">${accuracy}%</div>
+                                <div class="score-stat-lbl">🎯 Accuracy</div>
+                            </div>
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--coin);">🪙 ${userCoins}</div>
+                                <div class="score-stat-lbl">Total Coins</div>
+                            </div>
+                        </div>
+
+                        <button class="btn-restart" onclick="restartExam()">🔄 Retake Exam</button>
+                    </div>
+                `;
+            } else {
+                resultBox.innerHTML = `
+                    <div class="scorecard-box">
+                        <div style="font-size: 34px;">🏆</div>
+                        <h3 style="margin: 6px 0 2px 0; color: var(--primary);">ፈተናውን አጠናቀዋል!</h3>
+                        <p style="font-size: 12px; color: var(--text-sub); margin: 0 0 10px 0;">የፈተና ውጤትዎ ማጠቃለያ፦</p>
+                        
+                        <div class="scorecard-grid">
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--success);">${examScore.correct}</div>
+                                <div class="score-stat-lbl">✅ የተመለሱ</div>
+                            </div>
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--danger);">${examScore.wrong}</div>
+                                <div class="score-stat-lbl">❌ የተሳሳቱ</div>
+                            </div>
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--primary);">${accuracy}%</div>
+                                <div class="score-stat-lbl">🎯 ትክክለኛነት</div>
+                            </div>
+                            <div class="score-stat">
+                                <div class="score-stat-val" style="color: var(--coin);">🪙 ${userCoins}</div>
+                                <div class="score-stat-lbl">ያለዎት Coins</div>
+                            </div>
+                        </div>
+
+                        <button class="btn-restart" onclick="restartExam()">🔄 ፈተናውን በድጋሜ ጀምር</button>
+                    </div>
+                `;
+            }
+        }
+
+        function restartExam() {
+            localStorage.removeItem(`bahirab_quiz_progress_${currentExam}`);
+            currentQIndex = 0;
+            examScore = { correct: 0, wrong: 0 };
+            loadQuestion();
         }
 
         // Exam & Module Unlock (100 Coins) - Multi-language with Earning Guide
