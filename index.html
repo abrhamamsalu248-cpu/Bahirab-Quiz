@@ -313,7 +313,6 @@
         }
         .option-btn:active { background: #e5e7eb; }
         
-        /* የተመረጠበት ሁኔታ (Selected before confirm) */
         .option-btn.selected {
             background: #e0f2fe !important;
             border-color: var(--primary) !important;
@@ -554,6 +553,8 @@
             <button class="course-btn" onclick="openExam('english_mid')"><span>📖</span>English Skills (Mid)</button>
             <button class="course-btn" onclick="openExam('entrepreneurship_final')"><span>🚀</span>Entrepreneurship (Final)</button>
             <button class="course-btn" onclick="openExam('entrepreneurship_mid')"><span>🚀</span>Entrepreneurship (Mid)</button>
+            <button class="course-btn" onclick="openExam('physics_final')"><span>⚛️</span>General Physics (Final)</button>
+            <button class="course-btn" onclick="openExam('psychology_final')"><span>🧠</span>General Psychology (Final)</button>
             <button class="course-btn" onclick="openExam('geography_final')"><span>🌍</span>Geography (Final)</button>
             <button class="course-btn" onclick="openExam('geography_mid')"><span>🗺️</span>Geography (Mid)</button>
             <button class="course-btn" onclick="openExam('global_final')"><span>🌐</span>Global Trends (Final)</button>
@@ -562,8 +563,6 @@
             <button class="course-btn" onclick="openExam('history_mid')"><span>📜</span>History (Mid)</button>
             <button class="course-btn" onclick="openExam('logic_final')"><span>💡</span>Logic (Final)</button>
             <button class="course-btn" onclick="openExam('logic_mid')"><span>💡</span>Logic (Mid)</button>
-            <button class="course-btn" onclick="openExam('physics_final')"><span>⚛️</span>Physics (Final)</button>
-            <button class="course-btn" onclick="openExam('psychology_final')"><span>🧠</span>Psychology (General)</button>
         </div>
     </div>
 
@@ -904,7 +903,98 @@
             }
         }
 
+        // --- EXAM CATEGORIES (Sorted Alphabetically A to Z) ---
         const categorizedMaterials = [
+            {
+                id: "anthro",
+                name: "🦴 Anthropology",
+                items: [
+                    { title: "Anthropology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_mid_2016" },
+                    { title: "Anthropology Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2016" },
+                    { title: "Anthropology Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2015" },
+                    { title: "Anthropology Final Exam 2016 (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2016_b" },
+                    { title: "Anthropology Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "anthro_mid_2017" }
+                ]
+            },
+            {
+                id: "civics",
+                name: "⚖️ Civics & Ethics",
+                items: [
+                    { title: "Civics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "civics_mid" },
+                    { title: "Moral and Civic Education Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_2016" },
+                    { title: "Civics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2016" },
+                    { title: "Civics Final Exam 2023", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2023" },
+                    { title: "Civics Final Exam (Set 3)", desc: "Bahir Dar University • Freshman Course", key: "civics_final_187" },
+                    { title: "Civics Final Exam (Set 4)", desc: "Bahir Dar University ancient", key: "civics_final_192" },
+                    { title: "Moral & Civic Education Final Exam", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_final_193" },
+                    { title: "Moral and Civic Education Mid Exam (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_323" }
+                ]
+            },
+            {
+                id: "econ",
+                name: "📊 Economics",
+                items: [
+                    { title: "Economics Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_mid_2016" },
+                    { title: "Economics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2016" },
+                    { title: "Economics Final Exam 2016 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2016_b" },
+                    { title: "Economics Final Exam 2013", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2013" },
+                    { title: "Economics Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2015" },
+                    { title: "Economics Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "econ_mid_2017" },
+                    { title: "Economics Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "econ_final_814" }
+                ]
+            },
+            {
+                id: "emerging",
+                name: "💻 Emerging Tech",
+                items: [
+                    { title: "Emerging Technology Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_mid" },
+                    { title: "Emerging Technology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2016" },
+                    { title: "Emerging Technology Final Exam", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_final" },
+                    { title: "Emerging Technology Final Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2014" },
+                    { title: "Emerging Technology Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2015" },
+                    { title: "Emerging Technology Final Exam (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_203" }
+                ]
+            },
+            {
+                id: "english",
+                name: "🗣️ English Skills",
+                items: [
+                    { title: "Communication Skills English Final Exam", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_final" },
+                    { title: "Communication English Skills Two Mid 2016", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_2016" },
+                    { title: "Communication English Skills Two Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_b" },
+                    { title: "Communication English Skills Two Mid 2016/17", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_2017" },
+                    { title: "Communication English Skills Two Final 2017", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_final_406" },
+                    { title: "Communication Skills One English Final", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_822" },
+                    { title: "Communication Skills One Final 2017", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_823" },
+                    { title: "Communication Skills One Final 2017 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_827" }
+                ]
+            },
+            {
+                id: "entrepreneurship",
+                name: "💼 Entrepreneurship",
+                items: [
+                    { title: "Entrepreneurship Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_mid_2016" },
+                    { title: "Entrepreneurship Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_2016" },
+                    { title: "Entrepreneurship Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_2015" },
+                    { title: "Entrepreneurship Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_785" }
+                ]
+            },
+            {
+                id: "geography",
+                name: "🗺️ Geography",
+                items: [
+                    { title: "Geography Final Exam", desc: "Bahir Dar University • Freshman Course", key: "geography_final" },
+                    { title: "Geography Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "geography_2014" },
+                    { title: "Geography Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2016" },
+                    { title: "Geography Mid Exam 2016 (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2016_b" },
+                    { title: "Geography Mid Exam 2016 (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_other" },
+                    { title: "Geography Final Exam (Bahirab Set 1)", desc: "Bahir Dar University • Freshman Course", key: "geography_final_204" },
+                    { title: "Geography Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "geography_final_2016" },
+                    { title: "Geography Final Exam (Bahirab Set 2)", desc: "Bahir Dar University • Freshman Course", key: "geography_final_213" },
+                    { title: "Geography Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "geography_final_2017" },
+                    { title: "Geography Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2017" }
+                ]
+            },
             {
                 id: "global",
                 name: "🌍 Global Trends",
@@ -933,48 +1023,6 @@
                 ]
             },
             {
-                id: "geography",
-                name: "🗺️ Geography",
-                items: [
-                    { title: "Geography Final Exam", desc: "Bahir Dar University • Freshman Course", key: "geography_final" },
-                    { title: "Geography Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "geography_2014" },
-                    { title: "Geography Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2016" },
-                    { title: "Geography Mid Exam 2016 (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2016_b" },
-                    { title: "Geography Mid Exam 2016 (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_other" },
-                    { title: "Geography Final Exam (Bahirab Set 1)", desc: "Bahir Dar University • Freshman Course", key: "geography_final_204" },
-                    { title: "Geography Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "geography_final_2016" },
-                    { title: "Geography Final Exam (Bahirab Set 2)", desc: "Bahir Dar University • Freshman Course", key: "geography_final_213" },
-                    { title: "Geography Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "geography_final_2017" },
-                    { title: "Geography Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "geography_mid_2017" }
-                ]
-            },
-            {
-                id: "emerging",
-                name: "💻 Emerging Tech",
-                items: [
-                    { title: "Emerging Technology Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_mid" },
-                    { title: "Emerging Technology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2016" },
-                    { title: "Emerging Technology Final Exam", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_final" },
-                    { title: "Emerging Technology Final Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2014" },
-                    { title: "Emerging Technology Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_2015" },
-                    { title: "Emerging Technology Final Exam (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "emerging_tech_203" }
-                ]
-            },
-            {
-                id: "civics",
-                name: "⚖️ Civics & Ethics",
-                items: [
-                    { title: "Civics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "civics_mid" },
-                    { title: "Moral and Civic Education Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_2016" },
-                    { title: "Civics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2016" },
-                    { title: "Civics Final Exam 2023", desc: "Bahir Dar University • Freshman Course", key: "civics_final_2023" },
-                    { title: "Civics Final Exam (Set 3)", desc: "Bahir Dar University • Freshman Course", key: "civics_final_187" },
-                    { title: "Civics Final Exam (Set 4)", desc: "Bahir Dar University ancient", key: "civics_final_192" },
-                    { title: "Moral & Civic Education Final Exam", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_final_193" },
-                    { title: "Moral and Civic Education Mid Exam (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "moral_civic_mid_323" }
-                ]
-            },
-            {
                 id: "logic",
                 name: "💡 Logic & Critical",
                 items: [
@@ -993,16 +1041,30 @@
                 ]
             },
             {
-                id: "econ",
-                name: "📊 Economics",
+                id: "math_physics",
+                name: "📐 Math, Physics & Chem",
                 items: [
-                    { title: "Economics Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_mid_2016" },
-                    { title: "Economics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2016" },
-                    { title: "Economics Final Exam 2016 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2016_b" },
-                    { title: "Economics Final Exam 2013", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2013" },
-                    { title: "Economics Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "econ_final_2015" },
-                    { title: "Economics Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "econ_mid_2017" },
-                    { title: "Economics Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "econ_final_814" }
+                    { title: "Applied Mathematics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "applied_math_mid" },
+                    { title: "Applied Mathematics One Final Exam", desc: "Bahir Dar University • Freshman Course", key: "applied_math_one_final" },
+                    { title: "Applied Mathematics One Final (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "applied_math_one_final_b" },
+                    { title: "General Chemistry Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "chemistry_mid" },
+                    { title: "General Physics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "physics_mid" },
+                    { title: "General Physics Final Exam", desc: "Bahir Dar University • Freshman Course", key: "physics_final_224" },
+                    { title: "Mathematics For Natural Final Exam", desc: "Bahir Dar University • Freshman Course", key: "math_natural_final" },
+                    { title: "Mathematics For Social Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid" },
+                    { title: "Mathematics For Social Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid_2016" },
+                    { title: "Mathematics For Social Final Exam", desc: "Bahir Dar University • Freshman Course", key: "math_social_final" },
+                    { title: "Mathematics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "math_final_2016" },
+                    { title: "Mathematics Mid Exam For Social", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid_325" }
+                ]
+            },
+            {
+                id: "others",
+                name: "📱 Others (Apps & Special)",
+                items: [
+                    { title: "C++ BDU Mid Exam", desc: "Bahir Dar University • Programming Course", key: "cpp_mid" },
+                    { title: "Freshman Modules and Exams Application", desc: "All-in-one Android App", key: "freshman_app" },
+                    { title: "Inclusiveness Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "inclusiveness_2014" }
                 ]
             },
             {
@@ -1011,71 +1073,9 @@
                 items: [
                     { title: "General Psychology Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_mid" },
                     { title: "General Psychology Final Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_final" },
-                    { title: "Psychology Material / Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_330" },
                     { title: "General Psychology Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "psychology_final_793" },
-                    { title: "General Psychology Final Exam (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "psychology_final_794" }
-                ]
-            },
-            {
-                id: "anthro",
-                name: "🦴 Anthropology",
-                items: [
-                    { title: "Anthropology Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_mid_2016" },
-                    { title: "Anthropology Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2016" },
-                    { title: "Anthropology Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2015" },
-                    { title: "Anthropology Final Exam 2016 (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "anthro_final_2016_b" },
-                    { title: "Anthropology Mid Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "anthro_mid_2017" }
-                ]
-            },
-            {
-                id: "entrepreneurship",
-                name: "💼 Entrepreneurship",
-                items: [
-                    { title: "Entrepreneurship Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_mid_2016" },
-                    { title: "Entrepreneurship Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_2016" },
-                    { title: "Entrepreneurship Final Exam 2015", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_2015" },
-                    { title: "Entrepreneurship Final Exam 2017", desc: "Bahir Dar University • Freshman Course", key: "entrepreneurship_final_785" }
-                ]
-            },
-            {
-                id: "english",
-                name: "🗣️ English Skills",
-                items: [
-                    { title: "Communication Skills English Final Exam", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_final" },
-                    { title: "Communication English Skills Two Mid 2016", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_2016" },
-                    { title: "Communication English Skills Two Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_b" },
-                    { title: "Communication English Skills Two Mid 2016/17", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_2017" },
-                    { title: "Communication English Skills Two Final 2017", desc: "Bahir Dar University • Freshman Course", key: "comm_english_two_final_406" },
-                    { title: "Communication Skills One English Final", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_822" },
-                    { title: "Communication Skills One Final 2017", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_823" },
-                    { title: "Communication Skills One Final 2017 (Set 2)", desc: "Bahir Dar University • Freshman Course", key: "comm_skills_one_827" }
-                ]
-            },
-            {
-                id: "math_physics",
-                name: "📐 Math, Physics & Chem",
-                items: [
-                    { title: "General Chemistry Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "chemistry_mid" },
-                    { title: "General Physics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "physics_mid" },
-                    { title: "Applied Mathematics Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "applied_math_mid" },
-                    { title: "Mathematics For Social Mid Exam", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid" },
-                    { title: "Mathematics For Social Mid Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid_2016" },
-                    { title: "Applied Mathematics One Final Exam", desc: "Bahir Dar University • Freshman Course", key: "applied_math_one_final" },
-                    { title: "Mathematics For Natural Final Exam", desc: "Bahir Dar University • Freshman Course", key: "math_natural_final" },
-                    { title: "Mathematics Final Exam 2016", desc: "Bahir Dar University • Freshman Course", key: "math_final_2016" },
-                    { title: "Applied Mathematics One Final (Bahirab)", desc: "Bahir Dar University • Freshman Course", key: "applied_math_one_final_b" },
-                    { title: "Mathematics For Social Final Exam", desc: "Bahir Dar University • Freshman Course", key: "math_social_final" },
-                    { title: "General Physics Final Exam", desc: "Bahir Dar University • Freshman Course", key: "physics_final_224" },
-                    { title: "Mathematics Mid Exam For Social", desc: "Bahir Dar University • Freshman Course", key: "math_social_mid_325" }
-                ]
-            },
-            {
-                id: "others",
-                name: "📱 ሌሎች መተግበሪያዎች",
-                items: [
-                    { title: "Freshman Modules and Exams Application", desc: "All-in-one Android App", key: "freshman_app" },
-                    { title: "Inclusiveness Mid Exam 2014", desc: "Bahir Dar University • Freshman Course", key: "inclusiveness_2014" },
-                    { title: "C++ BDU Mid Exam", desc: "Bahir Dar University • Programming Course", key: "cpp_mid" }
+                    { title: "General Psychology Final Exam (Other Sem.)", desc: "Bahir Dar University • Freshman Course", key: "psychology_final_794" },
+                    { title: "Psychology Material / Exam", desc: "Bahir Dar University • Freshman Course", key: "psychology_330" }
                 ]
             }
         ];
@@ -1188,12 +1188,16 @@
             });
         }
 
+        // --- MODULES LIST (Sorted Alphabetically A to Z) ---
         function renderModulesList() {
             const container = document.getElementById('modulesListContainer');
             if (!container) return;
             container.innerHTML = '';
             
-            const modules = window.freshmanModules || [];
+            let modules = [...(window.freshmanModules || [])];
+            // Sort A to Z by title
+            modules.sort((a, b) => a.title.localeCompare(b.title));
+
             modules.forEach(mod => {
                 const card = document.createElement('div');
                 card.className = 'mat-card';
@@ -1256,8 +1260,8 @@
         }
 
         const titles = {
-            physics_final: "⚛️ Physics Final Exam Practice",
-            psychology_final: "🧠 General Psychology Practice",
+            physics_final: "⚛️ General Physics Final Exam Practice",
+            psychology_final: "🧠 General Psychology Final Exam Practice",
             entrepreneurship_final: "🚀 Entrepreneurship Final Exam",
             entrepreneurship_mid: "🚀 Entrepreneurship Mid Exam",
             english_final: "📖 Communicative English Skills II Final Exam",
@@ -1381,12 +1385,10 @@
             
             selectedOptionIdx = selectedIdx;
             
-            // የነበረውን የምርጫ ከለር አጥፍቶ አዲሱን መምረጥ
             const allBtns = document.querySelectorAll('.option-btn');
             allBtns.forEach(b => b.classList.remove('selected'));
             btnElement.classList.add('selected');
 
-            // የማረጋገጫ በተኑን ማሳየት
             document.getElementById('confirmBtn').style.display = 'block';
         }
 
