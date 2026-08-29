@@ -13,6 +13,9 @@
     <!-- Modules Data -->
     <script src="modules.js"></script>
 
+    <!-- Teacher Guides Data -->
+    <script src="teacher_guides.js"></script>
+
     <!-- External Question Banks -->
     <script src="physics.js"></script>
     <script src="economics.js"></script>
@@ -138,20 +141,20 @@
             opacity: 0.85;
         }
 
-        /* Tabs Nav (3 Buttons Layout) */
+        /* Tabs Nav (4 Buttons Layout) */
         .tabs-nav {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             margin-bottom: 14px;
         }
         .tab-btn {
             flex: 1;
             background: #e2e8f0;
             border: none;
-            padding: 10px 4px;
+            padding: 10px 2px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-sub);
             cursor: pointer;
             text-align: center;
@@ -228,6 +231,17 @@
         }
         .btn-module {
             background-color: #0284c7;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .btn-guide {
+            background-color: #7c3aed;
             color: white;
             border: none;
             padding: 8px;
@@ -530,11 +544,12 @@
         </div>
     </div>
 
-    <!-- Main Navigation Tabs (3 Tabs) -->
+    <!-- Main Navigation Tabs (4 Tabs) -->
     <div class="tabs-nav" id="mainTabs">
         <button class="tab-btn active" id="tabQuiz" onclick="switchTab('quiz')">✍️ ጥያቄዎች (Quiz)</button>
         <button class="tab-btn" id="tabMats" onclick="switchTab('mats')">📥 ፈተናዎች (Exams)</button>
         <button class="tab-btn" id="tabMods" onclick="switchTab('mods')">📚 ሞጁሎች (Modules)</button>
+        <button class="tab-btn" id="tabGuides" onclick="switchTab('guides')">📖 Teacher Guide</button>
     </div>
 
     <!-- HOME VIEW: Course Selection Buttons (Quiz) - Sorted Alphabetically A to Z -->
@@ -586,6 +601,12 @@
     <div id="modulesView" style="display: none;">
         <div class="home-title" id="lblModuleTitle">📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 100 Coins):</div>
         <div id="modulesListContainer"></div>
+    </div>
+
+    <!-- TEACHER GUIDE VIEW (200 Coins) -->
+    <div id="guidesView" style="display: none;">
+        <div class="home-title" id="lblGuideTitle">📖 Teacher Guide ዝርዝር (በ 200 Coins):</div>
+        <div id="guidesListContainer"></div>
     </div>
 
     <!-- QUIZ VIEW -->
@@ -1090,9 +1111,11 @@
                 document.getElementById('lblSelect').innerText = "📚 Select Course:";
                 document.getElementById('lblMatSelect').innerText = "📚 Select Exam Category:";
                 document.getElementById('lblModuleTitle').innerText = "📚 Freshman Modules (100 Coins):";
+                document.getElementById('lblGuideTitle').innerText = "📖 Teacher Guide (200 Coins):";
                 document.getElementById('tabQuiz').innerText = "✍️ Quiz Practice";
-                document.getElementById('tabMats').innerText = "📥 Exams (100 Coins)";
-                document.getElementById('tabMods').innerText = "📚 Modules (100 Coins)";
+                document.getElementById('tabMats').innerText = "📥 Exams";
+                document.getElementById('tabMods').innerText = "📚 Modules";
+                document.getElementById('tabGuides').innerText = "📖 Teacher Guide";
                 document.getElementById('backText').innerText = "Back to Courses";
                 document.getElementById('backMatText').innerText = "Back to Categories";
                 
@@ -1116,9 +1139,11 @@
                 document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
                 document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
                 document.getElementById('lblModuleTitle').innerText = "📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 100 Coins):";
+                document.getElementById('lblGuideTitle').innerText = "📖 Teacher Guide ዝርዝር (በ 200 Coins):";
                 document.getElementById('tabQuiz').innerText = "✍️ ጥያቄዎች (Quiz)";
                 document.getElementById('tabMats').innerText = "📥 ፈተናዎች (Exams)";
                 document.getElementById('tabMods').innerText = "📚 ሞጁሎች (Modules)";
+                document.getElementById('tabGuides').innerText = "📖 Teacher Guide";
                 document.getElementById('backText').innerText = "ወደ ኮርሶች ዝርዝር ተመለስ";
                 document.getElementById('backMatText').innerText = "ወደ ምድቦች ተመለስ";
                 
@@ -1140,6 +1165,7 @@
                 document.getElementById('langSwitchBtn').innerText = "🌐 Amh / Eng";
             }
             renderModulesList();
+            renderTeacherGuidesList();
             updateAdLimitUI();
         }
 
@@ -1211,6 +1237,28 @@
             });
         }
 
+        // --- TEACHER GUIDE LIST (200 Coins) ---
+        function renderTeacherGuidesList() {
+            const container = document.getElementById('guidesListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let guides = [...(window.teacherGuides || [])];
+            guides.sort((a, b) => a.title.localeCompare(b.title));
+
+            guides.forEach(guide => {
+                const card = document.createElement('div');
+                card.className = 'mat-card';
+                const btnText = currentLang === 'en' ? "📖 Unlock Guide (200 Coins)" : "📖 Guide በ 200 Coins አውርድ";
+                card.innerHTML = `
+                    <h3>${guide.title}</h3>
+                    <p>${guide.category || 'Teacher Guide'}</p>
+                    <button class="btn-guide" onclick="unlockTeacherGuide('${guide.fileKey}')">${btnText}</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
         function backToMatMain() {
             document.getElementById('materialsDetailView').style.display = 'none';
             document.getElementById('materialsMainView').style.display = 'block';
@@ -1220,9 +1268,12 @@
             document.getElementById('tabQuiz').classList.remove('active');
             document.getElementById('tabMats').classList.remove('active');
             document.getElementById('tabMods').classList.remove('active');
+            document.getElementById('tabGuides').classList.remove('active');
+
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('materialsView').style.display = 'none';
             document.getElementById('modulesView').style.display = 'none';
+            document.getElementById('guidesView').style.display = 'none';
             document.getElementById('quizView').style.display = 'none';
 
             if (tab === 'quiz') {
@@ -1237,6 +1288,10 @@
                 document.getElementById('tabMods').classList.add('active');
                 document.getElementById('modulesView').style.display = 'block';
                 renderModulesList();
+            } else if (tab === 'guides') {
+                document.getElementById('tabGuides').classList.add('active');
+                document.getElementById('guidesView').style.display = 'block';
+                renderTeacherGuidesList();
             }
         }
 
@@ -1546,7 +1601,7 @@
             loadQuestion();
         }
 
-        // Exam & Module Unlock (100 Coins) - Multi-language with Earning Guide
+        // Exam, Module & Teacher Guide Unlock (100 / 200 Coins)
         async function unlockMaterial(fileKey) {
             if (!tg || !tg.initData) {
                 const notInTgMsg = currentLang === 'en' 
@@ -1555,6 +1610,8 @@
                 alert(notInTgMsg);
                 return;
             }
+
+            const requiredCoins = fileKey.startsWith("guide_") ? 200 : 100;
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/user/unlock-material`, {
@@ -1577,8 +1634,8 @@
                     redirectToBot(fileKey);
                 } else {
                     const noCoinMsg = currentLang === 'en'
-                        ? "⚠️ Not enough Coins! (Need 100 Coins)\n\n💡 How to earn Coins:\n• Watch Adsgram / Monetag ads (+150 / +100 Coins)\n• Answer Quiz practice questions correctly (+5 Coins)"
-                        : "⚠️ በቂ Coins የለዎትም! (100 Coins ያስፈልጋል)\n\n💡 Coins ለማግኘት፦\n• የ Adsgram / Monetag ማስታወቂያዎችን ይመልከቱ (+150 / +100 Coins)\n• የፈተና ጥያቄዎችን በትክክል ይመልሱ (+5 Coins)";
+                        ? `⚠️ Not enough Coins! (Need ${requiredCoins} Coins)\n\n💡 How to earn Coins:\n• Watch Adsgram / Monetag ads (+150 / +100 Coins)\n• Answer Quiz practice questions correctly (+5 Coins)`
+                        : `⚠️ በቂ Coins የለዎትም! (${requiredCoins} Coins ያስፈልጋል)\n\n💡 Coins ለማግኘት፦\n• የ Adsgram / Monetag ማስታወቂያዎችን ይመልከቱ (+150 / +100 Coins)\n• የፈተና ጥያቄዎችን በትክክል ይመልሱ (+5 Coins)`;
                     alert(noCoinMsg);
                 }
             } catch (err) {
@@ -1591,6 +1648,11 @@
 
         // Module Unlock (100 Coins)
         function unlockModule(fileKey) {
+            unlockMaterial(fileKey);
+        }
+
+        // Teacher Guide Unlock (200 Coins)
+        function unlockTeacherGuide(fileKey) {
             unlockMaterial(fileKey);
         }
 
@@ -1635,6 +1697,7 @@
         window.onload = function() {
             renderMatCategories();
             renderModulesList();
+            renderTeacherGuidesList();
 
             // Language Prompt on First Visit
             const savedLang = localStorage.getItem('bahirab_lang');
