@@ -144,17 +144,17 @@
         /* Tabs Nav (4 Buttons Layout) */
         .tabs-nav {
             display: flex;
-            gap: 5px;
+            gap: 6px;
             margin-bottom: 14px;
         }
         .tab-btn {
             flex: 1;
             background: #e2e8f0;
             border: none;
-            padding: 10px 2px;
+            padding: 10px 4px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 10px;
+            font-size: 11px;
             color: var(--text-sub);
             cursor: pointer;
             text-align: center;
@@ -241,7 +241,7 @@
             font-weight: bold;
         }
         .btn-guide {
-            background-color: #7c3aed;
+            background-color: #0284c7;
             color: white;
             border: none;
             padding: 8px;
@@ -1243,7 +1243,7 @@
             if (!container) return;
             container.innerHTML = '';
 
-            let guides = [...(window.teacherGuides || [])];
+            let guides = [...(window.teacherGuides || typeof teacherGuides !== 'undefined' ? (window.teacherGuides || teacherGuides) : [])];
             guides.sort((a, b) => a.title.localeCompare(b.title));
 
             guides.forEach(guide => {
@@ -1601,7 +1601,7 @@
             loadQuestion();
         }
 
-        // Exam, Module & Teacher Guide Unlock (100 / 200 Coins)
+        // Exam, Module & Teacher Guide Unlock (100 / 200 Coins) - Multi-language with Earning Guide
         async function unlockMaterial(fileKey) {
             if (!tg || !tg.initData) {
                 const notInTgMsg = currentLang === 'en' 
