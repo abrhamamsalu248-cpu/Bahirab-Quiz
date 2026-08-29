@@ -4,7 +4,7 @@ const teacherGuides = [
     title: "Economics Teacher Guide",
     category: "Teacher Guide",
     fileKey: "guide_economics",
-    price: 100,
+    price: 200,
     link: "https://t.me/bahirabquiz/31"
   },
   {
@@ -12,7 +12,7 @@ const teacherGuides = [
     title: "Mathematics Teacher Guide",
     category: "Teacher Guide",
     fileKey: "guide_mathematics",
-    price: 100,
+    price: 200,
     link: "https://t.me/bahirabquiz/32"
   }
 ];
