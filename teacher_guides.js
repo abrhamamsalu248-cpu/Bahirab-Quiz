@@ -1,4 +1,4 @@
-const teacherGuides = [
+window.teacherGuides = [
   {
     id: "guide_economics",
     title: "Economics Teacher Guide",
