@@ -1336,7 +1336,6 @@
                 openPdfViewer(pdfFile, title);
 
             } catch (e) {
-                // Network error fallback
                 unlocked.push(noteId);
                 localStorage.setItem('unlocked_notes', JSON.stringify(unlocked));
                 renderNotesList();
@@ -1344,7 +1343,7 @@
             }
         }
 
-        // --- 📄 IN-APP HIGH DEFINITION PDF VIEWER ENGINE ---
+        // --- 📄 FAST & PROGRESSIVE IN-APP PDF VIEWER ENGINE ---
         if (window.pdfjsLib) {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         }
@@ -1387,7 +1386,7 @@
             }
         }
 
-        function openPdfViewer(pdfUrl, title) {
+        async function openPdfViewer(pdfUrl, title) {
             const pdfView = document.getElementById('pdfView');
             const pagesWrapper = document.getElementById('pdfPagesWrapper');
             const scrollArea = document.getElementById('pdfScrollArea');
@@ -1406,25 +1405,30 @@
                 return;
             }
 
-            pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
+            try {
+                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                const pdfDoc = await loadingTask.promise;
+                
                 pagesWrapper.innerHTML = '';
+
                 for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
                     const canvas = document.createElement('canvas');
-                    canvas.style.cssText = "display: block; width: 96% !important; max-width: 650px; height: auto !important; background: white; box-shadow: 0 4px 14px rgba(0,0,0,0.4); border-radius: 4px; margin-bottom: 8px;";
+                    canvas.style.cssText = "display: block; width: 96% !important; max-width: 650px; height: auto !important; background: white; box-shadow: 0 4px 14px rgba(0,0,0,0.4); border-radius: 4px; margin-bottom: 12px;";
                     pagesWrapper.appendChild(canvas);
 
-                    pdfDoc.getPage(pageNum).then(function(page) {
-                        const ctx = canvas.getContext('2d');
-                        const viewport = page.getViewport({ scale: 2.0 });
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
-                        page.render({ canvasContext: ctx, viewport: viewport });
-                    });
+                    const page = await pdfDoc.getPage(pageNum);
+                    const ctx = canvas.getContext('2d');
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
                 }
-            }).catch(function(error) {
+
+            } catch (error) {
                 alert(`⚠️ PDF መክፈት አልተቻለም!\n\nምክንያት፦ "${pdfUrl}" ፋይል በ GitHub ላይ መኖሩን ያረጋግጡ።\n\n(${error.message})`);
                 closePdfViewer();
-            });
+            }
         }
 
         function closePdfViewer() {
