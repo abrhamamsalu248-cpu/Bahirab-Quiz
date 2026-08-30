@@ -1374,7 +1374,7 @@
             }
         }
 
-        // --- 📄 FAST & PROGRESSIVE IN-APP PDF VIEWER ENGINE ---
+        // --- 📄 FAST & PROGRESSIVE IN-APP PDF VIEWER ENGINE (LANDSCAPE & HD ZOOM FIXED) ---
         if (window.pdfjsLib) {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         }
@@ -1406,7 +1406,8 @@
                             e.touches[0].pageY - e.touches[1].pageY
                         );
                         const factor = dist / initialDist;
-                        currentZoom = Math.min(Math.max(100, Math.round(baseZoom * factor)), 300);
+                        // እስከ 400% ድረስ በነፃነት ማጉላት እንዲቻል
+                        currentZoom = Math.min(Math.max(100, Math.round(baseZoom * factor)), 400);
                         pagesWrapper.style.width = `${currentZoom}%`;
                     }
                 }, { passive: false });
@@ -1427,6 +1428,7 @@
             
             pdfView.style.display = 'block';
             scrollArea.scrollTop = 0;
+            scrollArea.scrollLeft = 0;
             currentZoom = 100;
             pagesWrapper.style.width = '100%';
 
@@ -1444,12 +1446,14 @@
 
                 for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
                     const canvas = document.createElement('canvas');
-                    canvas.style.cssText = "display: block; width: 96% !important; max-width: 650px; height: auto !important; background: white; box-shadow: 0 4px 14px rgba(0,0,0,0.4); border-radius: 4px; margin-bottom: 12px;";
+                    // max-width ገደቡ ተነስቶ ሙሉ ስክሪኑን እንዲሞላ ተደርጓል
+                    canvas.style.cssText = "display: block; width: 100% !important; max-width: 100% !important; height: auto !important; background: white; box-shadow: 0 4px 14px rgba(0,0,0,0.4); border-radius: 4px; margin-bottom: 12px;";
                     pagesWrapper.appendChild(canvas);
 
                     const page = await pdfDoc.getPage(pageNum);
                     const ctx = canvas.getContext('2d');
-                    const viewport = page.getViewport({ scale: 1.5 });
+                    // ጥራቱ HD እንዲሆን scale ወደ 2.2 ከፍ ተደርጓል
+                    const viewport = page.getViewport({ scale: 2.2 });
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
 
