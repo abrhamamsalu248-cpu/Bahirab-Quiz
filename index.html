@@ -274,6 +274,29 @@
             font-weight: bold;
         }
 
+        /* Note Pilot Information Card */
+        .note-info-card {
+            background: #fffbeb;
+            border: 1.5px dashed #f59e0b;
+            border-radius: 12px;
+            padding: 14px;
+            margin: 14px 0 20px 0;
+            text-align: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .note-info-card h4 {
+            margin: 0 0 6px 0;
+            font-size: 13px;
+            color: #b45309;
+            font-weight: bold;
+        }
+        .note-info-card p {
+            margin: 0;
+            font-size: 11.5px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+
         /* Quiz View */
         #quizView {
             display: none;
@@ -604,10 +627,16 @@
         </div>
     </div>
 
-    <!-- NOTES VIEW (500 Coins In-App HD PDF Reader) -->
+    <!-- NOTES VIEW (500 Coins In-App HD Reader) -->
     <div id="notesView" style="display: none;">
         <div class="home-title" id="lblNotesTitle">📖 የኮርስ ኖቶች ዝርዝር (በ 500 Coins):</div>
         <div id="notesListContainer"></div>
+        
+        <!-- 💡 PILOT STUDY NOTICE CARD -->
+        <div class="note-info-card">
+            <h4 id="noteInfoTitle">💡 ማሳሰቢያ</h4>
+            <p id="noteInfoText">እነዚህ ኖቶች ለሙከራ የተዘጋጁ የአማርኛ ማጠቃለያዎች ሲሆኑ፣ የተማሪዎችን ተቀባይነትና አስተያየት መሰረት በማድረግ በቀጣይ ሌሎች በርካታ ተመሳሳይ አጋዥ ኖቶችን የምንጨምር ይሆናል።</p>
+        </div>
     </div>
 
     <!-- MATERIALS VIEW (Exams) -->
@@ -670,22 +699,22 @@
         </div>
     </div>
 
-    <!-- 📖 IN-APP EMBEDDED PDF READER OVERLAY (100% Guaranteed) -->
+    <!-- 📖 IN-APP EMBEDDED PDF READER OVERLAY -->
     <div id="pdfView" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; z-index: 999999; box-sizing: border-box; overflow: hidden;">
         <div style="position: absolute; top: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; z-index: 1000000; box-shadow: 0 2px 10px rgba(0,0,0,0.3); backdrop-filter: blur(6px);">
-            <span id="pdfViewerTitle" style="color: white; font-size: 14px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%;">📖 PDF Reader</span>
+            <span id="pdfViewerTitle" style="color: white; font-size: 14px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%;">📖 Course Note</span>
             <button onclick="closePdfViewer()" style="background: #ef4444; color: #ffffff; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">✖ ዝጋ (Close)</button>
         </div>
         <div id="pdfScrollArea" style="width: 100%; height: 100%; overflow-y: auto; overflow-x: auto; box-sizing: border-box; padding-top: 60px; padding-bottom: 40px; -webkit-overflow-scrolling: touch;">
             <div id="pdfPagesWrapper" style="display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 10px 4px; width: 100%; min-width: 100%; box-sizing: border-box; transition: width 0.1s ease-out;">
-                <div id="pdfLoadingStatus" style="color: white; font-size: 14px; font-weight: bold; margin-top: 80px; text-align: center;">⏳ ፒዲኤፉ በመጫን ላይ ነው... እባክዎ ይጠብቁ</div>
+                <div id="pdfLoadingStatus" style="color: white; font-size: 14px; font-weight: bold; margin-top: 80px; text-align: center;">📖 ኖቱ በመጫን ላይ ነው... እባክዎ ይጠብቁ</div>
             </div>
         </div>
     </div>
 
     <script>
         const BACKEND_URL = "https://bahirab-bot-server.onrender.com";
-        const SMARTLINK_URL = "https://omg10.com/4/11654019"; // Monetag SmartLink
+        const SMARTLINK_URL = "https://omg10.com/4/11654019";
 
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
@@ -714,7 +743,7 @@
             }
         }
 
-        // --- 🔒 2. SERVER COIN UPDATE (+/- Fallback) ---
+        // --- 🔒 2. SERVER COIN UPDATE ---
         async function updateCoins(amount) {
             if (!tg || !tg.initData) return;
             try {
@@ -806,7 +835,7 @@
             }
         }
 
-        /* --- 5-HOUR ROLLING COOLDOWN (MAX 6 FOR EACH AD PROVIDER) --- */
+        /* --- 5-HOUR ROLLING COOLDOWN --- */
         const MAX_ADS = 6;
         const COOLDOWN_HOURS = 5;
         const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
@@ -875,7 +904,6 @@
 
         let adController = null;
 
-        // --- 📺 1. ADSGRAM AD FUNCTION (+150 COINS) ---
         function watchAdsgramAd() {
             const times = getTimestamps('bahirab_adsgram_timestamps');
             if (times.length >= MAX_ADS) {
@@ -926,7 +954,6 @@
             }
         }
 
-        // --- ⚡ 2. MONETAG AD FUNCTION (+100 COINS) ---
         function watchMonetagAd() {
             const times = getTimestamps('bahirab_monetag_timestamps');
             if (times.length >= MAX_ADS) {
@@ -966,7 +993,7 @@
             }
         }
 
-        // --- EXAM CATEGORIES (Sorted Alphabetically A to Z) ---
+        // --- EXAM CATEGORIES ---
         const categorizedMaterials = [
             {
                 id: "anthro",
@@ -1152,6 +1179,8 @@
             if (currentLang === 'en') {
                 document.getElementById('lblSelect').innerText = "📚 Select Course:";
                 document.getElementById('lblNotesTitle').innerText = "📖 Course Notes (500 Coins):";
+                document.getElementById('noteInfoTitle').innerText = "💡 Notice";
+                document.getElementById('noteInfoText').innerText = "These are sample Amharic study notes prepared for trial. Based on student feedback and demand, we will be adding more comprehensive course notes.";
                 document.getElementById('lblMatSelect').innerText = "📚 Select Exam Category:";
                 document.getElementById('lblModuleTitle').innerText = "📚 Freshman Modules (100 Coins):";
                 document.getElementById('lblGuideTitle').innerText = "📖 Teacher Guide (200 Coins):";
@@ -1180,6 +1209,8 @@
             } else {
                 document.getElementById('lblSelect').innerText = "📚 የፈተና ኮርስ ይምረጡ (Select Course):";
                 document.getElementById('lblNotesTitle').innerText = "📖 የኮርስ ኖቶች ዝርዝር (በ 500 Coins):";
+                document.getElementById('noteInfoTitle').innerText = "💡 ማሳሰቢያ";
+                document.getElementById('noteInfoText').innerText = "እነዚህ ኖቶች ለሙከራ የተዘጋጁ የአማርኛ ማጠቃለያዎች ሲሆኑ፣ የተማሪዎችን ተቀባይነትና አስተያየት መሰረት በማድረግ በቀጣይ ሌሎች በርካታ ተመሳሳይ አጋዥ ኖቶችን የምንጨምር ይሆናል።";
                 document.getElementById('lblMatSelect').innerText = "📚 የኮርስ ማቴሪያል ምድብ ይምረጡ:";
                 document.getElementById('lblModuleTitle').innerText = "📚 የፍሬሽማን ሞጁሎች ዝርዝር (በ 100 Coins):";
                 document.getElementById('lblGuideTitle').innerText = "📖 Teacher Guide ዝርዝር (በ 200 Coins):";
@@ -1294,7 +1325,7 @@
         async function unlockAndReadCourseNote(noteId, pdfFile, title, cost = 500) {
             let unlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
 
-            // 1. ቀድሞ የተከፈተ ከሆነ በቀጥታ ፒዲኤፉን ክፈት
+            // 1. ቀድሞ የተከፈተ ከሆነ በቀጥታ ኖቱን ክፈት
             if (unlocked.includes(noteId)) {
                 openPdfViewer(pdfFile, title);
                 return;
@@ -1391,8 +1422,8 @@
             const pagesWrapper = document.getElementById('pdfPagesWrapper');
             const scrollArea = document.getElementById('pdfScrollArea');
             
-            document.getElementById('pdfViewerTitle').innerText = title || "📖 PDF Reader";
-            pagesWrapper.innerHTML = '<div style="color: white; font-size: 14px; font-weight: bold; margin-top: 80px; text-align: center;">⏳ ፒዲኤፉ በመጫን ላይ ነው... እባክዎ ይጠብቁ</div>';
+            document.getElementById('pdfViewerTitle').innerText = title || "📖 Course Note";
+            pagesWrapper.innerHTML = '<div style="color: white; font-size: 14px; font-weight: bold; margin-top: 80px; text-align: center;">📖 ኖቱ በመጫን ላይ ነው... እባክዎ ይጠብቁ</div>';
             
             pdfView.style.display = 'block';
             scrollArea.scrollTop = 0;
@@ -1400,7 +1431,7 @@
             pagesWrapper.style.width = '100%';
 
             if (!window.pdfjsLib) {
-                alert("⚠️ የ PDF.js ሞጁል አልጫነም! እባክዎ ኢንተርኔትዎን ይፈትሹ።");
+                alert("⚠️ ማንበቢያው አልተጫነም! እባክዎ ኢንተርኔትዎን ይፈትሹ።");
                 closePdfViewer();
                 return;
             }
@@ -1426,7 +1457,7 @@
                 }
 
             } catch (error) {
-                alert(`⚠️ PDF መክፈት አልተቻለም!\n\nምክንያት፦ "${pdfUrl}" ፋይል በ GitHub ላይ መኖሩን ያረጋግጡ።\n\n(${error.message})`);
+                alert(`⚠️ ኖቱን መክፈት አልተቻለም!\n\nእባክዎ የኢንተርኔት ግንኙነትዎን ፈትሸው በድጋሚ ይሞክሩ።\n\n(${error.message})`);
                 closePdfViewer();
             }
         }
