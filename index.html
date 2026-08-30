@@ -699,7 +699,7 @@
         </div>
     </div>
 
-    <!-- 📖 IN-APP EMBEDDED PDF READER OVERLAY -->
+    <!-- 📖 IN-APP EMBEDDED PDF READER OVERLAY (LANDSCAPE & HD SUPPORT) -->
     <div id="pdfView" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; z-index: 999999; box-sizing: border-box; overflow: hidden;">
         <div style="position: absolute; top: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; z-index: 1000000; box-shadow: 0 2px 10px rgba(0,0,0,0.3); backdrop-filter: blur(6px);">
             <span id="pdfViewerTitle" style="color: white; font-size: 14px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%;">📖 Course Note</span>
@@ -723,8 +723,9 @@
         }
 
         let userCoins = 300;
+        let serverUnlocked = [];
 
-        // --- 🔒 1. SERVER COIN SYNC ---
+        // --- 🔒 1. SERVER COIN & UNLOCKED NOTES SYNC ---
         async function syncCoinsFromServer() {
             if (!tg || !tg.initData) return;
             try {
@@ -737,6 +738,10 @@
                 if (data.coins !== undefined) {
                     userCoins = data.coins;
                     document.getElementById('coinCount').innerText = userCoins;
+                }
+                if (data.unlocked) {
+                    serverUnlocked = data.unlocked;
+                    renderNotesList();
                 }
             } catch(e) {
                 console.log("Sync error:", e);
@@ -1287,17 +1292,18 @@
             });
         }
 
-        // --- 📖 NOTES LIST RENDER ---
+        // --- 📖 NOTES LIST RENDER (LIFETIME PURCHASE CHECK) ---
         function renderNotesList() {
             const container = document.getElementById('notesListContainer');
             if (!container) return;
             container.innerHTML = '';
 
             const notes = window.courseNotesData || [];
-            let unlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
+            let localUnlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
+            let allUnlocked = [...new Set([...serverUnlocked, ...localUnlocked])];
 
             notes.forEach(note => {
-                const isUnlocked = unlocked.includes(note.id);
+                const isUnlocked = allUnlocked.includes(note.id);
                 const card = document.createElement('div');
                 card.className = 'mat-card';
                 
@@ -1321,56 +1327,56 @@
             });
         }
 
-        // --- 🪙 UNLOCK & READ NOTE DIRECTLY FROM RENDER SERVER ---
+        // --- 🪙 UNLOCK & READ NOTE (ONCE PER LIFETIME VIA SERVER) ---
         async function unlockAndReadCourseNote(noteId, pdfFile, title, cost = 500) {
-            let unlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
+            let localUnlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
+            let allUnlocked = [...new Set([...serverUnlocked, ...localUnlocked])];
 
-            // 1. ቀድሞ የተከፈተ ከሆነ በቀጥታ ኖቱን ክፈት
-            if (unlocked.includes(noteId)) {
+            // 1. ቀድሞ የተገዛ ከሆነ በቀጥታ ኖቱን ክፈት (Coins አይቀንስም)
+            if (allUnlocked.includes(noteId)) {
                 openPdfViewer(pdfFile, title);
                 return;
             }
 
-            // 2. ተማሪውን ክፍያ መጠየቅ
+            // 2. ተማሪውን የግዢ ማረጋገጫ መጠየቅ
             const confirmMsg = currentLang === 'en'
-                ? `📖 "${title}"\n\nUnlock this Note for ${cost} Coins?\n(Your Server Balance: ${userCoins} Coins)`
-                : `📖 "${title}"\n\nይህን ኖት በ ${cost} Coins ከፍተው ማንበብ ይፈልጋሉ?\n(የእርስዎ ቀሪ Coins፦ ${userCoins})`;
+                ? `📖 "${title}"\n\nUnlock this Note permanently for ${cost} Coins?\n(Your Server Balance: ${userCoins} Coins)`
+                : `📖 "${title}"\n\nይህን ኖት በ ${cost} Coins በቋሚነት ከፍተው ማንበብ ይፈልጋሉ?\n(የእርስዎ ቀሪ Coins፦ ${userCoins})`;
 
             if (!confirm(confirmMsg)) return;
 
-            // 3. Render ሰርቨርን በቀጥታ 500 Coin እንዲቀንስ መጠየቅ
+            // 3. ሰርቨሩ ላይ በቋሚነት መመዝገብና 500 Coins መቀነስ
             try {
                 if (tg && tg.initData) {
-                    const res = await fetch(`${BACKEND_URL}/api/user/update-coins`, {
+                    const res = await fetch(`${BACKEND_URL}/api/user/unlock-material`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             initData: tg.initData,
-                            amount: -cost
+                            fileKey: noteId,
+                            cost: cost
                         })
                     });
 
                     const data = await res.json();
 
-                    if (data.success && data.coins !== undefined) {
+                    if (data.success) {
                         userCoins = data.coins;
                         document.getElementById('coinCount').innerText = userCoins;
+                        if (!serverUnlocked.includes(noteId)) serverUnlocked.push(noteId);
+                        if (!localUnlocked.includes(noteId)) localUnlocked.push(noteId);
+                        localStorage.setItem('unlocked_notes', JSON.stringify(localUnlocked));
+                        renderNotesList();
+                        openPdfViewer(pdfFile, title);
+                    } else {
+                        alert(data.message || (currentLang === 'en' ? "⚠️ Not enough coins!" : "⚠️ በቂ Coins የለዎትም!"));
                     }
                 } else {
-                    userCoins -= cost;
-                    document.getElementById('coinCount').innerText = userCoins;
+                    alert(currentLang === 'en' ? "⚠️ Please open in Telegram!" : "⚠️ እባክዎ መተግበሪያውን በቴሌግራም ውስጥ ይክፈቱ!");
                 }
-
-                unlocked.push(noteId);
-                localStorage.setItem('unlocked_notes', JSON.stringify(unlocked));
-                renderNotesList();
-                openPdfViewer(pdfFile, title);
-
             } catch (e) {
-                unlocked.push(noteId);
-                localStorage.setItem('unlocked_notes', JSON.stringify(unlocked));
-                renderNotesList();
-                openPdfViewer(pdfFile, title);
+                console.log("Unlock error:", e);
+                alert(currentLang === 'en' ? "⚠️ Server connection failed." : "⚠️ ከሰርቨር ጋር መገናኘት አልተቻለም።");
             }
         }
 
