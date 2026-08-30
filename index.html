@@ -1276,32 +1276,62 @@
             });
         }
 
-        // --- 🪙 UNLOCK & READ NOTE WITH COINS ---
-        function unlockAndReadCourseNote(noteId, pdfFile, title, cost = 500) {
+        // --- 🪙 UNLOCK & READ NOTE DIRECTLY FROM RENDER SERVER ---
+        async function unlockAndReadCourseNote(noteId, pdfFile, title, cost = 500) {
+            if (!tg || !tg.initData) {
+                alert(currentLang === 'en' ? "⚠️ Please open in Telegram!" : "⚠️ እባክዎ መተግበሪያውን በቴሌግራም ውስጥ ይክፈቱ!");
+                return;
+            }
+
             let unlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
 
+            // 1. ቀድሞ የተከፈተ ከሆነ በቀጥታ ፒዲኤፉን ክፈት
             if (unlocked.includes(noteId)) {
                 openPdfViewer(pdfFile, title);
                 return;
             }
 
-            if (userCoins >= cost) {
-                const confirmMsg = currentLang === 'en'
-                    ? `📖 "${title}"\n\nUnlock this Note for ${cost} Coins?\n(Your Balance: ${userCoins} Coins)`
-                    : `📖 "${title}"\n\nይህን ኖት በ ${cost} Coins ከፍተው ማንበብ ይፈልጋሉ?\n(የእርስዎ ቀሪ Coins፦ ${userCoins})`;
+            // 2. ተማሪውን ክፍያ መጠየቅ
+            const confirmMsg = currentLang === 'en'
+                ? `📖 "${title}"\n\nUnlock this Note for ${cost} Coins?\n(Your Server Balance: ${userCoins} Coins)`
+                : `📖 "${title}"\n\nይህን ኖት በ ${cost} Coins ከፍተው ማንበብ ይፈልጋሉ?\n(የእርስዎ ቀሪ Coins፦ ${userCoins})`;
 
-                if (confirm(confirmMsg)) {
-                    updateCoins(-cost);
+            if (!confirm(confirmMsg)) return;
+
+            // 3. Render ሰርቨርን በቀጥታ 500 Coin እንዲቀንስ መጠየቅ
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/user/update-coins`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        initData: tg.initData,
+                        amount: -cost // ከሰርቨሩ ላይ -500 Coin ይቀንሳል
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success && data.coins !== undefined) {
+                    // ከሰርቨሩ የተቀነሰውን ትክክለኛ Coin በስክሪኑ ላይ አሳይ
+                    userCoins = data.coins;
+                    document.getElementById('coinCount').innerText = userCoins;
+
+                    // ኖቱን የተከፈተ ብለህ መዝግብ
                     unlocked.push(noteId);
                     localStorage.setItem('unlocked_notes', JSON.stringify(unlocked));
                     renderNotesList();
+
+                    // ፒዲኤፉን ክፈት
                     openPdfViewer(pdfFile, title);
+                } else {
+                    // በሰርቨሩ በኩል በቂ Coin ከሌለው
+                    const noCoinMsg = currentLang === 'en'
+                        ? `⚠️ Not enough Coins on server! (Need ${cost} Coins)\n(Your Balance: ${userCoins} Coins)\n\n💡 Watch Adsgram or Monetag ads to earn Coins.`
+                        : `⚠️ በቂ Coins የለዎትም! (${cost} Coins ያስፈልጋል)\n(የእርስዎ ቀሪ Coins፦ ${userCoins})\n\n💡 እባክዎ ማስታወቂያዎችን በማየት Coin ያግኙ።`;
+                    alert(noCoinMsg);
                 }
-            } else {
-                const noCoinMsg = currentLang === 'en'
-                    ? `⚠️ Not enough Coins! (Need ${cost} Coins)\n(Your Balance: ${userCoins} Coins)\n\n💡 Watch Adsgram or Monetag video to earn +150 / +100 Coins.`
-                    : `⚠️ በቂ Coins የለዎትም! (${cost} Coins ያስፈልጋል)\n(የእርስዎ ቀሪ Coins፦ ${userCoins})\n\n💡 የ Adsgram ወይም Monetag ቪዲዮ በማየት +150 / +100 Coins ያግኙ።`;
-                alert(noCoinMsg);
+            } catch (e) {
+                alert(currentLang === 'en' ? "⚠️ Server error! Please check connection." : "⚠️ ከሰርቨር ጋር መገናኘት አልተቻለም። እባክዎ እንደገና ይሞክሩ።");
             }
         }
 
