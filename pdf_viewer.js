@@ -3,12 +3,12 @@ if (window.pdfjsLib) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
 
-// ፒዲኤፍ ማንበቢያውን Screen በራስ-ሰር የሚፈጥር
+// ፒዲኤፍ ማንበቢያውን HTML በራስ-ሰር የሚፈጥር
 (function initPdfViewerDOM() {
     if (document.getElementById('pdfView')) return;
     const viewerHTML = `
-        <div id="pdfView" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; z-index: 10001; box-sizing: border-box; overflow: hidden;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; z-index: 10005; box-shadow: 0 2px 10px rgba(0,0,0,0.3); backdrop-filter: blur(6px);">
+        <div id="pdfView" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; z-index: 100001; box-sizing: border-box; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.95); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; z-index: 100005; box-shadow: 0 2px 10px rgba(0,0,0,0.3); backdrop-filter: blur(6px);">
                 <span id="pdfViewerTitle" style="color: white; font-size: 14px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%;">📖 PDF Reader</span>
                 <button onclick="closePdfViewer()" style="background: #ef4444; color: #ffffff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">✖ ዝጋ (Close)</button>
             </div>
