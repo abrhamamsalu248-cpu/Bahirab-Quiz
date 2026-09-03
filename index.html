@@ -147,7 +147,7 @@
             opacity: 0.85;
         }
 
-        /* Tabs Nav (5 Buttons Layout) */
+        /* Tabs Nav (5 Buttons Layout) - Reordered: Quiz -> Exams -> Modules -> Notes -> Teacher Guide */
         .tabs-nav {
             display: flex;
             gap: 4px;
@@ -589,12 +589,12 @@
         </div>
     </div>
 
-    <!-- Main Navigation Tabs (5 Tabs) -->
+    <!-- Main Navigation Tabs (5 Tabs) - Reordered: Quiz -> Exams -> Modules -> Notes -> Teacher Guide -->
     <div class="tabs-nav" id="mainTabs">
         <button class="tab-btn active" id="tabQuiz" onclick="switchTab('quiz')">✍️ ጥያቄዎች (Quiz)</button>
-        <button class="tab-btn" id="tabNotes" onclick="switchTab('notes')">📖 ኖቶች (Notes)</button>
         <button class="tab-btn" id="tabMats" onclick="switchTab('mats')">📥 ፈተናዎች (Exams)</button>
         <button class="tab-btn" id="tabMods" onclick="switchTab('mods')">📚 ሞጁሎች (Modules)</button>
+        <button class="tab-btn" id="tabNotes" onclick="switchTab('notes')">📖 ኖቶች (Notes)</button>
         <button class="tab-btn" id="tabGuides" onclick="switchTab('guides')">📖 Teacher Guide</button>
     </div>
 
@@ -725,6 +725,12 @@
         let userCoins = 300;
         let serverUnlocked = [];
 
+        function getUserId() {
+            return (tg && tg.initDataUnsafe && tg.initDataUnsafe.user)
+                ? tg.initDataUnsafe.user.id
+                : 'guest';
+        }
+
         // --- 🔒 1. SERVER COIN & UNLOCKED NOTES SYNC ---
         async function syncCoinsFromServer() {
             if (!tg || !tg.initData) return;
@@ -794,11 +800,8 @@
 
         function sendAdWatchToServer() {
             try {
-                const userId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user)
-                    ? tg.initDataUnsafe.user.id
-                    : null;
-
-                if (userId && BACKEND_URL.startsWith("http")) {
+                const userId = getUserId();
+                if (userId && userId !== 'guest' && BACKEND_URL.startsWith("http")) {
                     fetch(`${BACKEND_URL}/api/track-ad`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -813,7 +816,7 @@
         /* --- SMARTLINK ONCE DAILY TRIGGER --- */
         function triggerSmartlinkOnceDaily() {
             const today = new Date().toISOString().slice(0, 10);
-            const lastTrigger = localStorage.getItem('bahirab_smartlink_last_date');
+            const lastTrigger = localStorage.getItem(`bahirab_smartlink_last_date_${getUserId()}`);
 
             if (lastTrigger !== today) {
                 const message = currentLang === 'en'
@@ -823,7 +826,7 @@
                 if (tg && tg.showConfirm) {
                     tg.showConfirm(message, (confirmed) => {
                         if (confirmed) {
-                            localStorage.setItem('bahirab_smartlink_last_date', today);
+                            localStorage.setItem(`bahirab_smartlink_last_date_${getUserId()}`, today);
                             updateCoins(150);
                             if (tg.openLink) {
                                 tg.openLink(SMARTLINK_URL, { try_instant_view: false });
@@ -832,7 +835,7 @@
                     });
                 } else {
                     if (confirm(message)) {
-                        localStorage.setItem('bahirab_smartlink_last_date', today);
+                        localStorage.setItem(`bahirab_smartlink_last_date_${getUserId()}`, today);
                         updateCoins(150);
                         window.open(SMARTLINK_URL, '_blank');
                     }
@@ -840,13 +843,14 @@
             }
         }
 
-        /* --- 5-HOUR ROLLING COOLDOWN --- */
+        /* --- 5-HOUR ROLLING COOLDOWN (PER-USER ISOLATED) --- */
         const MAX_ADS = 6;
         const COOLDOWN_HOURS = 5;
         const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
 
         function getTimestamps(storageKey) {
-            const raw = localStorage.getItem(storageKey);
+            const userKey = `${storageKey}_${getUserId()}`;
+            const raw = localStorage.getItem(userKey);
             let timestamps = [];
             try {
                 timestamps = raw ? JSON.parse(raw) : [];
@@ -856,7 +860,7 @@
             const now = Date.now();
             const active = timestamps.filter(t => (now - t) < COOLDOWN_MS);
             if (active.length !== timestamps.length) {
-                localStorage.setItem(storageKey, JSON.stringify(active));
+                localStorage.setItem(userKey, JSON.stringify(active));
             }
             return active.sort((a, b) => a - b);
         }
@@ -930,7 +934,7 @@
                             sendAdWatchToServer();
                             const active = getTimestamps('bahirab_adsgram_timestamps');
                             active.push(Date.now());
-                            localStorage.setItem('bahirab_adsgram_timestamps', JSON.stringify(active));
+                            localStorage.setItem(`bahirab_adsgram_timestamps_${getUserId()}`, JSON.stringify(active));
                             
                             if (active.length === 3) triggerSmartlinkOnceDaily();
                             updateAdLimitUI();
@@ -975,7 +979,7 @@
                     sendAdWatchToServer();
                     const active = getTimestamps('bahirab_monetag_timestamps');
                     active.push(Date.now());
-                    localStorage.setItem('bahirab_monetag_timestamps', JSON.stringify(active));
+                    localStorage.setItem(`bahirab_monetag_timestamps_${getUserId()}`, JSON.stringify(active));
                     
                     if (active.length === 3) triggerSmartlinkOnceDaily();
                     updateAdLimitUI();
@@ -1292,14 +1296,14 @@
             });
         }
 
-        // --- 📖 NOTES LIST RENDER (LIFETIME PURCHASE CHECK) ---
+        // --- 📖 NOTES LIST RENDER (LIFETIME PURCHASE CHECK PER USER) ---
         function renderNotesList() {
             const container = document.getElementById('notesListContainer');
             if (!container) return;
             container.innerHTML = '';
 
             const notes = window.courseNotesData || [];
-            let localUnlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
+            let localUnlocked = JSON.parse(localStorage.getItem(`unlocked_notes_${getUserId()}`) || '[]');
             let allUnlocked = [...new Set([...serverUnlocked, ...localUnlocked])];
 
             notes.forEach(note => {
@@ -1327,9 +1331,9 @@
             });
         }
 
-        // --- 🪙 UNLOCK & READ NOTE (ONCE PER LIFETIME VIA SERVER) ---
+        // --- 🪙 UNLOCK & READ NOTE (ONCE PER LIFETIME VIA SERVER PER USER) ---
         async function unlockAndReadCourseNote(noteId, pdfFile, title, cost = 500) {
-            let localUnlocked = JSON.parse(localStorage.getItem('unlocked_notes') || '[]');
+            let localUnlocked = JSON.parse(localStorage.getItem(`unlocked_notes_${getUserId()}`) || '[]');
             let allUnlocked = [...new Set([...serverUnlocked, ...localUnlocked])];
 
             // 1. ቀድሞ የተገዛ ከሆነ በቀጥታ ኖቱን ክፈት (Coins አይቀንስም)
@@ -1365,7 +1369,7 @@
                         document.getElementById('coinCount').innerText = userCoins;
                         if (!serverUnlocked.includes(noteId)) serverUnlocked.push(noteId);
                         if (!localUnlocked.includes(noteId)) localUnlocked.push(noteId);
-                        localStorage.setItem('unlocked_notes', JSON.stringify(localUnlocked));
+                        localStorage.setItem(`unlocked_notes_${getUserId()}`, JSON.stringify(localUnlocked));
                         renderNotesList();
                         openPdfViewer(pdfFile, title);
                     } else {
@@ -1452,13 +1456,11 @@
 
                 for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
                     const canvas = document.createElement('canvas');
-                    // max-width ገደቡ ተነስቶ ሙሉ ስክሪኑን እንዲሞላ ተደርጓል
                     canvas.style.cssText = "display: block; width: 100% !important; max-width: 100% !important; height: auto !important; background: white; box-shadow: 0 4px 14px rgba(0,0,0,0.4); border-radius: 4px; margin-bottom: 12px;";
                     pagesWrapper.appendChild(canvas);
 
                     const page = await pdfDoc.getPage(pageNum);
                     const ctx = canvas.getContext('2d');
-                    // ጥራቱ HD እንዲሆን scale ወደ 2.2 ከፍ ተደርጓል
                     const viewport = page.getViewport({ scale: 2.2 });
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
@@ -1620,13 +1622,13 @@
                 index: currentQIndex,
                 score: examScore
             };
-            localStorage.setItem(`bahirab_quiz_progress_${currentExam}`, JSON.stringify(dataToSave));
+            localStorage.setItem(`bahirab_quiz_progress_${currentExam}_${getUserId()}`, JSON.stringify(dataToSave));
         }
 
         function openExam(type) {
             currentExam = type;
             
-            const savedProgress = localStorage.getItem(`bahirab_quiz_progress_${type}`);
+            const savedProgress = localStorage.getItem(`bahirab_quiz_progress_${type}_${getUserId()}`);
             if (savedProgress) {
                 try {
                     const parsed = JSON.parse(savedProgress);
@@ -1859,11 +1861,44 @@
             }
         }
 
+        // --- 🔄 RETAKE EXAM WITH ADSGRAM GATE (NO COIN REWARD) ---
         function restartExam() {
-            localStorage.removeItem(`bahirab_quiz_progress_${currentExam}`);
-            currentQIndex = 0;
-            examScore = { correct: 0, wrong: 0 };
-            loadQuestion();
+            const confirmMsg = currentLang === 'en'
+                ? "🎬 To retake this exam, you must watch a short ad (No coins will be awarded). Proceed?"
+                : "🎬 ፈተናውን በድጋሜ ለመስራት አጭር ማስታወቂያ ማየት አለብዎት (ለዚህ ማስታወቂያ Coins አይሰጥም)። መቀጠል ይፈልጋሉ?";
+
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                if (!adController && window.Adsgram) {
+                    adController = window.Adsgram.init({ blockId: "44491" });
+                }
+
+                if (adController) {
+                    adController.show().then((result) => {
+                        if (result && result.done) {
+                            sendAdWatchToServer();
+                            const uid = getUserId();
+                            localStorage.removeItem(`bahirab_quiz_progress_${currentExam}_${uid}`);
+                            currentQIndex = 0;
+                            examScore = { correct: 0, wrong: 0 };
+                            loadQuestion();
+                        } else {
+                            alert(currentLang === 'en' 
+                                ? "⚠️ You must complete the ad to retake the exam!" 
+                                : "⚠️ ፈተናውን በድጋሜ ለመውሰድ ማስታወቂያውን እስከመጨረሻው ማየት አለብዎት!");
+                        }
+                    }).catch(() => {
+                        alert(currentLang === 'en' 
+                            ? "⚠️ Ad failed to load. Please check your internet connection." 
+                            : "⚠️ ማስታወቂያው መጫን አልተቻለም። እባክዎ ኢንተርኔትዎን ፈትሸው በድጋሚ ይሞክሩ።");
+                    });
+                } else {
+                    alert(currentLang === 'en' ? "⚠️ Adsgram not ready." : "⚠️ የማስታወቂያ አገልግሎቱ አልተዘጋጀም።");
+                }
+            } catch (e) {
+                alert("⚠️ Error: " + e.message);
+            }
         }
 
         // Exam, Module & Teacher Guide Unlock (100 / 200 Coins)
