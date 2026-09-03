@@ -251,8 +251,9 @@
             font-size: 12px;
             font-weight: bold;
         }
+        /* Teacher Guide Button Styled to Red */
         .btn-guide {
-            background-color: #0284c7;
+            background-color: #dc2626;
             color: white;
             border: none;
             padding: 8px;
@@ -579,11 +580,11 @@
             <button class="btn-earn btn-earn-adsgram" id="adBtnAdsgram" onclick="watchAdsgramAd()">📺 እይ (+150)</button>
         </div>
 
-        <!-- 2. Monetag Button (+100 Coins) -->
+        <!-- 2. Monetag Button (+100 Coins) - Max 3 -->
         <div class="earn-banner earn-banner-monetag">
             <div>
                 <h4 id="adTitleMonetag">⚡ Monetag ማስታወቂያ (+100)</h4>
-                <p id="adSubMonetag">የ Monetag አድ በማየት +100 Coins ያግኙ። (<span id="adLimitMonetag">6</span> የቀረ)</p>
+                <p id="adSubMonetag">የ Monetag አድ በማየት +100 Coins ያግኙ። (<span id="adLimitMonetag">3</span> የቀረ)</p>
             </div>
             <button class="btn-earn btn-earn-monetag" id="adBtnMonetag" onclick="watchMonetagAd()">⚡ እይ (+100)</button>
         </div>
@@ -844,7 +845,8 @@
         }
 
         /* --- 5-HOUR ROLLING COOLDOWN (PER-USER ISOLATED) --- */
-        const MAX_ADS = 6;
+        const MAX_ADS_ADSGRAM = 6;
+        const MAX_ADS_MONETAG = 3;  // Monetag count kept at 3
         const COOLDOWN_HOURS = 5;
         const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
 
@@ -868,9 +870,9 @@
         function updateAdLimitUI() {
             const now = Date.now();
 
-            // 1. Adsgram Limits (+150 Coins)
+            // 1. Adsgram Limits (+150 Coins) - Max 6
             const adsgramTimes = getTimestamps('bahirab_adsgram_timestamps');
-            const adsgramAvail = MAX_ADS - adsgramTimes.length;
+            const adsgramAvail = MAX_ADS_ADSGRAM - adsgramTimes.length;
             const adsgramBtn = document.getElementById('adBtnAdsgram');
             const adsgramLimitText = document.getElementById('adLimitAdsgram');
             if (adsgramLimitText) adsgramLimitText.innerText = Math.max(0, adsgramAvail);
@@ -888,9 +890,9 @@
                 adsgramBtn.innerText = `⏳ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
             }
 
-            // 2. Monetag Limits (+100 Coins)
+            // 2. Monetag Limits (+100 Coins) - Max 3
             const monetagTimes = getTimestamps('bahirab_monetag_timestamps');
-            const monetagAvail = MAX_ADS - monetagTimes.length;
+            const monetagAvail = MAX_ADS_MONETAG - monetagTimes.length;
             const monetagBtn = document.getElementById('adBtnMonetag');
             const monetagLimitText = document.getElementById('adLimitMonetag');
             if (monetagLimitText) monetagLimitText.innerText = Math.max(0, monetagAvail);
@@ -915,7 +917,7 @@
 
         function watchAdsgramAd() {
             const times = getTimestamps('bahirab_adsgram_timestamps');
-            if (times.length >= MAX_ADS) {
+            if (times.length >= MAX_ADS_ADSGRAM) {
                 const msg = currentLang === 'en' 
                     ? "⏳ Adsgram limit reached! Please wait for the timer." 
                     : "⏳ የ Adsgram ቪዲዮ ገደብ ላይ ደርሰዋል! እባክዎ ቆጣሪው እስኪያልቅ ይጠብቁ።";
@@ -965,7 +967,7 @@
 
         function watchMonetagAd() {
             const times = getTimestamps('bahirab_monetag_timestamps');
-            if (times.length >= MAX_ADS) {
+            if (times.length >= MAX_ADS_MONETAG) {
                 const msg = currentLang === 'en' 
                     ? "⏳ Monetag limit reached! Please wait for the timer." 
                     : "⏳ የ Monetag ማስታወቂያ ገደብ ላይ ደርሰዋል! እባክዎ ቆጣሪው እስኪያልቅ ይጠብቁ።";
@@ -1206,7 +1208,7 @@
                 document.getElementById('adBtnAdsgram').innerText = "📺 Watch (+150)";
                 
                 document.getElementById('adTitleMonetag').innerText = "⚡ Monetag Ad (+100)";
-                document.getElementById('adSubMonetag').innerHTML = 'Watch Monetag ad & earn +100 Coins. (<span id="adLimitMonetag">6</span> left)';
+                document.getElementById('adSubMonetag').innerHTML = 'Watch Monetag ad & earn +100 Coins. (<span id="adLimitMonetag">3</span> left)';
                 document.getElementById('adBtnMonetag').innerText = "⚡ Watch (+100)";
 
                 document.getElementById('confirmBtn').innerText = "✔️ Confirm Answer";
@@ -1236,7 +1238,7 @@
                 document.getElementById('adBtnAdsgram').innerText = "📺 እይ (+150)";
                 
                 document.getElementById('adTitleMonetag').innerText = "⚡ Monetag ማስታወቂያ (+100)";
-                document.getElementById('adSubMonetag').innerHTML = 'የ Monetag አድ በማየት +100 Coins ያግኙ። (<span id="adLimitMonetag">6</span> የቀረ)';
+                document.getElementById('adSubMonetag').innerHTML = 'የ Monetag አድ በማየት +100 Coins ያግኙ። (<span id="adLimitMonetag">3</span> የቀረ)';
                 document.getElementById('adBtnMonetag').innerText = "⚡ እይ (+100)";
 
                 document.getElementById('confirmBtn').innerText = "✔️ መልስ አረጋግጥ (Confirm Answer)";
@@ -1456,11 +1458,13 @@
 
                 for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
                     const canvas = document.createElement('canvas');
+                    // max-width ገደቡ ተነስቶ ሙሉ ስክሪኑን እንዲሞላ ተደርጓል
                     canvas.style.cssText = "display: block; width: 100% !important; max-width: 100% !important; height: auto !important; background: white; box-shadow: 0 4px 14px rgba(0,0,0,0.4); border-radius: 4px; margin-bottom: 12px;";
                     pagesWrapper.appendChild(canvas);
 
                     const page = await pdfDoc.getPage(pageNum);
                     const ctx = canvas.getContext('2d');
+                    // ጥራቱ HD እንዲሆን scale ወደ 2.2 ከፍ ተደርጓል
                     const viewport = page.getViewport({ scale: 2.2 });
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
@@ -1503,7 +1507,7 @@
             });
         }
 
-        // --- TEACHER GUIDE LIST (200 Coins) ---
+        // --- TEACHER GUIDE LIST (200 Coins) - Uses .btn-guide (Red) ---
         function renderTeacherGuidesList() {
             const container = document.getElementById('guidesListContainer');
             if (!container) return;
