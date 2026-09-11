@@ -714,7 +714,7 @@
     </div>
 
     <script>
-        const BACKEND_URL = "https://bahirab-bot-server.onrender.com";
+        const BACKEND_URL = "https://bahirab-bot-server-z5wd.onrender.com";
         const SMARTLINK_URL = "https://omg10.com/4/11654019";
 
         const tg = window.Telegram ? window.Telegram.WebApp : null;
@@ -1916,6 +1916,15 @@
             }
 
             const requiredCoins = fileKey.startsWith("guide_") ? 200 : 100;
+
+            // ⚡ ሳንቲሙ ካነሰ ወደ ሰርቨር ሳይሄድ ወዲያውኑ በቅጽበት ማሳሰቢያውን ማሳየት (Zero Delay)
+            if (userCoins < requiredCoins) {
+                const noCoinMsg = currentLang === 'en'
+                    ? `⚠️ Not enough Coins! (Need ${requiredCoins} Coins)\n\n💡 How to earn Coins:\n• Watch Adsgram / Monetag ads (+150 / +100 Coins)\n• Answer Quiz practice questions correctly (+5 Coins)`
+                    : `⚠️ በቂ Coins የለዎትም! (${requiredCoins} Coins ያስፈልጋል)\n\n💡 Coins ለማግኘት፦\n• የ Adsgram / Monetag ማስታወቂያዎችን ይመልከቱ (+150 / +100 Coins)\n• የፈተና ጥያቄዎችን በትክክል ይመልሱ (+5 Coins)`;
+                alert(noCoinMsg);
+                return;
+            }
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/user/unlock-material`, {
