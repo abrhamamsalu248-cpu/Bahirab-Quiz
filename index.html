@@ -568,7 +568,7 @@
 
     <!-- 2 Separate Earn Banners (Both Adsgram +150 Coins) -->
     <div class="earn-container">
-        <!-- 1. Adsgram Button (+150 Coins) -->
+        <!-- 1. Adsgram Button (+150 Coins) - 6 Left -->
         <div class="earn-banner earn-banner-adsgram">
             <div>
                 <h4 id="adTitleAdsgram">📺 Adsgram ቪዲዮ (+150)</h4>
@@ -577,11 +577,11 @@
             <button class="btn-earn btn-earn-adsgram" id="adBtnAdsgram" onclick="watchAdsgramAd()">📺 እይ (+150)</button>
         </div>
 
-        <!-- 2. Adsgram Button 2 (+150 Coins) -->
+        <!-- 2. Adsgram Button 2 (+150 Coins) - 3 Left -->
         <div class="earn-banner earn-banner-monetag">
             <div>
                 <h4 id="adTitleAdsgram2">⚡ Adsgram ቪዲዮ 2 (+150)</h4>
-                <p id="adSubAdsgram2">የ Adsgram ቪዲዮ በማየት +150 Coins ያግኙ። (<span id="adLimitAdsgram2">6</span> የቀረ)</p>
+                <p id="adSubAdsgram2">የ Adsgram ቪዲዮ በማየት +150 Coins ያግኙ። (<span id="adLimitAdsgram2">3</span> የቀረ)</p>
             </div>
             <button class="btn-earn btn-earn-monetag" id="adBtnAdsgram2" onclick="watchAdsgramAd2()">⚡ እይ (+150)</button>
         </div>
@@ -810,9 +810,9 @@
             }
         }
 
-        /* --- 5-HOUR ROLLING COOLDOWN (PER-USER ISOLATED) --- */
+        /* --- 5-HOUR ROLLING COOLDOWN (BUTTON 1 = 6, BUTTON 2 = 3) --- */
         const MAX_ADS_ADSGRAM = 6;
-        const MAX_ADS_ADSGRAM2 = 6;
+        const MAX_ADS_ADSGRAM2 = 3;  // Button 2 limit set to 3
         const COOLDOWN_HOURS = 5;
         const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
 
@@ -856,7 +856,7 @@
                 adsgramBtn.innerText = `⏳ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
             }
 
-            // 2. Adsgram Button 2 (+150 Coins) - Max 6
+            // 2. Adsgram Button 2 (+150 Coins) - Max 3
             const adsgram2Times = getTimestamps('bahirab_adsgram2_timestamps');
             const adsgram2Avail = MAX_ADS_ADSGRAM2 - adsgram2Times.length;
             const adsgram2Btn = document.getElementById('adBtnAdsgram2');
@@ -1183,7 +1183,7 @@
                 document.getElementById('adBtnAdsgram').innerText = "📺 Watch (+150)";
                 
                 document.getElementById('adTitleAdsgram2').innerText = "⚡ Adsgram Video 2 (+150)";
-                document.getElementById('adSubAdsgram2').innerHTML = 'Watch Adsgram video & earn +150 Coins. (<span id="adLimitAdsgram2">6</span> left)';
+                document.getElementById('adSubAdsgram2').innerHTML = 'Watch Adsgram video & earn +150 Coins. (<span id="adLimitAdsgram2">3</span> left)';
                 document.getElementById('adBtnAdsgram2').innerText = "⚡ Watch (+150)";
 
                 document.getElementById('confirmBtn').innerText = "✔️ Confirm Answer";
@@ -1213,7 +1213,7 @@
                 document.getElementById('adBtnAdsgram').innerText = "📺 እይ (+150)";
                 
                 document.getElementById('adTitleAdsgram2').innerText = "⚡ Adsgram ቪዲዮ 2 (+150)";
-                document.getElementById('adSubAdsgram2').innerHTML = 'የ Adsgram ቪዲዮ በማየት +150 Coins ያግኙ። (<span id="adLimitAdsgram2">6</span> የቀረ)';
+                document.getElementById('adSubAdsgram2').innerHTML = 'የ Adsgram ቪዲዮ በማየት +150 Coins ያግኙ። (<span id="adLimitAdsgram2">3</span> የቀረ)';
                 document.getElementById('adBtnAdsgram2').innerText = "⚡ እይ (+150)";
 
                 document.getElementById('confirmBtn').innerText = "✔️ መልስ አረጋግጥ (Confirm Answer)";
